@@ -1,0 +1,58 @@
+<html>
+    <head>
+        <title>math</title>
+        <script src='https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=AM_HTMLorMML'></script>
+        <script src='http://code.jquery.com/jquery-2.1.4.min.js'></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.8.2/vis.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/2.3.0/math.min.js"></script>
+        <script src="jscolor/jscolor.js"></script>
+        <script src="libs/mkay.js"></script>
+        <script src="libs/jquery.jsonview.js"></script>
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.8.2/vis.min.css" rel="stylesheet" type="text/css">
+        <link href="main.css" rel="stylesheet" type="text/css">
+        <link href="libs/jquery.jsonview.css" rel="stylesheet" type="text/css">
+    </head>
+    <body>
+        <div class="hid_overflow">
+            <div id="graph"></div>
+            Choice Select:<br>
+            <div style="display: inline-block; width:237; max-width: 237;">
+                <div id="choicepicker">
+                </div>
+                <button id="newchoicebutton">New Choice</button>
+                <br><br>
+                <div id="selectionInfo">
+                    <br>
+                </div>
+                <br>
+                <div>
+                    <input id="selectionmathtype" type="checkbox"/>show math-type<br><br>
+                    Edge labels:<br>
+                    <button id="edgeMath">Math</button>
+                    <button id="edgeName">Name</button>
+                    <button id="edgeNone">None</button>
+                </div>
+            </div>
+            <button id="Simulate">
+                Simulate
+            </button>
+        </div>
+        
+        
+        <div id="OptionBox">
+        </div>
+        
+        <h2>Simulation-Log</h2>
+        <div id="log-view">
+        </div>
+        
+    </body>
+</html>
+
+<script src='utils.js'></script>
+<script src='questions.js'></script>
+<script src='actions.js'></script>
+<script src='gui_actions.js'></script>
+<script src='Sim.js'></script>
+<script src='main.js'></script>
+
