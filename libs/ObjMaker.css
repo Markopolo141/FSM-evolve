@@ -1,0 +1,73 @@
+.container .spacer, .container .sub_element, .container .numeric_content, .container .string_content  {
+    padding-left: 12px;  
+    position: relative;   
+}
+.container .spacer::before, .container .spacer::after,
+.container .sub_element::before, .container .sub_element::after, 
+.container .numeric_content::before, .container .numeric_content::after, 
+.container .string_content::before, .container .string_content::after{
+    content: '';
+    position: absolute;
+    left: 0;
+}
+.container .sub_element::before, .container .numeric_content::before, .container .string_content::before{
+    border-top: 1px solid #999;
+    top: 12px;
+    width: 12px;
+    height: 0;    
+}
+.container .spacer::after, .container .sub_element::after, .container .numeric_content::after, .container .string_content::after{
+    border-left: 1px solid #999;
+    height: 100%;
+    width: 0px;
+    top: -12px; 
+}
+.spacer::after, .sub_element::after, .numeric_content::after, .string_content::after{
+    top: 12px;
+}
+.sub_element:last-child::after {
+    height: 24px;
+}
+.needed {
+    border-color: red;
+    border-width: 2;
+}
+.duplicate {
+    border-color: green;
+    border-width: 2;
+}
+input {
+    border-width: 0;
+    background-color: transparent;
+    padding-left: 5px;
+    height: 24px;
+}
+input:disabled {
+    padding-left: 10px;
+}
+.spacer {
+    height: 5px;
+}
+.additional {
+    background-color: white;
+}
+select {
+    height: 22px;
+    padding:3px;
+    margin: 0;
+    -webkit-border-radius:4px;
+    -moz-border-radius:4px;
+    border-radius:4px;
+    -webkit-box-shadow: 0 3px 0 #ccc, 0 -1px #bbb inset;
+    -moz-box-shadow: 0 3px 0 #ccc, 0 -1px #bbb inset;
+    box-shadow: 0 3px 0 #ccc, 0 -1px #bbb inset;
+    background: #eee;
+    color:#444;
+    border:none;
+    outline:none;
+    display: inline-block;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+    appearance:none;
+    cursor:pointer;
+}

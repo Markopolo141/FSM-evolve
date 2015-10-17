@@ -2,19 +2,20 @@
 Evolving propensities of finite state machines for analysing dynamics related to evolutionary behaviours
 
 # status
-at the moment - pretty rough-as-guts and sketchy too ...its working... only just.
+at the moment - pretty rough-as-guts and sketchy too ...it's working... only just.
 
 # Introduction
-some of the most controversial claims about evolution concern explanations of behaviour generally and particularly-of human behaviour.
+some of the most controversial claims about evolution concern explanations of behaviour generally and particularly of human behaviour.
 many of these ideas (or at-least the dynamics behind them) should - if feasible - be demonstrable in a sensibly constructed artificial-life sim.
 constructing such a simulation isn't particularly easy
 
 # Design
-A population of individuals can be modelled as densities flowing between a finite number of states, where at each state is a number of choices are available to the individuals (which may be common to other states).
-each choice yields a transmission of density to other states (which may depend on the on the population distribution itself).
-the genetics of the population are encoded as their propensities to choose one choice over another (ratio between probabilities).
-after setting up such an arrangement - the simulation is initiated and evolves the genetics to yield the final state densities and transmission rates.
-from which useful hypothesis may perhaps be inferred.
+A population of individuals can be modelled as densities flowing between a finite number of states.
+At each state there is a number of choices are available to the individuals, which may be common to other states.
+each choice yields a transmission of density to other states, which may depend on the on the population distribution itself.
+the 'genetics' of the population are their propensities (ratio between probabilities) towards one choice over another.
+using the GUI to setup such an arrangement - the simulation is initiated and evolves the genetics to yield the final state densities and transmission rates.
+from which useful hypotheses may perhaps be inferred.
 
 # Concepts
 Any artificial life simulation can (in principle) be visualised as being composed of agents, interacting according to constructed rules across a finite (perhaps big) number of states.

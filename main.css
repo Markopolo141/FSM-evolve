@@ -56,3 +56,6 @@
 .vis-config-rangeinput {
     height: initial !important;
 }
+select[disabled] {
+    display:none;
+}

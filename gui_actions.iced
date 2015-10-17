@@ -252,25 +252,7 @@ window.gui_actions.loadMatricies = () ->
     
 window.gui_actions.simulate = () ->
     matrix_info = gui_actions.getMatricies()
-    config = {
-        "simulate_params":{
-            "target_trait_change":0.0000001,
-            "repeated":15
-        },
-        "initial_reduction":0.4,
-        "reduction_compaction":0.4,
-        "MutateSimulation": {
-            "simulate_params":{
-                "target_quality": 0.000003
-            },
-            "mutation_shift": 0.4,
-            "incorporation_factor": 0.3,
-            "mutation_incorporation_factor": 0.8,
-            "SubPopulationGrowthSimulation": {
-                "smoothing_factor": 0.3
-            }
-        }
-    }
+    config = config_tree.get()
     logs = {}
     console.log("SimulationStarting")
     console.log("switch_table - #{matrix_info['switch_table']}")
