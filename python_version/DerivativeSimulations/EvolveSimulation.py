@@ -18,7 +18,8 @@ class EvolveSimulation(ReductionSimulation):
         self.config = config
         
         def alter_func(sim,r):
-            sim.muation_shift = r
+            sim.mutation_shift = r
+            print "Altering Mutation_shift to {}".format(r)
         
         ReductionSimulation.__init__(
             self,

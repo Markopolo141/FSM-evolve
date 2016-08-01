@@ -13,8 +13,8 @@ class Simulation:
         old_trait = float("-inf")
         repeats = 0
         while iteration < max_iterations:
-            iteration = iteration + 1
             self.iterate()
+            iteration = iteration + 1
             new_trait = self.getTrait()
             if self.getQuality() <= target_quality and abs(new_trait-old_trait) <= target_trait_change:
                 if iteration >= min_iterations:

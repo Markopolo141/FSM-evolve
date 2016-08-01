@@ -6,6 +6,8 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+import pdb
+
 
 def super_range(start, end, step):
     a = start
@@ -136,11 +138,17 @@ def check_matrix_positive_semi_definite(m, start=0.0, end=1.0, step=0.2):
     return False not in [check_expression_positive_semi_definite(v, start, end, step) for v in m]
 
 def variable_translate(nums):
-    t = [1.0]
-    for n in nums:
-        t.append(t[-1]*n/(1.0-n))
-    t_sum = sum(t)
-    return [a/t_sum for a in t]
+    #t = [1.0]      #old ratio translation for reduced dimensionality.... caused warped simulation
+    #for n in nums:
+    #    t.append(t[-1]*n/(1.0-n))
+    #t_sum = sum(t)
+    #return [a/t_sum for a in t]
+    abs_nums = [abs(n) for n in nums]       #new non-ratio bassed method with ...increased... dimensionality, shouldnt warp simulation
+    nums_sum = sum(abs_nums)
+    if nums_sum != 0:
+        return [n/nums_sum for n in abs_nums]
+    else:
+        return [1.0/len(abs_nums) for n in abs_nums]
 
 def distributed_variable_translate(dist, nums):
     nums = [n for n in nums]
@@ -156,7 +164,7 @@ def distributed_variable_translate(dist, nums):
 
 def get_distribution(m):
     dist = [sum(c) for c in m.cols()]
-    return [d-1 if d>1 else 0 for d in dist]
+    return [d if d>1 else 0 for d in dist]
 
 pop_dict = {}
 def weight_choice(choice, pop):
@@ -192,9 +200,11 @@ def check_input(switch, choice):
     m = choice*switch
     if not matrix_is_expressions_with(m, [symbols("s{}".format(i)) for i in range(switch.ncols)]):
         return False
-    if not is_ergodic(m, lambda x:x.expand().simplify==0):
-        return False
-    if not check_matrix_positive_semi_definite(m):
-        return False
+    logger.warn("bypassing ergodicity check")
+    #if not is_ergodic(m, lambda x:x.expand().simplify==0):
+    #    return False
+    logger.warn("bypassing positive_semi_definite check")
+    #if not check_matrix_positive_semi_definite(m):
+    #    return False
     return True
 

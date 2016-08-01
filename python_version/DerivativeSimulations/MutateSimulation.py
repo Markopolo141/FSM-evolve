@@ -3,6 +3,7 @@ from Simulations import GreatestAscentSimulation, SimpleEnsembleSimulation
 from DerivativeSimulations.SubPopulationGrowthSimulation import SubPopulationGrowthSimulation
 
 def sim_number_generator(nums, mutation_shift):
+    #print "mutation_shift = {}".format(mutation_shift)
     r = []
     for i in range(matrix_len(nums)):
         r.append(nums.copy())
@@ -20,12 +21,13 @@ class MutateSimulation(GreatestAscentSimulation):
         self.mutation_shift = config['mutation_shift']
         
         def func(nums, pre):
+            #print "performing an Ensemble Simulation of {}".format(len(nums))
             ensemble = SimpleEnsembleSimulation([SubPopulationGrowthSimulation(weight_switch(switch, n, switch_dist), pre, config['SubPopulationGrowthSimulation']) for n in nums])
             ensemble.simulate(**config['simulate_params'])
             return ensemble.sims
-            
+        
         def pre_func(old, new, old_obj, new_obj):
-            print "iterating genetics from {}".format([a for a in new])
+            #print "iterating genetics from {}".format([a for a in new])
             a = None
             if old_obj and new_obj:
                 a = displace(old_obj.population, new_obj.population, config['incorporation_factor'])
@@ -36,10 +38,13 @@ class MutateSimulation(GreatestAscentSimulation):
             else:
                 raise Exception("WTF")
             return weight_choice(choice, a)
+
+        def generator(x):
+            return sim_number_generator(x,self.mutation_shift)
         
         GreatestAscentSimulation.__init__(self, 
             start           = generate_constant_vector(num_dim, 0.5),
-            generator       = lambda x : sim_number_generator(x,self.mutation_shift),
+            generator       = generator,
             pre_function    = pre_func,
             function        = func,
             valuer          = lambda x : x.getTrait(),

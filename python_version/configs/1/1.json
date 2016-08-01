@@ -1,0 +1,24 @@
+{
+    "choice":"1 0 1 0\n0 2 s2+2 1\n0 1 1 1",
+    "switch":"1 0 1\n0 1 1\n0 1 0\n1 0 1",
+    "simulate_params":{
+        "target_trait_change":0.0000001,
+        "repeated":15
+    },
+    "initial_reduction":0.4,
+    "reduction_compaction":0.4,
+    "MutateSimulation": {
+        "simulate_params":{
+            "target_quality": 0.000003
+        },
+        "mutation_shift": 0.4,
+        "incorporation_factor": 0.3,
+        "mutation_incorporation_factor": 0.8,
+        "SubPopulationGrowthSimulation": {
+            "smoothing_factor": 0.3
+        }
+    }
+}
+
+
+
