@@ -1,210 +1,96 @@
-from collections import OrderedDict
-from sympy import *
-from sympy.core.numbers import *
 from pymatrix import *
-import logging
+from sympy.parsing.sympy_parser import parse_expr
+from sympy import symbols
+from copy import deepcopy as copy
+import math
 
-logger = logging.getLogger(__name__)
-
-import pdb
-
-
+'''
+a better version of range
+'''
 def super_range(start, end, step):
     a = start
     while a <= end:
         yield a
         a = a + step
 
-def abs_sum(X):
-    s = 0
-    for n in X:
-        s = s + abs(n)
-    return s
+'''
+given a function f, and a dictionary defining ranges of iterables in form 
+{"count1":{"min":0,"max":5,"step":1},...} execute the function for and passing each combination of iterables
+note: "step" is optional on each
+'''
+def multi_iterate(f,d):
+    keys = d.keys()
+    def sub_method(vals,i):
+        if i<len(keys):
+            for count in super_range(d[keys[i]]["min"], d[keys[i]]["max"], d[keys[i]].get("step",1)):
+                sub_method(vals + [count],i+1)
+        else:
+            f(**dict(zip(keys,vals)))
+    sub_method([],0)
+        
 
-def delta(a):
-    return 1.0 if a==0 else 0.0
-
-def protected_division(a,b, r=0):
-    return r if b==0 else a/b
-    
-def displace(a, b, proportion):
-    return a + proportion*(b-a)
-
-def manhattan_distance(a,b, sub=None):
-    if sub is None:
-        return abs_sum(b-a)
-    else:
-        return abs_sum(sub(b, a))
-    
-def manhattan_normalize(a, mul=None):
-    s = sum(a)
-    s = delta(s) + s
-    if mul is None:
-        return (1.0/s)*a
-    else:
-        return mul((1.0/s), a)
-    
+'''
+generate a manhattan normalized pymatrix column vector of dimension 'size'
+'''
 def generate_even_vector(size):
-    a = 1.0/size
-    return matrix([[a]]*size)
+    return matrix([[1.0/size] for s in range(size)])
 
-def generate_constant_vector(size, val):
-    return matrix([[val]]*size)
+'''
+given a pymatrix matrix normalise it so that its entries sum = 1.0
+'''
+def manhattan_normalize(v):
+    s = 0
+    for a in v:
+        s += abs(a)
+    for row in range(v.nrows):
+        for col in range(v.ncols):
+            if s >0:
+                v.grid[row][col] = abs(v.grid[row][col])/s
+            else:
+                v.grid[row][col] = 1.0/(v.nrows*v.ncols)
+    return v    
+
+'''
+given square pymatrix M, use power-iterations to find largest positive eigenvalue and its corresponding eigenvector.
+i and ip control the number of iterations taken place: the number of iterations is given by: i*2^ip
+'''
+def eigen(M, ip, i):
+    size = M.ncols
+    v = generate_even_vector(size)
+    for count in range(ip):
+        M = M+M*M
+    for count in range(i):
+        v = M*v
+        s = sum([sum(a) for a in v.grid])
+        if s == 0:
+            return 0,generate_even_vector(size)
+        if math.isnan(s):
+            raise Exception("overflow: power_iteration power factor is too big")
+        z = 1.0/s
+        v = v * z
+    return math.pow(s, 1.0/(2**(ip))),v
+
+'''
+given a pymatrix of sympy expressions return a pymatrix of thoes expressions evaluated with dictionary d
+d is of form {pysymbol:value,pysymbol:value...}
+'''
+def eval_sympy_matrix(M,d):
+    return M.map(lambda x: max(float(x.evalf(subs=d)),0))
+
+'''
+given a Matrix of sympy expressions, sequencially substitute each entity according to the given dictionary of values
+'''
+def subs_sympy_matrix(M,S):
+    for k in S.keys():
+        M = M.map(lambda x:x.subs(symbols(str(k)),S[k]))
+    return M
     
-def matrix_size(m):
-    return m.nrows, m.ncols
-
-def matrix_len(m):
-    return m.nrows * m.ncols
-    
-def elvis(a, f, *args, **kwargs):
-    if a is None:
-        return f(*args, **kwargs)
-    return a
-
-def get_max_index(obj_list, func=lambda x:x):
-    f = float("-inf")
-    index = None
-    for i,o in enumerate(obj_list):
-        funced_val = func(o)
-        if funced_val > f:
-            f = funced_val
-            index = i
-    return index
-
-def get_max_of(obj_list, func=lambda x:x):
-    f = float("-inf")
-    obj = None
-    for o in obj_list:
-        funced_val = func(o)
-        if funced_val > f:
-            f = funced_val
-            obj = o
-    return obj
-
-def is_ergodic(m, iszero=lambda x:x==0):
-    if m.ncols != m.nrows:
-        return False
-    mul = 1
-    while (mul < m.ncols):
-        m = m * m + m
-        mul = mul * 2
-    for v in m:
-        if iszero(v):
-            return False
-    return True
-
-def every_element_is_in(m, s):
-    for v in m:
-        if v not in s:
-            return False
-    return True
-
-def is_expression_with(v, atoms):
-    for a in v.atoms():
-        if not ((a.is_number and a.is_real) or (a.is_Symbol and a in atoms)):
-            return False
-    return True
-    
-def matrix_is_expressions_with(m, atoms):
-    for v in m:
-        if not is_expression_with(v, atoms):
-            return False
-    return True
-    
-def check_expression_positive_semi_definite(m, start=0.0, end=1.0, step=0.2):
-    syms = []
-    for a in m.atoms():
-        if a.is_Symbol and a not in syms:
-            syms.append(a)
-    def f(dim):
-        if dim > 0:
-            for i in super_range(0.0, 1.0, 0.2):
-                for z in f(dim-1):
-                    yield [i] + z
-        else:
-            yield []
-    
-    for nums in f(len(syms)):
-        try:
-            if m.subs(zip(syms, nums)) < 0:
-                return False
-        except:
-            logger.warn("exception in evaluating positive semi-definiteness of expression {} for trial {}={}".format(m, syms,nums), exc_info=True)
-            pass
-    return True
-
-def check_matrix_positive_semi_definite(m, start=0.0, end=1.0, step=0.2):
-    return False not in [check_expression_positive_semi_definite(v, start, end, step) for v in m]
-
-def variable_translate(nums):
-    #t = [1.0]      #old ratio translation for reduced dimensionality.... caused warped simulation
-    #for n in nums:
-    #    t.append(t[-1]*n/(1.0-n))
-    #t_sum = sum(t)
-    #return [a/t_sum for a in t]
-    abs_nums = [abs(n) for n in nums]       #new non-ratio bassed method with ...increased... dimensionality, shouldnt warp simulation
-    nums_sum = sum(abs_nums)
-    if nums_sum != 0:
-        return [n/nums_sum for n in abs_nums]
-    else:
-        return [1.0/len(abs_nums) for n in abs_nums]
-
-def distributed_variable_translate(dist, nums):
-    nums = [n for n in nums]
-    r = []
-    i = 0
-    for d in dist:
-        if d>0:
-            r.append(variable_translate(nums[i:(i+d)]))
-        else:
-            r.append(None)
-        i = i + d
-    return r
-
-def get_distribution(m):
-    dist = [sum(c) for c in m.cols()]
-    return [d if d>1 else 0 for d in dist]
-
-pop_dict = {}
-def weight_choice(choice, pop):
-    global pop_dict
-    if pop.ncols * pop.nrows != len(pop_dict):
-        pop_dict = OrderedDict()
-        for i,p in enumerate(pop):
-            pop_dict[symbols("s{}".format(i))] = p
-    else:
-        for i,p in enumerate(pop):
-            pop_dict[pop_dict.keys()[i]] = p
-    weighted_choice = Matrix(choice.nrows, choice.ncols)
-    for row_index, row in enumerate(choice.grid):
-        for col_index, element in enumerate(row):
-            weighted_choice.grid[row_index][col_index] = float(element.evalf(subs=pop_dict))
-    return weighted_choice
-
-def weight_switch(switch, nums, dist=None):
-    if dist is None:
-        dist = get_distribution(switch)
-    weighted_switch = switch.copy()
-    distributed = distributed_variable_translate(dist, nums)
-    for col_index in range(switch.ncols):
-        if distributed[col_index]:
-            for row_index in range(switch.nrows):
-                if switch[row_index][col_index]:
-                    weighted_switch.grid[row_index][col_index] = distributed[col_index].pop()
-    return weighted_switch
-
-def check_input(switch, choice):
-    if not (switch.nrows == choice.ncols and switch.ncols == choice.nrows):
-        return False
-    m = choice*switch
-    if not matrix_is_expressions_with(m, [symbols("s{}".format(i)) for i in range(switch.ncols)]):
-        return False
-    logger.warn("bypassing ergodicity check")
-    #if not is_ergodic(m, lambda x:x.expand().simplify==0):
-    #    return False
-    logger.warn("bypassing positive_semi_definite check")
-    #if not check_matrix_positive_semi_definite(m):
-    #    return False
-    return True
-
+'''
+given a pymatrix of math-expression-strings, return corresponding pymatrix of sympy expressions
+'''
+def parse_matrix_of_expressions(m):
+    mm = copy(m)
+    for x in range(len(m)):
+        for y in range(len(m[0])):
+            mm[x][y] = parse_expr(str(m[x][y]))
+    return matrix(mm)
