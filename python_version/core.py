@@ -7,7 +7,7 @@ from utils import *
 given a switch-matrix, generate the vectors of the pure (or extreme) strategies.
 '''
 def generate_switch_extrema(switch):
-    dist = [sum(c) for c in switch.cols()]
+    dist = [int(sum(c)) for c in switch.cols()]
     dist = [d if d>1 else 0 for d in dist]
     def gen_unit_arrays(n):
         Z = [[0 for i in range(n)] for i in range(n)]

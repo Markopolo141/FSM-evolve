@@ -40,19 +40,24 @@
         "B":{
             "min":-0.05,
             "max":0.451,
-            "step":0.05
+            "step":0.10
         },
         "M":{
             "min":1.0,
             "max":2.01,
-            "step":0.1
+            "step":0.2
+        },
+        "Z":{
+            "min":0,
+            "max":1.01,
+            "step":0.2
         }
     },
     "power_iterations": {
        "super_iterations":5,
        "iterations":1
     },
-    "iterations":150,
+    "iterations":15,
     "sequence":"1.0/(x+2)",
-    "output_formatter":"./output/{}.txt"
+    "output_formatter":"./output/out.json"
 }
