@@ -1,4 +1,4 @@
-from pymatrix import *
+import numpy
 from sympy.parsing.sympy_parser import parse_expr
 from sympy import symbols
 from copy import deepcopy as copy
@@ -32,24 +32,22 @@ def multi_iterate(d):
         
 
 '''
-generate a manhattan normalized pymatrix column vector of dimension 'size'
+generate a manhattan normalized matrix column vector of dimension 'size'
 '''
 def generate_even_vector(size):
-    return matrix([[1.0/size] for s in range(size)])
+    return numpy.matrix([[1.0/size] for s in range(size)])
 
 '''
-given a pymatrix matrix normalise it so that its entries sum = 1.0
+given a list of numbers normalise it so that its entries sum to 1.0
 '''
 def manhattan_normalize(v):
     s = 0
     for a in v:
         s += abs(a)
-    for row in range(v.nrows):
-        for col in range(v.ncols):
-            if s >0:
-                v.grid[row][col] = abs(v.grid[row][col])/s
-            else:
-                v.grid[row][col] = 1.0/(v.nrows*v.ncols)
+    if s>0:
+        v = [abs(a)/s for a in v]
+    else:
+        v = [1.0/s for a in v]
     return v    
 
 '''
@@ -57,13 +55,13 @@ given square pymatrix M, use power-iterations to find largest positive eigenvalu
 i and ip control the number of iterations taken place: the number of iterations is given by: i*2^ip
 '''
 def eigen(M, ip, i):
-    size = M.ncols
+    size = M.shape[0]
     v = generate_even_vector(size)
     for count in range(ip):
         M = M*M
     for count in range(i):
         v = M*v
-        s = sum([sum(a) for a in v.grid])
+        s = v.sum()
         if s == 0:
             return 0,generate_even_vector(size)
         if math.isnan(s):
@@ -73,26 +71,35 @@ def eigen(M, ip, i):
     return math.pow(s, 1.0/(2**(ip))),v
 
 '''
-given a pymatrix of sympy expressions return a pymatrix of thoes expressions evaluated with dictionary d
-d is of form {pysymbol:value,pysymbol:value...}
+given a matrix of lambda expressions return a matrix of thoes expressions evaluated with arguments in list d
+d is of form [arg1,arg2,...]
 '''
 def eval_sympy_matrix(M,d):
-    return M.map(lambda x: max(float(x.evalf(subs=d)),0))
+    #MM = copy(M)
+    MM = [list(a) for a in M]
+    for i in range(len(M)):
+        for j in range(len(M[0])):
+            MM[i][j] = MM[i][j](*d)
+    return MM
 
 '''
 given a Matrix of sympy expressions, sequencially substitute each entity according to the given dictionary of values
 '''
 def subs_sympy_matrix(M,S):
+    MM = copy(M)
     for k in S.keys():
-        M = M.map(lambda x:x.subs(symbols(str(k)),S[k]))
-    return M
+        func = lambda x:x.subs(symbols(str(k)),S[k])
+        for i in range(len(M)):
+            for j in range(len(M[0])):
+                MM[i][j] = func(MM[i][j])
+    return MM
     
 '''
-given a pymatrix of math-expression-strings, return corresponding pymatrix of sympy expressions
+given a list-of-lists matrix of math-expression-strings, return list-of-list matrix of sympy expressions
 '''
 def parse_matrix_of_expressions(m):
     mm = copy(m)
     for x in range(len(m)):
         for y in range(len(m[0])):
             mm[x][y] = parse_expr(str(m[x][y]))
-    return matrix(mm)
+    return mm

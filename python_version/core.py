@@ -1,13 +1,15 @@
-from collections import OrderedDict
 from sympy import symbols
-from pymatrix import *
+from sympy.utilities.lambdify import lambdify
+from copy import deepcopy as copy
+import numpy
+import sympy
 from utils import *
 
 '''
 given a switch-matrix, generate the vectors of the pure (or extreme) strategies.
 '''
 def generate_switch_extrema(switch):
-    dist = [int(sum(c)) for c in switch.cols()]
+    dist = [sum([a[i] for a in switch]) for i in range(len(switch[0]))]
     dist = [d if d>1 else 0 for d in dist]
     def gen_unit_arrays(n):
         Z = [[0 for i in range(n)] for i in range(n)]
@@ -31,30 +33,30 @@ def generate_switch_extrema(switch):
 given a choice matrix (of sympy expressions), and population vector (of numbers), return the weighted-choice matrix
 which is the matrix expressions evaluated according to the numbers of the population vector. 
 '''
-symbol_dict = {}
 def weight_choice(choice,pop):
-    global symbol_dict
-    if id(choice) not in symbol_dict:
-        Z = OrderedDict()
-        for i in range(choice.nrows):
-            Z[symbols("s{}".format(i))]=None
-        symbol_dict[id(choice)]=Z
-    dictionary = symbol_dict[id(choice)]
-    keys = dictionary.keys()
-    for i,p in enumerate(pop):
-        dictionary[keys[i]] = p
-    return eval_sympy_matrix(choice,dictionary)
+    return eval_sympy_matrix(choice,[a[0,0] for a in pop])
 
 '''
 given a switch-matrix, weight the choices available to each state by a supplied .
 '''
 def weight_switch(switch,vector):
-    weighted_switch = switch.copy()
-    for col_index in range(switch.ncols):
+    weighted_switch = copy(switch)
+    for col_index in range(len(switch[0])):
         if vector[col_index] is not None:
             i = 0
-            for row_index in range(switch.nrows):
+            for row_index in range(len(switch)):
                 if switch[row_index][col_index]:
-                    weighted_switch.grid[row_index][col_index] = vector[col_index][i]
+                    weighted_switch[row_index][col_index] = vector[col_index][i]
                     i = i + 1
     return weighted_switch
+
+'''
+given a matrix of sympy expressions (under the assumption that their free-variables are numbered s0,s1,...,s(ps-1))
+convert each expression to a lambda-functioni n the matrix
+'''
+def lambdify_matrix(M, ps):
+    symbols = [sympy.symbols("s{}".format(i)) for i in range(ps)]
+    for row_index in range(len(M)):
+        for col_index in range(len(M[0])):
+            M[row_index][col_index] = lambdify(symbols, M[row_index][col_index])
+    return M
