@@ -14,19 +14,21 @@ def super_range(start, end, step):
         a = a + step
 
 '''
-given a function f, and a dictionary defining ranges of iterables in form 
-{"count1":{"min":0,"max":5,"step":1},...} execute the function for and passing each combination of iterables
+given a dictionary defining ranges of iterables in form 
+{"count1":{"min":0,"max":5,"step":1},...} return a list of dicts of all combinations of thoes values
 note: "step" is optional on each
 '''
-def multi_iterate(f,d):
+def multi_iterate(d):
     keys = d.keys()
+    amalgum_list = []
     def sub_method(vals,i):
         if i<len(keys):
             for count in super_range(d[keys[i]]["min"], d[keys[i]]["max"], d[keys[i]].get("step",1)):
                 sub_method(vals + [count],i+1)
         else:
-            f(**dict(zip(keys,vals)))
+            amalgum_list.append(dict(zip(keys,vals)))
     sub_method([],0)
+    return amalgum_list
         
 
 '''
@@ -58,7 +60,7 @@ def eigen(M, ip, i):
     size = M.ncols
     v = generate_even_vector(size)
     for count in range(ip):
-        M = M+M*M
+        M = M*M
     for count in range(i):
         v = M*v
         s = sum([sum(a) for a in v.grid])

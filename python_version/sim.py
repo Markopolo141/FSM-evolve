@@ -31,11 +31,9 @@ def simulate(config):
     extrema = [weight_switch(switch,e) for e in generate_switch_extrema(switch)]
     
     output_json = []
-    def evaluate_subs_case(**sub_values):
-        print sub_values
+    for sub_values in tqdm(multi_iterate(subs)):
         subs_choice = subs_sympy_matrix(choice,sub_values)
-        #out_file = file(output_formatter.format("".join(["{}{}".format(k,sub_values[k]) for k in sub_values.keys()])),"w")
-        for i in tqdm(range(iterations)):
+        for i in range(iterations):
             for p in range(len(pops)):
                 extrema_eigen_pairs = [eigen(weight_choice(subs_choice,pops[p])*e,i_ip,i_i) for e in extrema]
                 extrema_growths = [e[0] for e in extrema_eigen_pairs]
@@ -43,14 +41,10 @@ def simulate(config):
                 z = sequence(i)
                 pops[p] = pops[p]*(1-z) + extrema_eigen_pairs[max_extrema_index][1]*z
         output_json.append({"parameters":dict([("{}".format(str(iii[0])),"{0:.3f}".format(iii[1])) for iii in sub_values.iteritems()]),"pops":[[[1 if pp>0.05 else 0 for pp in p],[ppp for ppp in p]] for p in pops]})
-        #print out_str
         out_file = file(output_formatter, "w")
-        #print output_json
         out_file.write(json.dumps({"output":output_json},sort_keys=True).replace('{"parameters":','\n{"parameters":'))
         out_file.flush()
         out_file.close()
-        #out_file.write(str([str(p.transpose()) for p in pops])+"\n")
-    multi_iterate(evaluate_subs_case,subs)
 
 if __name__ == '__main__':
     simulate()

@@ -38,26 +38,31 @@
     ],
     "range_substitutions":{
         "B":{
-            "min":-0.05,
-            "max":0.451,
+            "min":0.95,
+            "max":1.351,
             "step":0.10
         },
         "M":{
             "min":1.0,
             "max":2.01,
-            "step":0.2
+            "step":0.1
         },
-        "Z":{
+        "Q":{
             "min":0,
             "max":1.01,
-            "step":0.2
+            "step":0.1
+        },
+        "W":{
+            "min":0,
+            "max":1.01,
+            "step":0.1
         }
     },
     "power_iterations": {
        "super_iterations":5,
-       "iterations":1
+       "iterations":20
     },
-    "iterations":15,
+    "iterations":50,
     "sequence":"1.0/(x+2)",
     "output_formatter":"./output/out.json"
 }
