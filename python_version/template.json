@@ -59,10 +59,10 @@
         }
     },
     "power_iterations": {
-       "super_iterations":4,
-       "iterations":100
+       "super_iterations":3,
+       "iterations":40
     },
-    "iterations":80,
+    "iterations":50,
     "sequence":"1.0/(x+2)",
     "output_formatter":"./output/out.json"
 }
