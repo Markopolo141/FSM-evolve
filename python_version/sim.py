@@ -30,18 +30,16 @@ def simulate(config):
         origional_pops = [numpy.matrix([a]).transpose() for a in original_pops]
     else:
         origional_pops = [numpy.matrix([[1.0/len(choice)] for s in range(len(choice))])]
-    if "range_substitutions" in config:
-        subs = config["range_substitutions"]
-    else:
-        subs = {"Z":{"min":0,"max":1,"step":1}}
-    subs = {symbols(a):b for a,b in subs.iteritems()}
+    subs = {a:b for a,b in config.get("range_substitutions", [["Z",{"min":0,"max":0.5,"step":1}]])}
+    range_constraints = [eval("lambda {}:{}".format(",".join(subs.keys()),con)) for con in config["range_constraints"]]
     def switch_weighter(vector):
         return lambda x,i,j: x if vector[j] is None else vector[j].pop() if x else 0
     extrema = [numpy.matrix(matrix_map(switch,switch_weighter(e))) for e in generate_switch_extrema(switch)]
     pop_symbols = [sympy.symbols("s{}".format(i)) for i in range(len(choice))]
     
     output_json = []
-    for sub_values in tqdm(multi_iterate(subs)):
+    for sub_values in tqdm([a for a in multi_iterate(subs) if False not in [con(**a) for con in range_constraints]]):
+        sub_values = {symbols(a):b for a,b in sub_values.iteritems()}
         pops = [a.copy() for a in origional_pops]
         subs_choice = matrix_map(choice,lambda x,i,j:lambdify(pop_symbols,x.subs(sub_values)))
         for i in range(iterations):
@@ -51,7 +49,7 @@ def simulate(config):
                 extrema_eigen_pairs = [eigen(weighted_choice*e,i_ip,i_i) for e in extrema]
                 z = sequence(i)
                 pops[p] = pops[p]*(1-z) + max(extrema_eigen_pairs, key=operator.itemgetter(0))[1]*z
-        output_json.append({"parameters":dict([("{}".format(str(iii[0])),"{0:.3f}".format(iii[1])) for iii in sub_values.iteritems()]),"pops":[[[1 if pp.sum()>0.05 else 0 for pp in p],[ppp.sum() for ppp in p]] for p in pops]})
+        output_json.append({"parameters":{str(a):b for a,b in sub_values.iteritems()},"pops":[[ppp.sum() for ppp in p] for p in pops]})
         out_file = file(output_formatter, "w")
         out_file.write(json.dumps({"output":output_json},sort_keys=True).replace('{"parameters":','\n{"parameters":'))
         out_file.flush()

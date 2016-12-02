@@ -36,33 +36,36 @@
         [0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,"<FIMo>","<FNMo>","<CIMo>","<CNMo>","<FIFo>","<FNFo>","<CIFo>","<CNFo>"]
     ],
-    "range_substitutions":{
-        "B":{
+    "range_substitutions":[
+        ["B",{
             "min":0.95,
             "max":1.351,
             "step":0.10
-        },
-        "M":{
+        }],
+        ["M",{
             "min":1.0,
             "max":2.01,
             "step":0.1
-        },
-        "Q":{
+        }],
+        ["W",{
             "min":0,
             "max":1.01,
             "step":0.1
-        },
-        "W":{
+        }],
+        ["Q",{
             "min":0,
             "max":1.01,
             "step":0.1
-        }
-    },
+        }]
+    ],
+    "range_constraints":[
+        "W>=Q"
+    ],
     "power_iterations": {
-       "super_iterations":3,
-       "iterations":40
+       "super_iterations":5,
+       "iterations":1
     },
-    "iterations":50,
+    "iterations":250,
     "sequence":"1.0/(x+2)",
     "output_formatter":"./output/out.json"
 }
