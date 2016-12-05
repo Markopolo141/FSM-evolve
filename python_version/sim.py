@@ -8,8 +8,8 @@ import sympy
 from sympy import symbols
 from sympy.parsing.sympy_parser import parse_expr
 from sympy.utilities.lambdify import lambdify
-import cgitb
-cgitb.enable(format="text")
+#import cgitb
+#cgitb.enable(format="text")
 
 @click.command()
 @click.argument('config', type=click.File('rb'))
@@ -27,7 +27,7 @@ def simulate(config):
     output_formatter = config["output_formatter"]
     if "starting_points" in config:
         origional_pops = [[a/sum(s) if sum(s)>0 else 1.0/len(s) for a in s] for s in config['starting_points']]
-        origional_pops = [numpy.matrix([a]).transpose() for a in original_pops]
+        origional_pops = [numpy.matrix([a]).transpose() for a in origional_pops]
     else:
         origional_pops = [numpy.matrix([[1.0/len(choice)] for s in range(len(choice))])]
     subs = {a:b for a,b in config.get("range_substitutions", [["Z",{"min":0,"max":0.5,"step":1}]])}
