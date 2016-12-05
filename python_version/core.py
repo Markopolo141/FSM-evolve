@@ -39,7 +39,7 @@ def multi_iterate(d):
     def sub_method(vals,i):
         if i<len(keys):
             count = d[keys[i]]["min"]
-            while count <= d[keys[i]]["max"]:
+            while count < d[keys[i]]["max"]:
                 sub_method(vals + [count],i+1)
                 count += d[keys[i]].get("step",1)
         else:
@@ -68,7 +68,7 @@ def eigen(M, ip, i):
     return math.pow(s, 1.0/(2**(ip))),v
 
 '''
-
+return a matrix, the result of the supplied function f applied to every individual element of matrix M
 '''
 def matrix_map(M,f):
     MM = [list(a) for a in M]
