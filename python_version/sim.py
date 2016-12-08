@@ -12,14 +12,14 @@ from scoop import futures, shared
 import scoop
 from time import time
 
-def process(sub_values):
+def process(sub_parameters):
     V = shared.getConst("V")
     sequence = eval("lambda x:{}".format(V['sequence']))
     extrema = V['extrema']
     i_ip = V['i_ip']
     i_i = V['i_i']
     
-    sub_values = {V['subs_symbols'][a]:b for a,b in sub_values.iteritems()}
+    sub_values = {V['subs_symbols'][a]:b[0] for a,b in sub_parameters.iteritems()}
     pops = [a.copy() for a in V['origional_pops']]
     subs_choice = matrix_map(V['choice'],lambda x,i,j:lambdify(V['pop_symbols'],x.subs(sub_values)))
     for i in range(V['iterations']):
@@ -29,7 +29,7 @@ def process(sub_values):
             extrema_eigen_pairs = [eigen(weighted_choice*e,i_ip,i_i) for e in extrema]
             z = sequence(i)
             pops[p] = pops[p]*(1-z) + max(extrema_eigen_pairs, key=operator.itemgetter(0))[1]*z
-    return [{"parameters":{str(a):b for a,b in sub_values.iteritems()},"pops":[[ppp.sum() for ppp in p] for p in pops]}]
+    return {"parameters":sub_parameters,"pops":[[ppp.sum() for ppp in p] for p in pops]}
 
 @click.command()
 @click.argument('config', type=click.File('rb'))
@@ -44,7 +44,7 @@ def simulate(config):
     def switch_weighter(vector):
         return lambda x,i,j: x if vector[j] is None else vector[j].pop() if x else 0
     switch = config['switch']
-    write_delay = config.get("write_delay",30)
+    write_delay = config.get("write_delay",10)
     
     V = {}
     V['choice'] = matrix_map(config['choice'],lambda x,i,j:parse_expr(str(x)))

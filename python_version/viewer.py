@@ -45,8 +45,8 @@ class SVG(object):
         self.rects.append({"x":x,"y":y,"w":w,"h":h,"c":c})
         self.xmin = min(self.xmin,x) if self.xmin is not None else x
         self.ymin = min(self.ymin,y) if self.ymin is not None else y
-        self.xmax = max(self.xmax,x) if self.xmax is not None else x+w
-        self.ymax = max(self.ymax,y) if self.ymax is not None else y+h
+        self.xmax = max(self.xmax,x+w) if self.xmax is not None else x+w
+        self.ymax = max(self.ymax,y+h) if self.ymax is not None else y+h
     def flatten(self):
         s= '<svg width="{0}" height="{1}"><rect x="0" y="0" width="{0}" height="{1}" fill="{2}"></rect><g transform="translate({3} {4})">\n'.format(self.xmax-self.xmin,self.ymax-self.ymin,self.bg,-self.xmin,-self.ymin)
         for r in self.rects:
@@ -63,7 +63,7 @@ def loadMatrix(data,config):
     def get_coords(dictionary):
         c = []
         for j,k in range_subs:
-            c.append(int((dictionary[j]-k['min'])/k['step']))
+            c.append(dictionary[j][1])
         return c
     matrix = None
     for d in dims[::-1]:

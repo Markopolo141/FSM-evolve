@@ -36,15 +36,17 @@ note: "step" is optional on each
 def multi_iterate(d):
     keys = d.keys()
     amalgum_list = []
-    def sub_method(vals,i):
+    def sub_method(vals,indices,i):
         if i<len(keys):
             count = d[keys[i]]["min"]
+            index = 0
             while count < d[keys[i]]["max"]:
-                sub_method(vals + [count],i+1)
+                sub_method(vals + [count],indices + [index],i+1)
                 count += d[keys[i]].get("step",1)
+                index += 1
         else:
-            amalgum_list.append(dict(zip(keys,vals)))
-    sub_method([],0)
+            amalgum_list.append({keys[i]:(vals[i],indices[i]) for i in range(len(keys))})
+    sub_method([],[],0)
     return amalgum_list
 
 '''
