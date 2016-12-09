@@ -3,6 +3,9 @@ import json
 from copy import deepcopy as copy
 import math
 
+def to_hex(v):
+    return hex(int((v/16)%16))[-1]+hex(int(v%16))[-1]
+
 def access(m,c,val=None):
     for cc in c[:-1]:
         m = m[cc]

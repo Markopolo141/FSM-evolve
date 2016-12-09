@@ -19,12 +19,12 @@
             "max":1.01,
             "step":0.05
         }],
-        ["B",{
+        ["C",{
             "min":-1.0,
             "max":1.01,
             "step":0.05
         }],
-        ["C",{
+        ["B",{
             "min":-1.0,
             "max":1.01,
             "step":0.05
@@ -41,14 +41,16 @@
        "super_iterations":5,
        "iterations":10
     },
-    "iterations":120,
-    "sequence":"0.1 if x < 80 else 0.1/(x-79)",
+    "iterations":250,
+    "sequence":"0.1 if x < 200 else 0.1/(x-199)",
     "weight_function":"lambda i,g: 1.0 if i==0 else 0.2 if i==1 else 0.05",
     "output_formatter":"./output/psr_out.json",
     "svg":{
         "colour":{
             "none":null,
-            "rule":"lambda v:'#{}0000'.format(hex(int(256*( math.pow(abs(v[0]/(1-v[3])-0.333333)*abs(v[1]/(1-v[3])-0.333333)*abs(v[2]/(1-v[3])-0.333333),0.333333) )))[2:])",
+            "rule":"lambda v:'#{}0000'.format(to_hex(256*(math.pow(((v[0]/(1-v[3])-0.333333)**2)+((v[1]/(1-v[3])-0.333333)**2)+((v[2]/(1-v[3])-0.333333)**2),0.5) )))",
+            "old_rule":"lambda v:'#{}{}{}'.format(hex(int(10*v[0]))[2:4], hex(int(10*v[1]))[2:4], hex(int(10*v[2]))[2:4])",
+            "new_rule":"lambda v:'#{}{}{}'.format(to_hex(int(255*v[0]/(1-v[3]))), to_hex(int(255*v[1]/(1-v[3]))), to_hex(int(255*v[2]/(1-v[3]))))",
             "background":"#777777"
         },
         "square_diff":10,
