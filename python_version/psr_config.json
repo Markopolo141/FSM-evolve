@@ -17,41 +17,39 @@
         ["A",{
             "min":-1.0,
             "max":1.01,
-            "step":0.25
+            "step":0.05
         }],
         ["B",{
             "min":-1.0,
             "max":1.01,
-            "step":0.25
+            "step":0.05
         }],
         ["C",{
             "min":-1.0,
             "max":1.01,
-            "step":0.25
+            "step":0.05
         }]
-        
     ],
     "range_constraints":[
     ],
     "starting_points":[
         [1,0,0,0.1],
         [0,1,0,0.1],
-        [0,0,1,0.1],
-        [0.1,0.1,0.1,1],
-        [1,1,1,0.1]
+        [0,0,1,0.1]
     ],
     "power_iterations": {
        "super_iterations":5,
        "iterations":10
     },
-    "iterations":50,
-    "sequence":"1.0/(x+2)",
+    "iterations":120,
+    "sequence":"0.1 if x < 80 else 0.1/(x-79)",
+    "weight_function":"lambda i,g: 1.0 if i==0 else 0.2 if i==1 else 0.05",
     "output_formatter":"./output/psr_out.json",
     "svg":{
         "colour":{
             "none":null,
-            "rule":"lambda v:'#{}{}{}'.format(hex(int(256*v[0]))[2:], hex(int(256*v[1]))[2:], hex(int(256*v[2]))[2:])",
-            "background":"#FFFFFF"
+            "rule":"lambda v:'#{}0000'.format(hex(int(256*( math.pow(abs(v[0]/(1-v[3])-0.333333)*abs(v[1]/(1-v[3])-0.333333)*abs(v[2]/(1-v[3])-0.333333),0.333333) )))[2:])",
+            "background":"#777777"
         },
         "square_diff":10,
         "border_diff":5,

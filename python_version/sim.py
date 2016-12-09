@@ -9,26 +9,33 @@ from sympy import symbols
 from sympy.parsing.sympy_parser import parse_expr
 from sympy.utilities.lambdify import lambdify
 from scoop import futures, shared
+import random
 import scoop
 from time import time
 
 def process(sub_parameters):
     V = shared.getConst("V")
     sequence = eval("lambda x:{}".format(V['sequence']))
+    weight_function = eval(V['weight_function'])
     extrema = V['extrema']
     i_ip = V['i_ip']
     i_i = V['i_i']
     
     sub_values = {V['subs_symbols'][a]:b[0] for a,b in sub_parameters.iteritems()}
-    pops = [a.copy() for a in V['origional_pops']]
     subs_choice = matrix_map(V['choice'],lambda x,i,j:lambdify(V['pop_symbols'],x.subs(sub_values)))
+    pops = [a.copy() for a in V['origional_pops']]
     for i in range(V['iterations']):
         for p in range(len(pops)):
             flattened_pop = [a[0,0] for a in pops[p]]
             weighted_choice = numpy.matrix(matrix_map(subs_choice,lambda x,i,j:x(*flattened_pop)))
             extrema_eigen_pairs = [eigen(weighted_choice*e,i_ip,i_i) for e in extrema]
+            random.shuffle(extrema_eigen_pairs)
+            extrema_eigen_pairs = sorted(extrema_eigen_pairs, key=operator.itemgetter(0), reverse=True)
+            growths = [a[0] for a in extrema_eigen_pairs]
+            weights = [weight_function(index,growths) for index in range(len(growths))]
+            weights = [a/sum(weights) for a in weights]
             z = sequence(i)
-            pops[p] = pops[p]*(1-z) + max(extrema_eigen_pairs, key=operator.itemgetter(0))[1]*z
+            pops[p] = pops[p]*(1-z) + sum([weights[index]*extrema_eigen_pairs[index][1] for index in range(len(growths))])*z
     return {"parameters":sub_parameters,"pops":[[ppp.sum() for ppp in p] for p in pops]}
 
 @click.command()
@@ -59,7 +66,8 @@ def simulate(config):
     V['extrema'] = [numpy.matrix(matrix_map(switch,switch_weighter(e))) for e in generate_switch_extrema(switch)]
     V['pop_symbols'] = [sympy.symbols("s{}".format(i)) for i in range(len(V['choice']))]
     V['subs_symbols'] = {a:symbols(a) for a,b in subs.iteritems()}
-    V['sequence'] = config['sequence']
+    V['sequence'] = config.get('sequence',"1.0/(x+2)")
+    V['weight_function'] = config['weight_function']
     shared.setConst(V=V)
     
     output_json = []

@@ -1,6 +1,7 @@
 import click
 import json
 from copy import deepcopy as copy
+import math
 
 def access(m,c,val=None):
     for cc in c[:-1]:
@@ -113,18 +114,13 @@ def outputSVG(matrix,config):
         elif pops is not None:
             pops = pops['pops']
             for i,p in enumerate(pops):
-                try:
-                    svg.addRect(
-                        x+square_spacing,
-                        y+square_spacing + i*1.0/len(pops)*(square_diff-square_spacing),
-                        square_diff-square_spacing,
-                        1.0/len(pops)*(square_diff-square_spacing),
-                        get_colour(p)
-                    )
-                except:
-                    import pdb
-                    pdb.set_trace()
-                    raise
+                svg.addRect(
+                    x+square_spacing,
+                    y+square_spacing + i*1.0/len(pops)*(square_diff-square_spacing),
+                    square_diff-square_spacing,
+                    1.0/len(pops)*(square_diff-square_spacing),
+                    get_colour(p)
+                )
     return svg.flatten()
 
 @click.command()
