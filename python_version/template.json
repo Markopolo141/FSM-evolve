@@ -38,24 +38,24 @@
     ],
     "range_substitutions":[
         ["B",{
-            "min":0.94,
+            "min":0.95,
             "max":1.401,
-            "step":0.10
+            "step":0.07
         }],
         ["M",{
             "min":1.0,
             "max":2.01,
-            "step":0.10
+            "step":0.07
         }],
         ["W",{
             "min":0,
             "max":1.01,
-            "step":0.10
+            "step":0.07
         }],
         ["Q",{
             "min":0,
             "max":1.01,
-            "step":0.10
+            "step":0.07
         }]
     ],
     "range_constraints":[
