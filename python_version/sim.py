@@ -18,8 +18,6 @@ def process(sub_parameters):
     sequence = eval("lambda x:{}".format(V['sequence']))
     weight_function = eval(V['weight_function'])
     extrema = V['extrema']
-    i_ip = V['i_ip']
-    i_i = V['i_i']
     
     sub_values = {V['subs_symbols'][a]:b[0] for a,b in sub_parameters.iteritems()}
     subs_choice = matrix_map(V['choice'],lambda x,i,j:lambdify(V['pop_symbols'],x.subs(sub_values)))
@@ -28,7 +26,7 @@ def process(sub_parameters):
         for p in range(len(pops)):
             flattened_pop = [a[0,0] for a in pops[p]]
             weighted_choice = numpy.matrix(matrix_map(subs_choice,lambda x,i,j:x(*flattened_pop)))
-            extrema_eigen_pairs = [eigen(weighted_choice*e,i_ip,i_i) for e in extrema]
+            extrema_eigen_pairs = [eigen(weighted_choice*e) for e in extrema]
             random.shuffle(extrema_eigen_pairs)
             extrema_eigen_pairs = sorted(extrema_eigen_pairs, key=operator.itemgetter(0), reverse=True)
             growths = [a[0] for a in extrema_eigen_pairs]
@@ -55,8 +53,6 @@ def simulate(config):
     
     V = {}
     V['choice'] = matrix_map(config['choice'],lambda x,i,j:parse_expr(str(x)))
-    V['i_ip'] = int(config['power_iterations']["super_iterations"])
-    V['i_i'] = int(config['power_iterations']["iterations"])
     V['iterations'] = int(config['iterations'])
     if "starting_points" in config:
         origional_pops = [[a/sum(s) if sum(s)>0 else 1.0/len(s) for a in s] for s in config['starting_points']]

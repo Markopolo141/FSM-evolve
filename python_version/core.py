@@ -1,6 +1,8 @@
 from copy import deepcopy as copy
 import numpy
 import math
+from numpy.linalg import eig
+import operator
 
 '''
 given a switch-matrix, generate the vectors of the pure (or extreme) strategies.
@@ -50,24 +52,14 @@ def multi_iterate(d):
     return amalgum_list
 
 '''
-given square pymatrix M, use power-iterations to find largest positive eigenvalue and its corresponding eigenvector.
-i and ip control the number of iterations taken place: the number of iterations is given by: i*2^ip
+given square pymatrix M, find largest positive eigenvalue and its corresponding eigenvector.
 '''
-def eigen(M, ip, i):
-    size = M.shape[0]
-    v = numpy.matrix([[1.0/size] for s in range(size)])
-    for count in range(ip):
-        M = M*M
-    for count in range(i):
-        v = M*v
-        s = v.sum()
-        if s == 0:
-            return 0,numpy.matrix([[1.0/size] for s in range(size)])
-        if math.isnan(s):
-            raise Exception("overflow: power_iteration power factor is too big")
-        z = 1.0/s
-        v = v * z
-    return math.pow(s, 1.0/(2**(ip))),v
+def eigen(M):
+    vals,vecs = eig(M)
+    index, max_val = max(enumerate(vals), key=operator.itemgetter(1))
+    vec = vecs[:,index]
+    vec = vec / numpy.sum(vec)
+    return max_val, vec
 
 '''
 return a matrix, the result of the supplied function f applied to every individual element of matrix M
