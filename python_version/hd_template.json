@@ -1,73 +1,34 @@
 {
     "switch": [
-        [1,0,0,0],
-        [0,1,0,0],
-        [0,0,1,0],
-        [0,0,0,1],
-        [0,0,0,1]
-    ],
-    "raw_switch": [
-        [1,0,0,0,0],
-        [0,1,0,0,0],
-        [0,0,1,0,0],
-        [0,0,0,1,0],
-        [0,0,0,0,1],
-        [0,0,0,0,1]
-    ],
-    "raw_choice": [
-        ["p",           0,          0,          0,      "(1-q)*(1-s0)", 0               ],
-        [0,             "p",        0,          0,      0,              "(1-q)*(1-s0)"  ],
-        [0,             0,          "p",        "1-q",  "(1-q)*s0",     "(1-q)*s0"      ],
-        [0,             0,          0,          "q",    "q*s0",         "q*s0"          ],
-        ["4+2*(d-2)*s0",  "2-2*s0",   "D*(2-s0)", 0,      "q*(1-s0)",     "q*(1-s0)"      ]
-    ],
-    "refined_choice": [
-        ["P",                   0,              0,                  0,              "0.3*(1-<AH>)",     0                 ],
-        [0,                     "P",            0,                  0,              0,                  "0.3*(1-<AH>)"    ],
-        [0,                     0,              "P",                "0.3",          "0.3*<AH>",         "0.3*<AH>"        ],
-        [0,                     0,              0,                  "0.7",          "0.7*<AH>",         "0.7*<AH>"        ],
-        ["1.5+(d-1.5)*<AH>",    "1-<AH>/2.0",   "D*(1-<AH>/2.0)",   0,              "0.7*(1-<AH>)",     "0.7*(1-<AH>)"    ]
+        [1,0,0],
+        [0,1,0],
+        [0,0,1],
+        [0,0,1]
     ],
     "choice": [
-        [0,                     0,                     0,                       "(1-<AH>)",     0           ],
-        [0,                     0,                     0,                       0,              "(1-<AH>)"  ],
-        [0,                     0,                     0,                       "<AH>",         "<AH>"      ],
-        ["A*(1-1.0*<AH>)",        "1-C*<AH>",           "0.7*(1-C*<AH>)",          0,              0           ]
+        [0,               0,            "(1-<AH>*C)",   0                     ],
+        [0,               0,            "D*<AH>*C",     "(1-<AH>*C)+D*<AH>*C" ],
+        ["2*(1-<AH>)",   "1-<AH>+A",    0,              0                     ]
     ],
     "range_substitutions":[
-        ["A",{
-            "min":0.0,
-            "max":2.01,
-            "step":0.05
+        ["D",{
+            "min":0.75,
+            "max":0.7501,
+            "step":0.1
         }],
         ["C",{
+            "min":0.7,
+            "max":0.701,
+            "step":0.1
+        }],
+        ["A",{
             "min":0.0,
-            "max":1.01,
-            "step":0.05
+            "max":1.001,
+            "step":0.02
         }]
     ],
-    "range_constraints":[
-    ],
-    "starting_points_ZZZ":[
-    ],
-    "power_iterations": {
-       "super_iterations":5,
-       "iterations":10
-    },
-    "iterations":120,
-    "sequence":"0.1 if x < 80 else 0.1/(x-79)",
-    "weight_function":"lambda i,g: 1.0/(i**2+1)",
-    "output_formatter":"./output/hd_out.json",
-    "svg":{
-        "colour":{
-            "none":null,
-            "rule":"lambda v:'#{}{}{}'.format(to_hex(256*(v[0])/(v[0]+v[1]+v[2])),to_hex(256*(v[1])/(v[0]+v[1]+v[2])),to_hex(256*(v[2])/(v[0]+v[1]+v[2])))",
-            "background":"#777777"
-        },
-        "square_diff":10,
-        "border_diff":5,
-        "square_spacing":0.1,
-        "appends":[
-        ]
-    }
+    "iterations":500,
+    "sequence":"0.1/math.log(x+2)",
+    "weight_function":"lambda i,g: 1.0 if i==0 else 0",
+    "output_formatter":"./output/hd_out.json"
 }

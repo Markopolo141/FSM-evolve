@@ -1,6 +1,4 @@
-from copy import deepcopy as copy
 import numpy
-import math
 from numpy.linalg import eig
 import operator
 

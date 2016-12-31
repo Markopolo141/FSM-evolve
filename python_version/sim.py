@@ -1,4 +1,5 @@
 from core import *
+import math
 from tqdm import tqdm
 import json
 import click
@@ -45,7 +46,10 @@ def simulate(config):
     
     output_formatter = config["output_formatter"]
     subs = {a:b for a,b in config.get("range_substitutions", [["Z",{"min":0,"max":0.5,"step":1}]])}
-    range_constraints = [eval("lambda {}:{}".format(",".join(subs.keys()),con)) for con in config["range_constraints"]]
+    if "range_constraints" in config:
+        range_constraints = [eval("lambda {}:{}".format(",".join(subs.keys()),con)) for con in config["range_constraints"]]
+    else:
+        range_constraints = []
     def switch_weighter(vector):
         return lambda x,i,j: x if vector[j] is None else vector[j].pop() if x else 0
     switch = config['switch']

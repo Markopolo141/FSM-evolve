@@ -37,10 +37,6 @@
         [0,1,0,0.1],
         [0,0,1,0.1]
     ],
-    "power_iterations": {
-       "super_iterations":5,
-       "iterations":10
-    },
     "iterations":120,
     "sequence":"0.1 if x < 80 else 0.1/(x-79)",
     "weight_function":"lambda i,g: 1.0 if i==0 else 0.2 if i==1 else 0.05",
