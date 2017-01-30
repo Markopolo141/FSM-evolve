@@ -2,7 +2,7 @@ from sympy.parsing.sympy_parser import parse_expr
 from sympy import symbols
 from wrapt import ObjectProxy as proxy
 from pymatrix import matrix
-from utils import generate_switch_extrema
+from utils import generate_switch_extrema, normalise
 from SubSpecies import SubSpecies
 
 class Species:
@@ -38,4 +38,3 @@ class Species:
         for s in self.sub_species:
             s.turnOver()
 
-wam = 4

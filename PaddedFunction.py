@@ -1,5 +1,6 @@
 from sympy.utilities.lambdify import lambdify
 
+functions = []
 class PaddedFunction:
     def __init__(self, expr):
         self.strE = str(expr)

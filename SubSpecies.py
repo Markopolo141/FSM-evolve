@@ -1,5 +1,6 @@
 from wrapt import ObjectProxy as proxy
-from sim import matricies
+from PaddedMatrix import PaddedMatrix, matricies
+from utils import accumu,addTo,equate
 
 class SubSpecies:
     def __init__(self,M,number=1,numbers=None,col_pruning=False,row_pruning=True):

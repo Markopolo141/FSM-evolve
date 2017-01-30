@@ -1,7 +1,8 @@
 from utils import addTo
 from PaddedFunction import PaddedFunction
-from sim import functions
+from PaddedFunction import functions
 
+matricies = []
 class PaddedMatrix:
     def __init__(self, M):
         M = M.map(lambda x:x.simplify())

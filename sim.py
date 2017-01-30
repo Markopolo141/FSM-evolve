@@ -3,16 +3,14 @@ from time import time
 import click
 import json
 
-functions = []
-matricies = []
 species =   []
 config = {"scooped":True}
 
 from validate import run_input_validation
-import pdb
-pdb.set_trace()
+from PaddedFunction import functions
+from PaddedMatrix import matricies
 from Species import Species
-from utils import normalise, multi_iterate
+from utils import normalise, multi_iterate, deviation
 
 
 def process(sub_parameters):
