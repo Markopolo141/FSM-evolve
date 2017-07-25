@@ -57,7 +57,7 @@ def deviation(l):
 
 '''
 given a list defining ranges of iterables in form 
-[["count1":{"min":0,"max":5,"step":1}],...} return a list of dicts of all combinations of thoes values (together with the index of their iterations)
+[("count1",{"min":0,"max":5,"step":1}),...] return a list of dicts of all combinations of thoes values (together with the index of their iterations)
 note: "step" is optional on each
 '''
 def multi_iterate(d):
@@ -65,9 +65,9 @@ def multi_iterate(d):
     def sub_method(vals,indices,i):
         if i<len(d):
             count = d[i][1]["min"]
-            index = 0
+            index = 1
             while count < d[i][1]["max"]:
-                sub_method(vals + [count],indices + [index],i+1)
+                sub_method(vals + [count],indices + [index-1],i+1)
                 count = d[i][1]["min"]+index*d[i][1].get("step",1)
                 index += 1
         else:
