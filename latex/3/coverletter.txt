@@ -1,0 +1,45 @@
+Thankyou for the opportunity to be allowed to make needed changes to the paper.
+In response to the reviews the following changes have been made:
+
+
+For the criticism that 'the motivation-for and contribution-of of the model was unclear':
+*	There is an additional section of the introduction explicitly dedicated to the motivation of the paper. This section details how the framework directly relates to the modeling of evolution and  specifically as it takes direct inspiration from the field of 'Artificial Life'. This is done to introduce the reader to the core elements of the model in a way that mirrors existing paradigms.
+
+
+For the criticism that 'the example was difficult reverse-engineer' and that the "description of the example is a little bit unfriendly":
+*	the Example of the paper is now surrounded with a sizable verbal explanation to allow the readers to get an intuitive grasp at the concepts without having to comprehend the example's formal specification.
+
+
+For the criticism that "it’s hard to tell what the pieces of the model are." and "I’m not sure I understand the model" there are changes:
+*	In addition to the pieces of the formal specification there is an additional section titled "The meaning of the Game's elements" where the components of the model are explained on a point-by-point basis and illustrations are given to highlight the potential representation of the components. This section gives additional intuition as to why the elements of the model are specified in the way that they are.
+*	The chapter of the paper that introduces fundamental concepts (Section 2) is made almost twice as long, and introduces the concepts at a far more casual pace.
+This casual pace occurs in the context of more illustrations to highlight the basic motivations distinguishing the framework from others, and this is done using simple and plain language.
+
+
+For the criticism that 'it was unclear how the framework is different from other frameworks already in the literature':
+*	There is a larger literature review where MDPs, Stochastic games and iterated prisoners dilemma are introduced specifically. These are introduced as examples of state in the context of game-theory. The related works and concepts are now also presented primarily by their virtues, as the presentation is softened and made more positive.
+
+
+For the criticism that the comparisons to other frameworks was brief and difficult to understand: "The other examples are similar since they are so brief.":
+*	The Discussion of the paper has had the offending statements that summarily compared the framework to others removed, and into that place has been added an additional appendix F. The appendix F features an additional example which is given to -show- how the framework can be used to encapsulate some of the dynamics of other frameworks.
+
+
+For the criticism that "that what action each individual organism will execute depends only on the state the organism is in, but not on the state of the other organisms. This point may seriously restrict the game’s reach.":
+*	The criticism accurately reflects the construction of the framework and the concern is now directly addressed in the discussion, however the concern does not disable it from modeling "conditional behaviors ... which form a considerable class of strategy in game theory" as the reviewer thinks. Which positively demonstrated by example in Appendix F.
+
+
+For the criticism that "There aren’t many take-home messages from the paper":
+*	The paper is now littered with illustrative examples of how the framework could be used to model evolutionary behaviors and finishes with a subtle challenge to the reader's imagination.
+
+
+To the request that "the reader of Games journal may be interested also in knowing how the author(s)’ framework can be applied for understanding reciprocal behaviors.":
+*	The example now provided as appendix F directly models classical cases of reciprocal behaviors
+
+
+This version of the paper should be significantly more reader-friendly and accessible.
+
+
+Additionally:
+*	There was a couple of footnotes added to the proofs
+*	A couple of brackets were closed, and a clause added to one of the proofs.
+

@@ -1,0 +1,344 @@
+\documentclass[journal,article,accept,oneauthor,pdftex,10pt,a4paper,games]{mdpi} 
+
+\firstpage{1} 
+\makeatletter 
+\setcounter{page}{\@firstpage} 
+\makeatother 
+\articlenumber{x}
+\doinum{10.3390/------}
+\pubvolume{xx}
+\pubyear{2017}
+\copyrightyear{2017}
+\externaleditor{Academic Editor: name}
+\history{Received: date; Accepted: date; Published: date}
+
+% import of libraries
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{pgfplots}
+\usepackage{color}
+\usepackage{subcaption}
+\usepackage{mathdots}
+\usepackage{hyperref}
+
+% configuration of libraries
+\usetikzlibrary{arrows,automata}
+\usetikzlibrary{positioning}
+\tikzset{
+    state/.style={
+           rectangle,
+           rounded corners,
+           draw=black, very thick,
+           minimum height=2em,
+           inner sep=2pt,
+           text centered,
+           },
+}
+\lstset{language=Python}
+\pgfplotsset{width=10.5cm,compat=1.8}
+\makeatletter
+
+% newcommand for inline equations used in appendices
+\newcommand*{\inlineequation}[2][]{
+  \begingroup
+    \refstepcounter{equation}
+    \ifx\\#1\\
+    \else
+      \label{#1}
+    \fi
+    \relpenalty=10000
+    \binoppenalty=10000
+    \ensuremath{
+      #2
+    }
+    ~\@eqnnum
+  \endgroup
+}
+\makeatother
+
+
+
+\Title{Non-Markov Stateful Evolutionary Games}
+\Author{Mark Burgess, Research School of Computer Science, The Australian National University, Canberra, ACT 0200, Australia; markburgess1989@gmail.com}
+\AuthorNames{}
+\address[1]{
+ \quad }
+
+\abstract{A evolutionary game is introduced which explicitly models states and actions in the strategies of the organisms of the evolving population. The game principally features actions that result in demographic flow between states that may not conserve organism numbers.
+The game's formalism is expounded and the nature of the game's equilibrium is discussed. This discussion leads to an algorithm for numerically determining the stable equilibrium points which is exemplified in the context of a modified Hawk-Dove game. The game's flexibility for modeling population dynamics is discussed in the context of other evolutionary games.}
+\keyword{Evolutionary stable strategies (ESS); Markov decision evolutionary games (MDEG); Hawk-Dove game; Evolutionary dynamics; Evolutionary Game Theory}
+
+% not sure if I should include these or not?
+%\PACS{02.50.Le}
+%\MSC{91A22}
+%\JEL{C73}
+
+
+\datasetlicense{CC-BY}
+\begin{document}
+
+\input{introduction}
+\input{description}
+\input{equilibrium}
+\input{example}
+\input{discussion}
+
+\vspace{6pt} 
+\acknowledgments{A great thankyou to Paul Scott \& Sylvie Thiebaux for essential proof-reading, academic advice and support!\\ This study was conducted under grant of the Australian Postgraduate Award (APA) for participation in PhD program through the Research School of Computer Science (RSCS) at the Australian National University (ANU). No specific funds were received for costs associated with open-access publication.}
+\conflictsofinterest{The authors declare no conflict of interest. And the founding sponsors had no role in the design of the study; in the collection, analyses, or interpretation of data; in the writing of the manuscript, and in the decision to publish the results.} 
+
+\appendixtitles{no}
+\appendixsections{multiple}
+\appendix
+\input{appendix1}
+\input{appendix2}
+\input{appendix3}
+\pagebreak
+\input{appendix4}
+\pagebreak
+\input{appendix5}
+\pagebreak
+\input{appendix6}
+
+%\bibliography{./bib}
+%\iffalse
+\begin{thebibliography}{999}
+\providecommand{\natexlab}[1]{#1}
+
+\bibitem[Smith and Price(1973)]{maynard}
+Smith, J.M.; Price, G.R.
+\newblock The Logic of Animal Conflict.
+\newblock {\em Nature} {\bf 1973}, {\em 246},~15--18.
+
+\bibitem[Smith(1982)]{maynard2}
+Smith, J.M.
+\newblock {\em Evolution and the Theory of Games}; Cambridge University Press,
+  1982.
+
+\bibitem[Weibull(1997)]{weibull}
+Weibull, J.W.
+\newblock {\em Evolutionary Game Theory}; The MIT Press,  1997.
+
+\bibitem[Alexander(2009)]{sep-game-evolutionary}
+Alexander, J.M.
+\newblock Evolutionary Game Theory. In {\em The Stanford Encyclopedia of
+  Philosophy}, Fall 2009 ed.;  Zalta, E.N., Ed.; Metaphysics Research Lab,
+  Stanford University,  2009.
+
+\bibitem[den Berg and Weissing(2015)]{socialpsyc1}
+den Berg, P.V.; Weissing, F.J., Evolutionary Perspectives on Social Psychology;
+  Springer International Publishing,  2015; chapter 34- Evolutionary Game
+  Theory and Personality, pp. 451--463.
+
+\bibitem[Hodgson and Huang(2012)]{Hodgson2012}
+Hodgson, G.M.; Huang, K.
+\newblock Evolutionary game theory and evolutionary economics: are they
+  different species?
+\newblock {\em Journal of Evolutionary Economics} {\bf 2012}, {\em
+  22},~345--366.
+
+\bibitem[McNamara \em{et~al.}(2009)McNamara, Fromhage, Barta, and
+  Houston]{McNamara953}
+McNamara, J.M.; Fromhage, L.; Barta, Z.; Houston, A.I.
+\newblock The optimal coyness game.
+\newblock {\em Proceedings of the Royal Society of London B: Biological
+  Sciences} {\bf 2009}, {\em 276},~953--960.
+
+\bibitem[Lenski \em{et~al.}(1999)Lenski, Ofria, Collier, and Adami]{Lenski1999}
+Lenski, R.E.; Ofria, C.; Collier, T.C.; Adami, C.
+\newblock Genome complexity, robustness and genetic interactions in digital
+  organisms.
+\newblock {\em Nature} {\bf 1999}, {\em 400},~661--664.
+
+\bibitem[Lenski \em{et~al.}(2003)Lenski, Ofria, Pennock, and Adami]{Lenski2003}
+Lenski, R.E.; Ofria, C.; Pennock, R.T.; Adami, C.
+\newblock The evolutionary origin of complex features.
+\newblock {\em Nature} {\bf 2003}, {\em 423},~139--144.
+
+\bibitem[O'Neill(2003)]{10.1371/journal.pbio.0000018}
+O'Neill, B.
+\newblock Digital Evolution.
+\newblock {\em PLOS Biology} {\bf 2003}, {\em 1}.
+
+\bibitem[Ray(1991)]{ray-approach-to-synthesis-1991}
+Ray, T.S.
+\newblock An approach to the Synthesis of Life. In {\em Artificial Life II,
+  Santa Fe Institute Studies in the Sciences of Complexity}; {C. Langton, C.
+  Taylor, J. D. Farmer, S. Rasmussen}., Ed.; Addison-Wesley: Redwood City, CA,
+  1991; Vol. vol. XI, pp. 371--408.
+
+\bibitem[Bedau \em{et~al.}(2000)Bedau, McCaskill, Packard, Rasmussen, Adami,
+  Green, Ikegami, Kaneko, and Ray]{journals/alife/BedauMPRAGIKR00}
+Bedau, M.A.; McCaskill, J.S.; Packard, N.H.; Rasmussen, S.; Adami, C.; Green,
+  D.G.; Ikegami, T.; Kaneko, K.; Ray, T.S.
+\newblock Open Problems in Artificial Life.
+\newblock {\em Artificial Life} {\bf 2000}, {\em 6},~363--376.
+
+\bibitem[Aguilar \em{et~al.}(2014)Aguilar, Santamaría-Bonfil, Froese, and
+  Gershenson]{alife1}
+Aguilar, W.; Santamaría-Bonfil, G.; Froese, T.; Gershenson, C.
+\newblock The past, present, and future of artificial life.
+\newblock {\em Frontiers in Robotics and AI} {\bf 2014}, {\em 8},~1--15.
+
+\bibitem[Szabó and Fáth(2007)]{spacial4}
+Szabó, G.; Fáth, G.
+\newblock Evolutionary games on graphs.
+\newblock {\em Physics Reports} {\bf 2007}, pp. 97--216.
+
+\bibitem[Shapley(1953)]{shapley53}
+Shapley, L.S.
+\newblock Stochastic Games.
+\newblock {\em Proceedings of the National Academy of Sciences of the United
+  States of America} {\bf 1953}, {\em 39},~1095--1100.
+
+\bibitem[Solan and Vieille(2015)]{Solan2015}
+Solan, E.; Vieille, N.
+\newblock Stochastic games.
+\newblock {\em Proceedings of the National Academy of Sciences} {\bf 2015},
+  {\em 112},~13743--13746.
+
+\bibitem[Killingback and Doebeli(1996)]{spacial1}
+Killingback, T.; Doebeli, M.
+\newblock Spacial Evolutionary Game Theory: Hawks and Doves revisited.
+\newblock {\em Proceedings - Biological Sciences} {\bf 1996}, {\em
+  263},~1135--1144.
+
+\bibitem[Nowak(2006)]{nowak}
+Nowak, M.A.
+\newblock {\em Evolutionary Dynamics: Exploring the Equations of Life}; Harvard
+  University Press,  2006.
+
+\bibitem[Nowak and May(1992)]{spacial2}
+Nowak, M.A.; May, R.M.
+\newblock Letters to Nature: Evolutionary games and spacial chaos.
+\newblock {\em Nature} {\bf 1992}, {\em 359},~826--829.
+
+\bibitem[Hauert and Doebeli(2004)]{spacial3}
+Hauert, C.; Doebeli, M.
+\newblock Spatial structure often inhibits the evolution of cooperation in the
+  snowdrift game.
+\newblock {\em Nature} {\bf 2004}, {\em 428},~643--646.
+
+\bibitem[Altman and Hayel(2010)]{markov2}
+Altman, E.; Hayel, Y.
+\newblock Markov Decision Evolutionary Games.
+\newblock {\em IEEE Transactions on Automatic Control} {\bf 2010}, {\em
+  55},~1560--1569.
+
+\bibitem[Tembine \em{et~al.}(2009)Tembine, Boudec, El-Azouzi, and
+  Altman]{markov3}
+Tembine, H.; Boudec, J.Y.L.; El-Azouzi, R.; Altman, E.
+\newblock Mean Field Asymptotic of Markov Decision Evolutionary Games and
+  Teams.
+\newblock {\em Gamenets 2009, International Conference on Game Theory for
+  Networks} {\bf 2009}.
+
+\bibitem[Altman \em{et~al.}(2009)Altman, Hayel, Tembine, and
+  El-Azouzi]{markov4}
+Altman, E.; Hayel, Y.; Tembine, H.; El-Azouzi, R.
+\newblock Markov Decision Evolutionary Games with Expected Average Fitness.
+\newblock {\em Evolutionary Ecology Research} {\bf 2009}.
+
+\bibitem[Altman and Brunetti(2013)]{markov5}
+Altman, E.; Brunetti, I.
+\newblock A Markov Decision Evolutionary Game for the study of a Dynamic Hawk
+  and Dove Game.
+\newblock {\em ISDG - 9th Workshop of the International Society of Dynamic
+  Games} {\bf 2013}.
+
+\bibitem[Brunetti \em{et~al.}(2015)Brunetti, Hayel, and Altman]{markov8}
+Brunetti, I.; Hayel, Y.; Altman, E.
+\newblock State Policy Couple Dynamics in Evolutionary Games.
+\newblock {\em American Control Conference} {\bf 2015}, pp. 1758--1763.
+
+\bibitem[Brunetti \em{et~al.}(2016)Brunetti, Hayel, and Altman]{markov9}
+Brunetti, I.; Hayel, Y.; Altman, E.
+\newblock State-Policy Dynamics in Evolutionary Games.
+\newblock {\em Dynamic Games and Applications} {\bf 2016}.
+
+\bibitem[Rosenberg and Bouchard(2015)]{sep-fitness}
+Rosenberg, A.; Bouchard, F.
+\newblock Fitness. In {\em The Stanford Encyclopedia of Philosophy}, Fall 2015
+  ed.;  Zalta, E.N., Ed.;  2015.
+
+\bibitem[Caswell(2000)]{population1}
+Caswell, H.
+\newblock {\em Matrix Population Models}; Sinauer Associates, Sunderland,
+  Massachusetts.,  2000.
+
+\bibitem[Leslie(1945)]{leslie}
+Leslie, P.
+\newblock On the use of Matricies in Certain Population Mathematics.
+\newblock {\em Biometrika} {\bf 1945}, {\em 33},~183--212.
+
+\bibitem[Gantmakher(2000)]{matrix2}
+Gantmakher, F.R.
+\newblock {\em The Theory of Matrices, Volume 2}; American Mathematical
+  Society,  2000.
+
+\bibitem[Put O~Ang and Wreede(1990)]{models1}
+Put O~Ang, J.; Wreede, R.D.
+\newblock Matrix models for algal life history stages.
+\newblock {\em Marine Ecology Progress Series} {\bf 1990}, {\em 59},~171--181.
+
+\bibitem[Jongejans and de~Kroon(2012)]{models2}
+Jongejans, E.; de~Kroon, H., Encyclopedia of Theoretical Ecology; University of
+  California Press,  2012; chapter Matrix Models, pp. 415--423.
+
+\bibitem[Shea \em{et~al.}(2010)Shea, Jongejans, Skarpaas, Kelly, and
+  Sheppard]{models3}
+Shea, K.; Jongejans, E.; Skarpaas, O.; Kelly, D.; Sheppard, A.W.
+\newblock Optimal management strategies to control local population growth or
+  population spread may not be the same.
+\newblock {\em Ecological Applications} {\bf 2010}, {\em 20},~1148–1161.
+
+\bibitem[Traulsen and Hauert(2009)]{stochastic1}
+Traulsen, A.; Hauert, C.
+\newblock {\em Reviews of Nonlinear Dynamics and Complexity}; Vol.~2,
+  Wiley-VCH,  2009; chapter Stochastic Evolutionary Game Dynamics, pp. 25--61.
+
+\bibitem[Hofbauer(2011)]{psr1}
+Hofbauer, J.
+\newblock Deterministic Evolutionary Game Dynamics.
+\newblock {\em Proceedings of Symposia in Applied Mathematics} {\bf 2011}, {\em
+  69},~61--79.
+
+\bibitem[McNamara \em{et~al.}(1997)McNamara, Webb, Collins, Székely, and
+  Houston]{errors1}
+McNamara, J.M.; Webb, J.N.; Collins, E.; Székely, T.; Houston, A.I.
+\newblock A General Technique for Computing Evolutionarily Stable Strategies
+  Based on Errors in Decision-making.
+\newblock {\em Journal of Theoretical Biology} {\bf 1997}, {\em 189},~211--225.
+
+\bibitem[Hoffman \em{et~al.}(2015)Hoffman, Suetens, Gneezy, and
+  Nowak]{rockpaperscissors}
+Hoffman, M.; Suetens, S.; Gneezy, U.; Nowak, M.A.
+\newblock An experimental investigation of evolutionary dynamics in the
+  Rock-Paper-Scissors game.
+\newblock {\em Scientific Reports} {\bf 2015}, {\em 5}.
+
+\bibitem[Serre(2010)]{matrix1}
+Serre, D.
+\newblock {\em Matrices: Theory and Applications}, 2 ed.; Vol. 216, {\em
+  Graduate Texts in Mathematics}, Springer-Verlag New York,  2010.
+
+\bibitem[Uherka and Sergott(1977)]{roots1}
+Uherka, D.J.; Sergott, A.M.
+\newblock On the Continuous Dependence of the Roots of a Polynomial on its
+  Coefficients.
+\newblock {\em The American Mathematical Monthly} {\bf 1977}, {\em
+  84},~368--370.
+
+\bibitem[Bo(2000)]{bo1}
+Bo, Z.
+\newblock On the spectral radius of nonnegative matrices.
+\newblock {\em Australasian Journal of Combinatorics} {\bf 2000}, {\em
+  22},~301--306.
+
+\end{thebibliography}
+%\fi
+\end{document}
+

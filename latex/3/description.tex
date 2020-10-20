@@ -1,0 +1,103 @@
+\section{Description of the Game}\label{section:formalism}
+
+In this section we specify the mathematical elements of our game and then proceed to give examples in order to provide more intuition to what the elements mean, afterwards we give an algorithm that simulates the organisms.
+
+Consider an ecosystem of different species of organisms, where the organisms of each species have a distinct set of states which they can occupy. Further imagine that each state has a set of actions which an organism in the state can execute.
+Let:
+\begin{itemize}[leftmargin=*,labelsep=4mm]
+\item   $K$ be a finite set of species
+\item	$S$ be the finite set of all states
+\item   $S_k$ be nonempty disjoint subsets of states $S$ available to species $k\in K$
+\item   $A$ be the finite set of all actions
+\item   $A_k$ be nonempty disjoint subsets of actions $A$ available to species $k\in K$
+\item   $A_{k,s}$ be nonempty subset of actions $A_k$ available to species $k\in K$ in state $s\in S_k$
+\end{itemize}
+Further imagine that each individual organism has a strategy (or a `genetic code'), which dictates the probabilities of what action it will execute depending on the state it is in.
+Let:
+
+\begin{itemize}[leftmargin=*,labelsep=4mm]
+\item   $W^k$ be the set of possible strategies for species $k\in K$, such that for any strategy $w^k \in W^k$ that $w^k_{a,s}$ denotes the probability that an organism with strategy $w^k$ will execute action $a\in A_{k,s}$ if it is in state $s\in S_k$.
+\end{itemize}
+The elements of $W^k$ are all that satisfy the basic rules of probability:
+\begin{itemize}[leftmargin=*,labelsep=4mm]
+\item[--]   probabilities of taking actions from any state must sum to one:\\\-\hspace{8mm} $\forall k\in K~~\forall w^k\in W^k~~\forall s\in S_k~~ \sum_{a\in A_{k,s}}w^k_{a,s}=1$
+\item[--]   all probabilities must be non-negative:\\\-\hspace{8mm} $\forall k\in K~~\forall w^k\in W^k~~\forall s\in S_k~~\forall a\in A_{k,s}~~ w^k_{a,s}\ge 0$
+\item[--]   inaccessible actions have probability of zero:\\\-\hspace{8mm} $\forall k\in K~~\forall w^k\in W^k~~\forall s\in S_k~~\forall a\notin A_{k,s}~~ w^k_{a,s}= 0$
+\end{itemize}
+The remaining elements are:
+
+\begin{itemize}[leftmargin=*,labelsep=4mm]
+\item	$P_{t,k,s,w}$ is the number\footnote{$P_{t,k,s,w}$ defines a distribution of the population at time $t$, which may be normalized and hence represent a probability distribution or left unnormalized as representing actual numbers of organisms. The only constraint is that it be non-negative $\forall t,k,s,w~~P_{t,k,s,w}\ge 0$. If the probability distribution is to be normalized then the normalization can either be `built-in' to the transmission $T$ terms or included as a separate step in the algorithm \ref{al:1}} of organisms at time $t$ of species $k\in K$ in a state $s\in S_k$ with strategy $w\in W^k$; 
+\item   $P^*_{t,k,s,a} = \sum_{w^k\in W^k}P_{t,k,s,w^k}w^k_{a,s}$ is the number of organisms at time $t$ of species $k\in K$ in a state $s\in S_k$ which are going to take action $a\in A_{k,s}$.
+\item   $T_{k,s,a}(P^*_t)$ are non-negative functions of argument\footnote{where $P^*_t$ is shorthand for the set of all the numbers across $k$, $s$ and $a$,  $P^*_t = \{P^*_{t,k,s,a}~|~k\in K,~s\in S_k,~a\in A_{k,s}\}$} $P^*_t$, giving transmission of organisms (of a strategy $w^k$) \textit{to} state $s\in S_k$ when action $a\in A_k$ is executed by an organism (of strategy $w^k$).
+\item   $\alpha$ as the proportion of the population that will take an action (or actualize it) at a time step $t\rightarrow t+1$; $0<\alpha<1$.
+\end{itemize}
+
+Once the above bullet-point elements $K,S,A,T,\alpha$ and initial population $P_0$ are given - the game is fully specified.
+\subsection{The meaning of the Game's elements}
+
+Some parts of this game should be relatively intuitive, such as the set of species $K$ - which might be 'catfish' or 'dog', but may also be 'tit-for-tat' players, or 'players at a node X'.
+Equally the states $S$ could be construed to be any number of things - such as 'in Europe', 'sensing light', 'remembers being cheated-on', 'shy', 'shy in Europe and sensing light', or 'in a pH 9.3'.
+The actions $A$ can equally be construed any which way - such as 'travel to Japan', 'twitch left leg', 'forgive husband', 'move into sunlight', 'produce Aldosterone', or 'try to travel to Japan otherwise forgive'.
+Indeed it is one of the virtues of modeling in this way that a mathematical specification could be used to represent so many things.\footnote{An astute reader might eventually notice that that the set of species $K$ actually only serves as a partitioning on the states and is actually redundant to the logic.}
+
+The set of strategies $W^k$ are the possible ways the organisms will choose actions based on their state. This could be interpreted as being part of the organisms programming, or part of its personality, perhaps as the instincts encoded in a genome, or the sequences of proteins as imprinted on a bacterial plasmid.
+
+At any point in time the population must have a basic specification, and $P_{t,k,s,w}$ is that specification. It is the number of organisms of a species $k$ in a state $s$ who have strategy $w$ at a time $t$. The primary thing worth noting here is that the actual strategies in the population need to be kept track-of. For instance, If we imagine that a population at a time $t$ of passive monkeys 'in a tree' doing action 'throw banana' would be a very different thing from aggressive monkeys 'in a tree' doing action 'throw banana'. In this case the difference between the passive and aggressive strategies might show at a later time when the monkeys are in a different state. Another note is that the number of different strategies in a population could be very large as there is a continuum of ways that the probabilities which define the strategies can be set.
+
+However the strategies in the population should probably not be the things in-themself which determine the immediate actions and reactions among the organisms. It is more natural to think that the actions which are executed should determine the immediate consequences for the population - and this specification is the $P^*_{t,k,s,a}$.
+$P^*$ is the specification of organisms of a species $k$ in a state $s$ doing action $a$ at a time $t$, it is determined by $P$ and it contains a lot less information than $P$.
+
+The $T_{k,s,a}(P^*_t)$ functions are the primary source of flexibility in the model. The concept of transmission was discussed in section \ref{sec:2} and describes the `demographic flow' of individuals from one state to another. These functions give the numbers that might otherwise appear in the entries of the transmission matrices - such as the Leslie matrices.
+For intuition: If 100 monkeys in state 'on the ground' did action 'reproduce' which would result in an expected 75 monkeys in state 'baby' in the next time-step, then the number 0.75 would be the value of the respective $T$ function. The $T_{k,s,a}(P^*_t)$ are a set of functions giving the transmission to a state $s$ by the organisms doing action $a$; and within the model these can be \textbf{any} non-negative function of the numbers $P^*_{t}$. For instance: the number of baby monkeys produced per time-step might depend linearly, quadratically, exponentially or even sinusoidally on the number of alligators specifically 'in the lake' doing action 'snap teeth' in that same time-step. Or as another instance: the population of monkeys in state 'blind' doing action 'go home' might transition to a number of states dependent on any number of such factors.
+
+Finally the term $\alpha$ captures the consideration that we generally don't want the entire ecosystem taking an action at every single time-step. It is perceived that such a thing would probably lead to enduring (perhaps unrealistic) oscillations in the population, and having the actions staggered in this way would be expected to smooth the dynamics out - as might be thought to occur in real-world evolution.
+
+\subsection{An algorithm for the Game's process}
+
+The update of the game can be seen to consist in stages: The organisms in the population of a strategy $w^k$ have population distribution across states given by $P_t$.  $\alpha$ of the those individuals have $w^k$ strategy which determines the distribution of actions taken by them.  The total actions taken by all strategies determines the total transmissions among the states - thus updating $P_t$ to $P_{t+1}$. The process is embedded as Algorithm \ref{al:1}. And that this process may or may not settle into any kind of stable equilibrium.
+
+\begin{algorithm}[h]
+\caption{Forward Stepping Algorithm}\label{al:1}
+\begin{algorithmic}[1]
+\setstretch{1.8}
+
+\Procedure{Simulate}{$K,S,W,T,P_0,\alpha,t_{max}$}
+\State $t\gets 0$
+\While{$t<t_{max}$}
+    \State $P^*_{t,k,s,a} \gets \sum_{w^k\in W^k}P_{t,k,s,w^k}w^k_{a,s}$\Comment{calculate reduced population distribution}
+    \For{$k \in K$}\Comment{for each species:}
+        \For{$w^k \in W^k$}\Comment{for each strategy:}
+            \State $M^{t,k,w^k}_{s_1,s_2} \gets \sum_{a\in A_{k,s_2}}T_{k,s_1,a}(P^*_t) w^k_{a,s_2}$\Comment{calculate transmission matrix}
+            \State $z_{s_1} \gets \sum_{s\in S_k} M^{t,k,w^k}_{s_1,s}P_{t,k,s,w^k}$\Comment{apply matrix to the strategy's population}
+            \State $P_{t+1,k,s,w^k} \gets \alpha z_s + (1-\alpha)P_{t,k,s,w^k}$\Comment{incorporate new population by $\alpha$}
+        \EndFor
+    \EndFor
+    \State $t\gets t+1$
+\EndWhile
+\State \textbf{return} $P^*_{t_{max}}$
+\EndProcedure
+
+\end{algorithmic}
+\end{algorithm}
+From Algorithm \ref{al:1} is noticed that if the states were indexed $S_k=\{s_{k,0},s_{k,1},\dots\}$, that every strategy $w^k$ would have its own transmission matrix analogous to those given in section \ref{sec:2} (such as the Leslie matrix):\begin{equation}\label{eq:transmission_matrix}m_{l,j} = M^{t,k,w^k}_{s_{k,l},s_{k,j}} = \sum_{a\in A_{k,s_j}}T_{k,s_{k,l},a}(P^*_t) w^k_{a,s_{k,j}}\end{equation}
+Such that $m_{l,j}$ would be net transmission from the $j$th state to the $l$th state for the individuals that take actions. We term such a matrix the "strategy's transmission matrix".
+
+\subsection{Some bookkeeping}
+
+Before we proceed further it is necessary to make an odd distinction between a strategy and the probability numbers by which it is defined by. This distinction is important because it is possible to perform operations on those numbers such that they may represent a different strategy or possibly no strategy at all.
+If the actions were indexed $A_{k,s_{k,j}}=\{a_{k,j,0},a_{k,j,1},\dots\}$ then the probabilities of any strategy $w^k\in W^k$ would form an indexed set of numbers which we define to be the strategy's "terms".
+\begin{equation}\label{eq:probability_indices}q_{j,i}=w^k_{a_{k,j,i},s_{k,j}}\end{equation}
+Here we say that appropriately dimensioned indexed set of numbers $q_{j,i}$ can be the terms of a strategy if it is "implementable", which is iff the numbers could be taken to be probabilities of a strategy.
+ie. $\forall j~\sum_iq_{j,i}=1$ and $\forall i,j~q_{i,j}\in\mathbb{R}_+\bigcup\{0\}$.\\
+The terms of a strategy have the same size and dimensions as the terms of all the strategies of the same species. Because of this it possible to add, subtract and multiply them together element-wise to form linear combinations of them.
+Although it may take some thought to realize, it is the case that the result of a linear combination of strategy terms is implementable if the coefficients of the linear combination are positive and sum to unity.
+In any case, in the next section we will talk of linear combinations of strategies in this manner.
+\\
+
+As a side-note: In anticipation of Appendix \ref{appendix5} we will present it here that - any strategy's transmission matrix has a form where it has columns are linear combination of column vectors weighted by its terms. Consider that if we index the $T$ functions as $y_{j,i,l}=T_{k,s_{k,l},a_{k,j,i}}$, and if $y_{j,i}$ denotes a column of such terms then $m_{l,j}$ has form:
+\begin{equation}\label{eq:columns} m_{l,j} = \sum_iy_{j,i,l}q_{j,i} = \left[\begin{array}{c|c|c}
+y_{0,0}q_{0,0}+y_{0,1}q_{0,1}+y_{0,2}q_{0,2}+\dots & 
+y_{1,0}q_{1,0}+y_{1,1}q_{1,1}+\dots & 
+y_{2,0}q_{2,0}+\dots
+\end{array}\right]\end{equation}

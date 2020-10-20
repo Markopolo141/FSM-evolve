@@ -1,0 +1,53 @@
+\section{Example Python source-code for Moran Process simulation}\label{appendix4}
+
+\begin{lstlisting}[frame=single]
+import random
+
+num_bots = 1200
+turns = num_bots*100
+D = 0.75
+A = 0.8	
+C = 0.70
+
+bots = [(i%3,i%2) for i in range(num_bots)]
+
+def add_bots(number,state,gamma):
+    for i in range(int(number)):
+        bots[random.randint(0,num_bots-1)] = (state,gamma)
+    if random.random() < number-int(number):
+        bots[random.randint(0,num_bots-1)] = (state,gamma)
+
+def calculate_p():
+    ah = 0
+    ad = 0
+    for b in bots:
+        if b[0]==0:
+            ah += 1
+        if b[0]==1:
+            ad += 1
+    if ah+ad==0:
+        return 0.0
+    else:
+        return (1.0*ah)/(ad+ah)
+
+def turn(b):
+    p = calculate_p()
+    if b[0]==0:
+        add_bots(2*(1-p),2,b[1])
+    if b[0]==1:
+        add_bots(1-p+A,2,b[1])
+    if b[0]==2 and b[1]==0:
+        add_bots(1-p*C,0,b[1])
+        add_bots(D*p*C,1,b[1])
+    if b[0]==2 and b[1]==1:
+        add_bots(C*p*(D-1)+1,1,b[1])
+
+for i in range(turns):
+    turn(random.choice(bots))
+    if i%(turns/1000)==0:
+        add_bots(1,random.randint(0,2),random.randint(0,1))
+print "p = {}".format(calculate_p())
+print "proportion Child = {}".format(sum(
+                [b[0]==2 for b in bots])*1.0/num_bots)
+\end{lstlisting}
+

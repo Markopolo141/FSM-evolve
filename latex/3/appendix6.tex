@@ -1,0 +1,129 @@
+
+\section{A tit-for-tat example}\label{appendix:titfortat}
+
+In order to demonstrate that the organisms in the game can indeed adapt to the plays of other organisms we develop a game in which the tit-for-tat strategy can be played against other strategies.
+The verbal description of the game is as follows:
+\begin{center}
+\fbox{\begin{minipage}{16cm}
+Imagine that there are two populations of simple organisms, and that the organisms in both populations can occupy one of two distinct states.
+These two states are named 'about to cooperate' and 'about to defect'. or "C1" and "D1", and "C2" and "D2" for short.
+
+In each time-period, organisms from the two populations are paired with each other where they play 'cooperate' or 'defect'.
+The combination determines the number of offspring that the organisms will have.\\
+If two organisms are paired from states "C1" and "C2" then they both have 3 offspring each.\\
+If two organisms are paired from states "C1" and "D2" then they have 1 and 4 offspring respectively.\\
+If two organisms are paired from states "D1" and "C2" then they have 4 and 1 offspring respectively.\\
+If two organisms are paired from states "D1" and "D2" then they both have 2 offspring each.\\
+\\
+In each state the organisms have 3 actions available to them, whose only purpose is to switch their state depending on how their pairing went.
+\begin{itemize}
+\item	In the first case, there is the action which keeps the current state irrespective of the outcome of the pairing.
+For instance, an organism in "C1" may choose this action which keeps it in state "C1" irrespective of what state the opponent was from. This action is called 'hold' or "H" for short.
+\item	In the second case, there is the action which switches the state if the opponent in the pairing played differently.
+For instance, an organism in "C1" may choose to transition to state "D1" only if the opponent in the pairing was from state "D2". This action is called 'mirror' or "M" for short.
+\item	In the third case, there is the action which changes the state irrespective of the outcome of the pairing.
+For instance, an organism in "C1" may choose to transition to state "D1" irrespective of what state the opponent was from. This action is called 'switch' or "S" for short.
+\end{itemize}
+\end{minipage}}
+\end{center}
+It is possible to draw a table of the combinations of offspring, and also possible to draw a diagram of the states with actions showing transmissions between them.
+these two are shown in the two parts of figure \ref{somefig:1}.\\
+
+\begin{figure}[h]
+    \begin{subfigure}[b]{.4\linewidth}
+        \centering
+        %\footnotesize
+		\centering
+		\label{my-label}
+		\begin{tabular}{ccc}
+				                       & Cooperate                & Defect                   \\ \cline{2-3} 
+		\multicolumn{1}{c|}{Cooperate} & \multicolumn{1}{c|}{3,3} & \multicolumn{1}{c|}{1,4} \\ \cline{2-3} 
+		\multicolumn{1}{c|}{Defect}    & \multicolumn{1}{c|}{4,1} & \multicolumn{1}{c|}{2,2} \\ \cline{2-3} 
+		\end{tabular}
+		\vspace{2.3\baselineskip}
+        \caption{
+            A matrix of the offspring numbers for \\the example Prisoner's Dilemma Game
+        }\label{somefig:1b}
+    \end{subfigure}
+    \begin{subfigure}[b]{.5\linewidth}
+        \centering
+        \begin{tikzpicture}[scale=0.9, transform shape,->,>=stealth',shorten >=1pt,auto,node distance=1.7cm,thick,main node/.style={circle}]
+            \path[use as bounding box] (-5.5cm, -2.0cm) rectangle (7.5cm, 2.0cm);
+
+            \node[main node, draw] (L1) at (-2cm,  1cm) [align=center, text width=0.5cm] {C1};
+            \node[main node, draw] (L2) at (-2cm, -1cm) [align=center, text width=0.5cm] {D1};
+
+            \node[main node, draw] (R1) at ( 2cm,  1cm) [align=center, text width=0.5cm] {C2};
+            \node[main node, draw] (R2) at ( 2cm, -1cm) [align=center, text width=0.5cm] {D2};
+
+            \path[every node/.style={sloped,auto=false}]
+			
+            (L1) edge [bend right=25,  						line width=1pt,anchor=south] node  {} (L2)
+            (L2) edge [bend right=25,						line width=1pt,anchor=south] node  {} (L1)
+            (L1) edge [in=90+20,out=90-20,looseness=7,		line width=1pt,anchor=south] node  {} (L1)
+            (L2) edge [in=270+20,out=270-20,looseness=7,	line width=1pt,anchor=south] node  {} (L2)
+            (L1) edge [in=90-35,out=0,looseness=7,			line width=1pt,anchor=south] node  {} (L1)
+            (L1) edge [in=35,out=0,looseness=1.3,			line width=1pt,anchor=south] node  {} (L2)
+            (L2) edge [in=270-35,out=180,looseness=7,		line width=1pt,anchor=south] node  {} (L2)
+            (L2) edge [in=180+35,out=180,looseness=1.3,		line width=1pt,anchor=south] node  {} (L1)
+
+            (R1) edge [bend right=25,  						line width=1pt,anchor=south] node  {} (R2)
+            (R2) edge [bend right=25,						line width=1pt,anchor=south] node  {} (R1)
+            (R1) edge [in=90+20,out=90-20,looseness=7,		line width=1pt,anchor=south] node  {} (R1)
+            (R2) edge [in=270+20,out=270-20,looseness=7,	line width=1pt,anchor=south] node  {} (R2)
+            (R1) edge [in=90-35,out=0,looseness=7,			line width=1pt,anchor=south] node  {} (R1)
+            (R1) edge [in=35,out=0,looseness=1.3,			line width=1pt,anchor=south] node  {} (R2)
+            (R2) edge [in=270-35,out=180,looseness=7,		line width=1pt,anchor=south] node  {} (R2)
+            (R2) edge [in=180+35,out=180,looseness=1.3,		line width=1pt,anchor=south] node  {} (R1)
+            ;
+        \end{tikzpicture}
+
+        \caption{The States in the example game, \\with arrows showing the transmissions due to actions}\label{somefig:1a}
+    \end{subfigure}
+        \vspace{-1.3\baselineskip}
+    \caption{}\label{somefig:1}
+\end{figure}
+
+\pagebreak
+
+the formal specification of the game is as follows:
+\begin{itemize}[leftmargin=*,labelsep=4mm]
+\item   $K=\{k_1,k_2\}$ Are the species of the two populations
+\item	$S=\{S_{k_1},S_{k_2}\}$, where $S_{k_1}=\{C1,D1\}$, $S_{k_2}=\{C2,D2\}$ are the respective states that the organisms of each species can occupy.
+\item	$A=\{A_{k_1},A_{k_2}\}$, where $A_{k_1}=\{A_{k_1,C1},A_{k_1,D1}\}$, $A_{k_2}=\{A_{k_2,C2},A_{k_1,D2}\}$\\
+		$A_{k_1,C1}=\{H_{C1},M_{C1},S_{C1}\}$,\\$A_{k_1,D1}=\{H_{D1},M_{D1},S_{D1}\}$,\\$A_{k_2,C2}=\{H_{C2},M_{C2},S_{C2}\}$,\\$A_{k_2,D2}=\{H_{D2},M_{D2},S_{D2}\}$\\ are the sets of all of the actions. It is noted that action 'switch' (or "S") from state C1 has very different outcome from action 'switch' from D2, and thus must therefore be referenced differently as $S_{C1}$ and $S_{D2}$ respectively.
+\item   If we we use shorthand $Z_{k_1} = \frac{P^*_{t,k_2,C2}}{P^*_{t,k_2,D2}+P^*_{t,k_2,C2}}$ and $Z_{k_2} = \frac{P^*_{t,k_1,C1}}{P^*_{t,k_1,D1}+P^*_{t,k_1,C1}}$ as the ratios of the populations in state the 'about to cooperate' state, then all the transmission rates for species $k_1$ are:\\
+\begin{tabular}{ll}\hline
+$T_{k_1,C1,H_{C1}}(P^*_t) = 3Z_{k_1}+1(1-Z_{k_1})$ & 	$T_{k_1,D1,H_{C1}}(P^*_t) = 0$\\
+$T_{k_1,C1,M_{C1}}(P^*_t) = 3Z_{k_1}$ & 				$T_{k_1,D1,M_{C1}}(P^*_t) = 1(1-Z_{k_1})$\\
+$T_{k_1,C1,S_{C1}}(P^*_t) = 0$ & 						$T_{k_1,D1,S_{C1}}(P^*_t) = 3Z_{k_1}+1(1-Z_{k_1})$\\\hline
+
+$T_{k_1,C1,H_{D1}}(P^*_t) = 0$ & 						$T_{k_1,D1,H_{D1}}(P^*_t) = 4Z_{k_1}+2(1-Z_{k_1})$\\
+$T_{k_1,C1,M_{D1}}(P^*_t) = 4Z_{k_1}$ & 				$T_{k_1,D1,M_{D1}}(P^*_t) = 2(1-Z_{k_1})$\\
+$T_{k_1,C1,S_{D1}}(P^*_t) = 4Z_{k_1}+2(1-Z_{k_1})$ &	$T_{k_1,D1,S_{D1}}(P^*_t) = 0$\\\hline
+\end{tabular}
+
+And reversely for the other species $k_2$:
+
+\begin{tabular}{ll}\hline
+$T_{k_2,C2,H_{C2}}(P^*_t) = 3Z_{k_2}+1(1-Z_{k_2})$ & 	$T_{k_2,D2,H_{C2}}(P^*_t) = 0$\\
+$T_{k_2,C2,M_{C2}}(P^*_t) = 3Z_{k_2}$ & 				$T_{k_2,D2,M_{C2}}(P^*_t) = 1(1-Z_{k_2})$\\
+$T_{k_2,C2,S_{C2}}(P^*_t) = 0$ & 						$T_{k_2,D2,S_{C2}}(P^*_t) = 3Z_{k_2}+1(1-Z_{k_2})$\\\hline
+
+$T_{k_2,C2,H_{D2}}(P^*_t) = 0$ & 						$T_{k_2,D2,H_{D2}}(P^*_t) = 4Z_{k_2}+2(1-Z_{k_2})$\\
+$T_{k_2,C2,M_{D2}}(P^*_t) = 4Z_{k_2}$ & 				$T_{k_2,D2,M_{D2}}(P^*_t) = 2(1-Z_{k_2})$\\
+$T_{k_2,C2,S_{D2}}(P^*_t) = 4Z_{k_2}+2(1-Z_{k_2})$ &	$T_{k_2,D2,S_{D2}}(P^*_t) = 0$\\\hline
+\end{tabular}
+\end{itemize}
+
+A simulation of such organisms also needs an initial population of the strategies to be specified.
+For instance, the species $k_1$ might be entirely comprised of organisms with the strategy of executing only 'mirror' actions, which would be very analogous to the tit-for-tat strategy.
+Alternately it may be that species $k_2$ might be entirely comprised of organisms with the strategy of executing 'mirror' if they are in state $C2$ and also play 'hold' if they are in state $D2$, which would be very analogous to the unforgiving 'grim-trigger' strategy.
+It is also possible to have the simulation run with combinations of these strategies and/or others between both populations.
+
+It is also worth noting that the two species $k_1$ and $k_2$ could be interpreted as playing against each other between adjacent nodes on a very simple graph or grid, and thus also possible to extend it to much larger grids where perhaps the cooperation/defection offspring numbers change.
+
+There is only so much modeling capacity with a binary state, but there is nothing prohibiting an extension to even more states for even more complex strategies, such as might be used for modeling 'tit-for-two-tats' strategy.
+Indeed the purpose of this appendix \ref{appendix:titfortat} is to illustrate some further possibilities.
+
+

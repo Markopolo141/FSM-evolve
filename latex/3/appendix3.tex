@@ -1,0 +1,223 @@
+\section{The Proofs}\label{appendix5b}
+
+\begin{Lemma}\label{lem1}
+for sets of complex numbers $\lambda_n$ and $\gamma_n$ related by $\gamma_n=\alpha\lambda_n+1-\alpha$ for an $\alpha$ such that $0<\alpha<1$ and $\lambda_0 = \max_n(|\lambda_n|)$ that: $\gamma_0=\max_n(|\gamma_n|)$ and for any $\gamma_m\ne\gamma_0$ that $|\gamma_m|<\gamma_0$ 
+\end{Lemma}
+\begin{proof}
+Applying the triangle inequality for any $\lambda_m$:\\
+$|\gamma_m|=|\alpha\lambda_m+1-\alpha|\le|\alpha\lambda_m|+|1-\alpha|=\alpha|\lambda_m|+1-\alpha$\\
+Therefore:\\
+$|\gamma_m|\le\alpha\max_n(|\lambda_n|)+1-\alpha=\alpha\lambda_0+1-\alpha=\gamma_0$\\
+Hence $\gamma_0$ is upper bound for set $|\gamma_m|$ and also is identical to an element in the set, hence is a maxima; satisfying the first part of the proof.\\
+For a $\gamma_m\ne\gamma_0$ then $\lambda_m\ne\lambda_0$, and we break $\lambda_m$ into real and imaginary components $\lambda_m=r_m+\mathbf{i}i_m$ (for $\mathbf{i}$ being imaginary number).\\
+If $r_m>\lambda_0$ then $\sqrt{r^2_m+i^2_m}=|\lambda_m|>\lambda_0$ which is contradiction of construction of $\lambda_0$.\\
+If $r_m=\lambda_0$ then $\sqrt{r^2_m+i^2_m}=|\lambda_0|\le\lambda_0$ would only be true if $i_m=0$, then $\gamma_m=\gamma_0$ contradicting construction of $\gamma_m$.\\
+Therefore $r_m<\lambda_0$.\\
+As $\gamma_m=\alpha\lambda_m+(1-\alpha)$ then:\\
+$|\gamma_m|^2=(\alpha r_m+(1-\alpha))^2+(\alpha i_m)^2=\alpha^2(r_m^2+i_m^2)+2\alpha r_m(1-\alpha) + (1-\alpha)^2$\\
+Since $|\lambda_m|\le\lambda_0$ therefore $r_m^2+i_m^2\le\lambda_0^2$, and also that $r_m<\lambda_0$:\\
+$|\gamma_m|^2<\alpha^2\lambda_0^2+2\alpha \lambda_0(1-\alpha) + (1-\alpha)^2 = (\alpha\lambda_0 + (1-\alpha))^2=|\gamma_0|^2$\\
+Therefore $|\gamma_m| < |\gamma_0|$, and the proof is complete.
+\end{proof}
+
+
+
+\begin{Theorem}\label{th:0}
+for an irreducible, diagonalizable non-negative real $n\times n$ matrix $M$ with spectral radius $\lambda$, and non-negative non-zero vector $v$ and an $\alpha$ such that $1>\alpha>0$, then for $Z=(\alpha M+(1-\alpha)I)$.\\
+That $\lambda$ is an eigenvalue of $M$ and its corresponding positive eigenvector $z$ is such there is an $b\in \mathbb{R_+}$ that: $$\lim_{m\rightarrow\infty}\frac{Z^mv}{(\alpha\lambda+(1-\alpha))^m}=bz$$
+\end{Theorem}
+\begin{proof}
+Since $M$ is irreducible and non-negative then it has a non-negative real eigenvalue $\lambda_0$ equal to its spectral radius $\lambda$ and a corresponding positive eigenvector $z_0$ via Perron-Frobenius theorem\footnote{that an irreducible matrix has an element-wise positive eigenvector corresponding to the eigenvalue equal to its spectral radius}.
+Let $z_0,z_1,\dots$ and $\lambda_0,\lambda_1,\dots$ be set of complex eigenvectors/values for $M$ (vectors as scaled to have magnitude of 1), in which case $z_0,z_1,\dots$ and $\gamma_0,\gamma_1,\dots$ are eigenvectors/values for $Z$ with $\gamma_i=\alpha\lambda_i+(1-\alpha)$.\\
+Since $\lambda_0=\lambda$, then $\gamma_0=\alpha\lambda_0+(1-\alpha)$ is unique largest magnitude eigenvalue of $Z$, as via lemma \ref{lem1}.\\
+since $z_0,z_1,\dots$ span $\mathbb{C}^n$, therefore $v$ can be decomposed into a linear combination of them:\\
+$v = c_0z_0 + c_1z_1 + c_2z_2 +\dots = \sum_i(v\boldsymbol{\cdot}z_i)z_i~~~~~\text{(where $\boldsymbol{\cdot}$ is hermitian inner product)}$\\
+With $c_0,c_1,\dots$ being the complex coefficients. Because vector $v$ is non-negative and non-zero and $z_0$ is also positive therefore $c_0$ is real and positive.
+Taking $m$ repeated applications of $\frac{1}{\gamma_0}Z$ gives:\\
+$\frac{Z^mv}{\gamma_0^m} = \left(\frac{\gamma_0}{\gamma_0}\right)^mc_0z_0 + \left(\frac{\gamma_{1}}{\gamma_0}\right)^mc_1z_1 + \left(\frac{\gamma_{2}}{\rho(Z)}\right)^mc_2z_2 + \dots$\\
+for large $m$, all terms with $\gamma_{a_i}$ magnitudes less than that of $\gamma_0$ tend to zero leaving the single term:\\
+$\frac{Z^mv}{\gamma_0^m} = \left(\frac{\gamma_0}{\gamma_0}\right)^mc_0z_0=c_0z_0$\\
+therefore:\\
+$\frac{Z^mv}{(\alpha\lambda_0+(1-\alpha))^m} = c_0z_0$\\
+which completes the proof.
+\end{proof}
+
+
+\pagebreak
+
+
+
+
+
+\begin{Lemma}\label{lem2}
+for a $n\times n$ matrix $A$, and $n$ column vector $b$, with $A^{b,k}$ denoting the matrix with its $k$th column as $b$.
+If $\lambda$ is an eigenvalue for both $A$ and $A^{b,k}$ then it is also an eigenvalue for $\alpha A + (1-\alpha)A^{b,k}$ for any $\alpha \in \mathbb{R}$
+\end{Lemma}
+\begin{proof}
+Consider the characteristic polynomials of $\lambda$ for $A$ and $A^{b,k}$:\\
+$\det(A-\lambda I)=\det(A^{b,k}-\lambda I)=0$\\
+If we let $C(\cdot)_{i,j}$ denote the $i$,$j$th cofactor of a matrix, then these determinants can be expanded along the $k$th column to give:\\
+$\left(\sum_iA_{i,k}C(A-\lambda I)_{i,k}\right)-\lambda C(A-\lambda I)_{k,k}=\left(\sum_ib_iC(A-\lambda I)_{i,k}\right)-\lambda C(A-\lambda I)_{k,k}=0$\\
+Therefore:\\
+$\alpha\left(\left(\sum_iA_{i,k}C(A-\lambda I)_{i,k}\right)-\lambda C(A-\lambda I)_{k,k}\right) + (1-\alpha)\left(\left(\sum_ib_iC(A-\lambda I)_{i,k}\right)-\lambda C(A-\lambda I)_{k,k}\right)=0$\\
+$=\left(\sum_i(\alpha A_{i,k}+(1-\alpha)b_i)C(A-\lambda I)_{i,k}\right)-\lambda C(A-\lambda I)_{k,k} =\det(\alpha A + (1-\alpha)A^{b,k}-\lambda I)=0$\\
+Thus it is demonstrated that $\lambda$ is also an eigenvalue for $\alpha A + (1-\alpha)A^{b,k}$.
+\end{proof}
+
+\begin{Theorem}\label{th:2}
+For a real $n\times n$ element-wise non-negative matrix $A$, and real element-wise non-negative column vector $b$, with $A^{b,k}$ denoting the matrix with its $k$th column as $b$.
+For the matrix mapping $B(\alpha) = \alpha A + (1-\alpha)A^{b,k}$ defined on a range $0\le\alpha\le1$. If $\rho(B(\alpha))$ denotes the spectral radius of $B(\alpha)$.\\ Then $\rho(B(\alpha))$ is continuous, and either constant or strictly monotonic with $\alpha$.
+\end{Theorem}
+\begin{proof}
+Because $B(\alpha) = \alpha A + (1-\alpha)A^{b,k}$ is a matrix continuous in all its elements it is thus well established that it will have $n$ continuous eigenvalues\cite{matrix1}.\footnote{An informal outline of the proof is that: 1. If the elements of a matrix are continuous 2. Then the coefficients of the characteristic polynomial are continuous (as they are additions and multiplications of them) 3. Then the roots of the characteristic polynomial are continuous (see \cite{roots1}) 4. Hence the eigenvalues are continuous}\\
+It is thus straightforward to note that the function $\rho(B(\alpha))$ is also continuous with $\alpha$ for all $\alpha$.\\
+Furthermore that the value $\rho(B(\alpha))$ is itself an eigenvalue of $B(\alpha)$ for all $\alpha$ via the Perron-Frobenius theorem\footnote{\label{note1}that an element-wise non-negative matrix has an eigenvalue equal to its spectral radius. The proof of this one seems quite difficult to find even though it certainly is stated in literature (for instance \cite{bo1}). Furthermore it also something which might be seem as intuitive, as any non-negative matrix can be constructed as the limit of a sequence of element-wise positive matricies and as the eigenvalues of a matrix must be continuous on their elements, thus that the corresponding property should also hold in the limit.}.
+Suppose for a contradiction that $\rho(B(\alpha))$ is not monotone, in this case there must exist at least three values of alpha, $\alpha_1<\alpha_2<\alpha_3$ such that $\rho(B(\alpha_2))>\max(\rho(B(\alpha_0)),\rho(B(\alpha_3)))$ or $\rho(B(\alpha_2))<\min(\rho(B(\alpha_0)),\rho(B(\alpha_3)))$.
+\begin{itemize}[leftmargin=*,labelsep=4mm]
+\item	suppose that $\rho(B(\alpha_2))>\max(\rho(B(\alpha_1)),\rho(B(\alpha_3)))$: let $\beta$ be a value between $\rho(B(\alpha_2))$ and $\max(\rho(B(\alpha_1)),\rho(B(\alpha_3)))$. Thus via the intermediate value theorem there exists $\gamma_1$ ($\alpha_1<\gamma_1<\alpha_2$) and $\gamma_2$ ($\alpha_2<\gamma_2<\alpha_3$) such that $\rho(B(\gamma_1))=\rho(B(\gamma_2))=\beta$. Thus $\beta$ is an eigenvalue of $B(\alpha_1)$ (via Lemma \ref{lem2}), and $\beta > \rho(B(\alpha_1))$ which contradicts the construction of $\rho(B(\alpha_1))$.
+\item   suppose that $\rho(B(\alpha_2))<\min(\rho(B(\alpha_1)),\rho(B(\alpha_3)))$: let $\beta$ be a value between $\rho(B(\alpha_2))$ and $\min(\rho(B(\alpha_1)),\rho(B(\alpha_3)))$. Thus via the intermediate value theorem there exists $\gamma_1$ ($\alpha_1<\gamma_1<\alpha_2$) and $\gamma_2$ ($\alpha_2<\gamma_2<\alpha_3$) such that $\rho(B(\gamma_1))=\rho(B(\gamma_2))=\beta$. Thus $\beta$ is an eigenvalue of $B(\alpha_2)$ (via Lemma \ref{lem2}), and $\beta > \rho(B(\alpha_2))$ which contradicts the construction of $\rho(B(\alpha_2))$.
+\end{itemize}
+Therefore $\rho(B(\alpha))$ is monotonic.\\
+If there does not exist any $\alpha_1,\alpha_2\in[0,1]$ such that $\rho(B(\alpha_1))$ = $\rho(B(\alpha_2))$\\
+\-\hspace{8mm}then $\rho(B(\alpha))$ is strictly monotonic.\\
+If there does exist an $\alpha_1,\alpha_2\in[0,1]$ such that $\rho(B(\alpha_1))$ = $\rho(B(\alpha_2))$\\
+\-\hspace{8mm}then $\rho(B(\alpha))$ is constant via lemma \ref{lem2}.\\
+Which completes the proof.
+\end{proof}
+
+\pagebreak
+
+\begin{Theorem}\label{th:3}
+For a $n\times n$ matrix $A_{i,j}$, and column vectors $b$ and $c$, with $A^{b,k}$ and $A^{c,k}$ denoting the matrix with its $k$th column as $b$ and $c$ respectively. For the matrix mapping $B(\alpha) = \alpha A^{b,k} + (1-\alpha)A^{c,k}$ for $\alpha\in\mathbb{R}$. Let $\lambda(\alpha)$ and $v(\alpha)$ be an eigenvalue/vector pairing of $B(\alpha)$\\
+If there exists different $\alpha_1$ and $\alpha_2$ such that $\lambda(\alpha_1)=\lambda(\alpha_2)$, then $\lambda(\alpha)=\lambda(\alpha_1)$ and $v(\alpha)=\frac{\alpha-\alpha_1}{\alpha_2-\alpha_1}v(\alpha_2)+\frac{\alpha-\alpha_2}{\alpha_1-\alpha_2}v(\alpha_1)$ is an eigenvalue/vector pairing for all $\alpha$, with the $k$th value of the eigenvector - $v(\alpha)_k$ being constant.
+\end{Theorem}
+\begin{proof}
+if $b=c$ then $A^{b,k}=A^{c,k}$ and $B(\alpha) = A^{b,k}$, then $\lambda(\alpha)=\lambda(\alpha_1)$ and $v(\alpha)=v(\alpha_1)$ is trivial solution which fulfills the proof. Otherwise $b\ne c$.\\
+Since $\lambda(\alpha_1)$ is an eigenvalue for all $B(\alpha)$ via Lemma \ref{lem2} then $\frac{\partial \lambda(\alpha)}{\partial \alpha}=0$ and $\lambda(\alpha)=\lambda(\alpha_1)=\lambda$ is true.\\
+As: $~\left(\alpha A^{b,k} + (1-\alpha)A^{c,k}\right)v(\alpha)=\lambda v(\alpha)$\\
+If $v(\alpha)_k$ denotes the $k$th value of $v(\alpha)$, then differentiating with respect to $\alpha$ \\
+Gives: $\left(\alpha A^{b,k} + (1-\alpha)A^{c,k} - \lambda I\right)\frac{\partial v(\alpha)}{\partial\alpha}+(b-c)v(\alpha)_k=0$\\
+now, there are two cases:\\
+if there is an $\alpha_3$ such that $v(\alpha_3)_k=0$ then:\\
+\-\hspace{8mm}$\left(\alpha_3 A^{b,k} + (1-\alpha_3)A^{c,k} - \lambda I\right)\frac{\partial v(\alpha_3)}{\partial\alpha}=0$\\
+\-\hspace{8mm}Setting $\frac{\partial v(\alpha)}{\partial\alpha}=0$ is permissible, making $v(\alpha)_k=0$.\\
+\-\hspace{8mm}therefore constant $v(\alpha)=v(\alpha_3)$ is solution which fulfills the proof\\
+if there is not an $\alpha_3$ such that $v(\alpha_3)_k=0$, then:\\
+\-\hspace{8mm}It is possible do scaling, thus setting $v(\alpha)_k=d$ to be a non-zero constant and therefore $\frac{\partial v(\alpha)_k}{\partial \alpha}=0$\\
+\-\hspace{8mm}Thus there is a $\frac{\partial v(\alpha)}{\partial\alpha}$ such that: $\left(\alpha A^{b,k} + (1-\alpha)A^{c,k} - \lambda I\right)\frac{\partial v(\alpha)}{\partial\alpha}+d(b-c)=0$\\
+\-\hspace{8mm}Thus there is a $\frac{\partial v(\alpha)}{\partial\alpha}$ such that for all $i$: $\left(\sum_{j,j\ne k}\left(A_{i,j}-\lambda I_{i,j}\right)\frac{\partial v(\alpha)_j}{\partial\alpha}\right) +d(b_i-c_i)=0 $\\
+\-\hspace{8mm}Therefore $\frac{\partial v(\alpha)}{\partial\alpha}$ can be constant\\
+\-\hspace{8mm}Therefore $v(\alpha)=\frac{\alpha-\alpha_1}{\alpha_2-\alpha_1}v(\alpha_2)+\frac{\alpha-\alpha_2}{\alpha_1-\alpha_2}v(\alpha_1)$ is only linear solution that adjoins $v(\alpha_2)$ and $v(\alpha_2)$.\\
+Which completes the proof.
+\end{proof}
+
+
+
+\begin{Theorem}\label{th:4}
+For a real $n\times n$ element-wise non-negative matrix $A$, 
+for $m$ element-wise non-negative column vectors $b_0,b_1,\dots$, 
+for $A^{b_i,k}$ denoting the matrix with its $k$th column as $b_i$, 
+for the matrix mapping $B(c_0,c_1,\dots) = \sum_{i}c_iA^{b_i,k}$ defined on inputs where: $\forall i~c_i\ge 0$ and $\left(\sum_{i=0}^{m-1}c_i\right)=1$, 
+for $\rho(B)$ denoting the spectral radius of $B$, 
+for $V(\cdot,\lambda)_k$ denoting the $k$th element of an eigenvector of a matrix corresponding to eigenvalue $\lambda$, 
+for a set of reals $d_0,d_1,\dots$: 
+$$\text{If:}~~~~~~~\rho(B(d_0,d_1,\dots)) = \max\rho(B)=\lambda ~~~~~~~\text{then:}~~~~~~~ $$ 
+$$ V(B(d_0,d_1,\dots),\lambda) = \sum_{i=0}^{m-1}d_iV(A^{b_i,k},\lambda) ~~~~~~~\text{and:}~~~~~~~ $$
+$$ \forall d_i\ne 0~~~~ V(A^{b_i,k},\lambda)_k=V(B(d_0,d_1,\dots),\lambda)_k=C  ~~~~\text{ie. they all have the same kth value, equal C}$$
+\end{Theorem}
+\begin{proof}
+We begin by introducing the following mapping on the coordinates $c_0,c_1,\dots,c_{m-1}$ by parameter $\alpha$, valid for $0\le\alpha\le 1$ and $c_{m-1}\ne 1$:\\
+\inlineequation[eq:part2]{Q(c_0,c_1,\dots,c_{m-1},\alpha)=B\left(\frac{c_0(1-\alpha)}{\sum_{y=0}^{m-2}c_y},\frac{c_{1}(1-\alpha)}{\sum_{y=0}^{m-2}c_y},\dots,\frac{c_{m-2}(1-\alpha)}{\sum_{y=0}^{m-2}c_y},\alpha\right)=\alpha A^{b_{m-1},k} + (1-\alpha)\frac{\sum_{y=0}^{m-2}c_yA^{b_y,k}}{\sum_{y=0}^{m-2}c_y}}\\
+$Q$ is a valid mapping under the input constraints, Ie. that the inputs to $B$ satisfy the constraints if the $c$-inputs of $Q$ (the $c_0,c_1,\dots,c_{m-1}$) satisfy the constraints (that they are non-negative and they sum to one).
+We also notice by inspection of equation \ref{eq:part2} that $Q(\dots,\alpha)$ satisfies the criteria for Theorem \ref{th:2} and thus $\rho(Q(\dots,\alpha))$ is either constant or strictly monotonic.
+When $\alpha=1$ the input to $B$ takes the singular value: \inlineequation[eq:part5]{Q(c_0,c_1,\dots,c_{m-1},1)=B(0,0,\dots,1)=A^{b_{m-1},k}}\\
+When $\alpha=0$ the input to $B$ takes the zero of the last value with the other values scaled to validate input constraints: \\\inlineequation[eq:part6]{Q(c_0,\dots,c_{m-1},0)=B(\gamma c_0,\dots,\gamma c_{m-2},0)=B(\gamma c_0,\dots,\gamma c_{m-2}) ~~~~~~~~\text{with:}~~~~~~~~ \gamma = (\sum_{i=0}^{m-2}c_i)^{-1}}\\
+And when $\alpha=c_{m-1}$ that \inlineequation[eq:part7]{Q(c_0,c_1,\dots,c_{m-1},c_{m-1})=B(c_0,c_1,\dots,c_{m-1})}\\
+Proof by induction:
+\begin{itemize}[leftmargin=*,labelsep=4mm]
+\item	Considering the case $m=1$: In which case there is a singular vector $b_0$ and the only permissible value of $B(d_0)$ under the constraints is $B(1)$ therefore $V(B(d_0),\lambda) = V(A^{b_0,k},\lambda)$ thus the theorem is satisfied for $m=1$.
+\item   Considering the case $m=j+1$ under the assumption of theorem satisfaction of $m=j$:\\
+\-\hspace{4mm}If $d_j=1$ then:\\
+\-\hspace{8mm}$V(B(d_0,d_1,\dots),\lambda) = V(A^{b_j,k},\lambda)$ and the theorem is satisfied\\
+\-\hspace{4mm}Otherwise:\\
+\-\hspace{8mm}$\rho(Q(d_0,d_1,\dots,d_{j},\alpha))$ exists and is constant or strictly monotonic with $\alpha$\\
+\-\hspace{8mm}- as per theorem \ref{th:2} on equation \ref{eq:part2}\\
+\-\hspace{8mm}$\rho(Q(d_0,d_1,\dots,d_{j},\alpha))$ passes through $\rho(B(d_0,d_1,\dots,d_{j}))$\\
+\-\hspace{8mm}- as per equation \ref{eq:part7}.\\
+\-\hspace{8mm}Assuming $\rho(B(d_0,d_1,\dots,d_{j}))\ge\max(\rho(Q(c_0,c_1,\dots,c_{j},1)), \rho(Q(c_0,c_1,\dots,c_{j},0)))$\\
+\-\hspace{8mm}- which is a condition of the theorem.\\
+\-\hspace{8mm}If $\rho(Q(d_0,d_1,\dots,d_{j},\alpha))$ is strictly monotonic then it must be maximal at \\
+\-\hspace{8mm}either side $\alpha=0$ or $\alpha=1$ or otherwise it must be constant, thus there are three cases:\\
+\-\hspace{12mm}If $d_j=1$ then $\rho(B(d_0,d_1,\dots,d_{j}))=\rho(Q(c_0,c_1,\dots,c_{j},1))$:\\
+\-\hspace{16mm}Then $V(B(d_0,d_1,\dots),\lambda) = V(A^{b_j,k},\lambda)$ and the theorem is satisfied\footnote{this line is technically redundant, but is included for an \dots attempt\dots at logial flow.}\\
+\-\hspace{12mm}If $d_j=0$ then $\rho(B(d_0,d_1,\dots,d_{j}))=\rho(Q(c_0,c_1,\dots,c_{j},0))$: \\
+\-\hspace{16mm}Then $B(d_0,d_1,\dots,d_{j-1},d_{j})=B(d_0,d_1,\dots,d_{j-1})$\\
+\-\hspace{16mm}And $V(B(d_0,d_1,\dots,d_{j-1},d_{j}),\lambda) = V(B(d_0,d_1,\dots,d_{j-1}),\lambda)$\\
+\-\hspace{16mm}And $V(B(d_0,d_1,\dots,d_{j-1}),\lambda) = \sum_{i=0}^{m-2}d_iV(A^{b_i,k},\lambda)$\\
+\-\hspace{16mm}- by the inductive assumption\\
+\-\hspace{16mm}Thus $V(B(d_0,d_1,\dots,d_{j-1},d_{j}),\lambda) = \sum_{i=0}^{m-1}d_iV(A^{b_i,k},\lambda)$ and the theorem is satisfied\\
+\-\hspace{12mm}Otherwise $\rho(Q(d_0,d_1,\dots,d_{j},\alpha)) $ must remain constant with any change in $\alpha$:\\
+\-\hspace{16mm}Since $Q(d_0,d_1,\dots,d_{j},\alpha)$ is non-negative matrix\\
+\-\hspace{16mm}Then $\rho(Q(d_0,d_1,\dots,d_{j},\alpha))=\lambda$ is an eigenvalue of it\\
+\-\hspace{16mm}-via the Perron-Frobenius theorem\footnote{see footnote \ref{note1}}\\
+\-\hspace{16mm}Thus via Theorem \ref{th:3}:\\
+\-\hspace{16mm}$V(Q(d_0,d_1,\dots,d_{j},\alpha),\lambda)$\\
+\-\hspace{22mm}$ = \alpha V(Q(d_0,d_1,\dots,d_{j},1),\lambda) + (1-\alpha) V(Q(d_0,d_1,\dots,d_{j},0),\lambda)$\\
+\-\hspace{16mm}and $V(Q(d_0,d_1,\dots,d_{j},\alpha),\lambda)_k=C$ is constant irrespective of $\alpha$\\
+\-\hspace{16mm}So doing immediate substitutions from equations \ref{eq:part5},\ref{eq:part6},\ref{eq:part7}:\\
+\-\hspace{16mm}$V(B(d_0,d_1,\dots,d_{j}),\lambda)$\\
+\-\hspace{22mm}$ = d_j V(A^{b_j,k},\lambda) + (1-d_j) V(B(\gamma d_0,\gamma d_1,\dots,\gamma d_{j-1}),\lambda) ~~~~\text{with:}~~~~\gamma = (\sum_{i=0}^{j-1}d_j)^{-1}$\\
+\-\hspace{16mm}And $V(B(d_0,d_1,\dots,d_{j}),\lambda)_k=V(A^{b_j,k},\lambda)_k=V(B(\gamma d_0,\gamma d_1,\dots,\gamma d_{j-1}),\lambda)_k=C$\\
+\-\hspace{16mm}As $V(B(\gamma d_0,\gamma d_1,\dots,\gamma d_{j-1}),\lambda) = \gamma\sum_{i=0}^{m-2}d_iV(A^{b_i,k},\lambda)$\\
+\-\hspace{16mm}- by the inductive assumption\\
+\-\hspace{16mm}and each non-zero $d_i$ has $V(A^{b_i,k},\lambda)_k=C$\\
+\-\hspace{16mm}Thus: $V(B(d_0,d_1,\dots,d_{j}),\lambda) = \sum_{i=0}^{m-1}d_iV(A^{b_i,k},\lambda)$ and the theorem is satisfied
+\end{itemize}
+Which completes the proof.
+\end{proof}
+
+
+\pagebreak
+
+\begin{Theorem}\label{th:5}
+For $n$ sets of real element-wise non-negative $n$-column vectors, $\{y_{0,0},y_{0,1},\dots,y_{1,0},y_{1,1},\dots\}$.\\
+Letting $q$ be similarly dimensioned set of sets of real numbers, $q=\{q_{0,0},q_{0,1},\dots,q_{1,0},q_{1,1},\dots\}$\\
+Letting $q^{\{i,j\}}$ be the same as $q$ except modified in that the subset $q_i$ is all zeros except for the $j$th being 1.\\ 
+Letting $q^{\{i,j\},a,b,c\dots}$ be the same as $q^{\{i,j\}}$ except that the first unmodified subset is all zeros except for the $a$th being $1$, and the second unmodified $q$ subset is all zeros except for the $b$th, and etc.\\
+Considering matrix constructions of form: \\
+$m(a) = 
+\left[\begin{array}{c|c|c|c}
+\sum_{x}a_{0,x}y_{0,x} & 
+\sum_{x}a_{1,x}y_{1,x} & 
+\sum_{x}a_{2,x}y_{2,x} & \dots
+\end{array}\right]$\\
+Defined for any $a$ input such that: $\forall j~\sum_{i}a_{j,i}=1$ and $\forall j,i~~a_{j,i}\ge 0$.\\
+for $\rho(\cdot)$ is spectral radius, and $V(\cdot,\lambda)$ is an eigenvector of a matrix for eigenvalue $\lambda$, and $\delta$ is Kronecker delta.\\
+If $\rho(m(q)) = \max_\zeta\rho(m(\zeta))=\lambda$\\
+Then
+$$ \forall i,j~~V(m(q),\lambda)_jq_{j,i} = \sum_k\sum_\alpha\dots\sum_\omega q_{0,\alpha}\dots q_{n-1,\omega}V(m(q^{\{j,k\},\alpha,\beta,\gamma,\dots,\omega}),\lambda)_j\delta_{ik} $$
+\end{Theorem}
+
+\begin{proof}$~$\\
+For any $j$, Theorem \ref{th:4} applies to $m(q)$ on the $j$th set of $q$'s values:\\
+Therefore $V(m(q),\lambda)=\sum_i q_{j,i}V(m(q^{\{j,i\}}),\lambda)$ and $\forall i:q_{j,i}\ne 0\Rightarrow~~V(m(q^{\{j,i\}}),\lambda)_j=C$ is a constant.\\
+Thus $V(m(q),\lambda)_j=\sum_i q_{j,i}V(m(q^{\{j,i\}}),\lambda)_j=\sum_i q_{j,i}C=C$, and\\
+Therefore $\forall i:q_{j,i}\ne 0\Rightarrow~~V(m(q),\lambda)_j=V(m(q^{\{j,i\}}),\lambda)_j$\\
+Thus $\forall i~~q_{j,i}V(m(q),\lambda)_j= q_{j,i}V(m(q^{\{j,i\}}),\lambda)_j$\\
+Thus \inlineequation[eq:part8]{\forall i~~q_{j,i}V(m(q),\lambda)_j= \sum_k\delta_{ik}q_{j,k}V(m(q^{\{j,k\}}),\lambda)_j}\\
+\\
+Now, theorem \ref{th:4} applies to $V(m(q^{\{j,k\}}),\lambda)$:\\
+therefore $V(m(q^{\{j,k\}}),\lambda) = \sum_\alpha q_{0,\alpha}V(m(q^{\{j,k\},\alpha}),\lambda)$\\
+theorem \ref{th:4} applies again to to $V(m(q^{\{j,k\},\alpha}),\lambda)$:\\
+therefore $V(m(q^{\{j,k\},\alpha}),\lambda) = \sum_\beta q_{1,\beta}V(m(q^{\{j,k\},\alpha,\beta}),\lambda)$\\
+theorem \ref{th:4} applies again to to $V(m(q^{\{j,k\},\alpha,\beta}),\lambda)$:\\
+therefore $V(m(q^{\{j,k\},\alpha,\beta}),\lambda) = \sum_\gamma q_{2,\gamma}V(m(q^{\{j,k\},\alpha,\beta,\gamma}),\lambda)$\\
+and so on$\dots$\\
+Therefore: \inlineequation[eq:part9]{V(m(q^{\{j,k\}}),\lambda) = \sum_\alpha\sum_\beta\sum_\gamma\dots\sum_\omega q_{0,\alpha}q_{1,\beta}q_{2,\gamma}\dots q_{n-1,\omega}V(m(q^{\{j,k\},\alpha,\beta,\gamma,\dots,\omega}),\lambda)}\\
+Which is fully expanded.\\
+\\
+Substituting equation \ref{eq:part9} into equation \ref{eq:part8} gives:\\
+$\forall i~~q_{j,i}V(m(q),\lambda)_j = \sum_\alpha\sum_\beta\sum_\gamma\dots\sum_k\dots\sum_\omega q_{0,\alpha}q_{1,\beta}q_{2,\gamma}\dots q_{j,k}\dots q_{n-1,\omega}\delta_{ik}V(m(q^{\{j,k\},\alpha,\beta,\gamma,\dots,\omega}),\lambda)_j$\\
+\\
+Which completes the proof
+\end{proof}

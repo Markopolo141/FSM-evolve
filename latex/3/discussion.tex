@@ -1,0 +1,25 @@
+\section{Discussion}\label{sec:discussion}
+
+The game (as defined in section \ref{section:formalism}) is designed with broad features in an attempt to encapsulate a large number of potential applications.
+The game's elements consist of there being a population/s of entities that can be described as stateful and stochastically transmit themselves between states based on their present state and the states and actions of others in accordance with a conserved strategy of choosing actions.
+
+In a former version of this paper there was an objecting concern: how could the organisms of the simulation ever be responsive to the actions of the others?
+If the strategy that is encoded into an organism determines what actions it will take based on its state alone, then how could that action ever change? And thence from this, how could the organisms even have the most basic intelligence?
+
+It is a good question, and a tentative answer is by allowing to organisms to execute actions that are responsive to the actions of others.
+Probably one of the most basic examples is the tit-for-tat strategy in the iterated prisoners dilemma, where the strategy changes the action played (cooperate or defect) based on the last play of the opponent. In appendix \ref{appendix:titfortat} we flesh out another example where a tit-for-tat-like strategy can be played by the organisms.
+
+The approach involves the use of a binary state which could easily be interpreted as holding the 'memory' of the previous play, and allowing a set of actions which play cooperate/defect along with changing the state of the memory depending on the play of the opponent.
+At this point it is good to note that the organisms in this example have an uncanny resemblance to Finite-State-Machines.
+
+The primary breadth of the game's flexibility comes from allowing the transmission terms $T_{k,i,j}$ to be any function of population state $P^*_t$.\\
+For instance, the $T$ terms can be non-linear and represent non-linear dynamics between individuals, such as might be potentially encoded in a classical evolutionary game with a 3-player symmetric payoff matrices. The $T$ terms might keep the total population size under a maximum, or only under a maximum or minimum for a particular state. And can be seen to encode dynamics similar to various evolutionary models eg. replicator dynamics, best-response dynamics or payoff comparison dynamics.\cite{psr1,errors1} It might be seen that the game's representation can be built to capture some of the dynamics of other evolutionary games.
+
+Consideration must be made in running the game's simulation (per algorithm \ref{al:1}) that there is no guarantee it will fall into a stable equilibrium, or that it will do so in a timely manner. This is particularly true if astability is intrinsically part of the model (such as the game of paper-scissors-rock \cite{rockpaperscissors}). It is also worth noting that setting $\alpha$ too high can potentially introduce astability into borderline stable models.
+
+A limitation of our game is that it is intentionally designed to 'wash-out' periodic transients between the states as the simulation progresses (as $\alpha<1$ acts as a dampener on such transients) so it cannot be used to model populations in which long-term periodic behavior between states in the simulation is desired\footnote{although $\alpha$ *could* be set to 1 to facilitate this}.
+Another limitation is that there is no current facilitation for transmission of organisms from one strategy into another, such as might be used to explicitly model the effects of significant mutation on the population (see Nowak \cite{nowak} for example analysis) or also perhaps model the sexual combination of strategies.
+
+However ultimately the features of evolutionary games and frameworks, with their virtues and shortcomings have to be evaluated and compared for some purpose.
+And it is on this note that we must leave the game with its potential uses, limitations, and concepts unto the reader's imagination.
+
