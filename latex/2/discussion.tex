@@ -1,0 +1,30 @@
+\section{Discussion}\label{sec:discussion}
+
+The game (as defined in section \ref{section:formalism}) is designed with broad features to encapsulate a large number of potential applications.
+The game's elements consist of there being a population/s of entities that can be described as stateful and stochastically transmit themselves between states based on their present state and the states and actions of others in accordance with a conserved strategy of choosing actions.
+
+It should be quite straightforward that the game's representation encapsulates other evolutionary games:
+\newpage
+\begin{itemize}[leftmargin=*,labelsep=4mm]
+\item   \textbf{Classical evolutionary games} feature a finite set of strategies, each with growth-rates according to the expected payoff against the population of strategies. The rather degenerate analogue in our game, would have a single species with a single state and multiple actions of transmission to that same single state. Each of these actions would correspond to a strategy and would have transmission in proportion to its payoff.
+\item   \textbf{Spacial evolutionary games} feature a finite set of strategies across nodes, each with growth-rates according to expected payoff against its neighbors.
+The analogue in our game, would consist in modeling each node as a separate species, each with a single state and multiple action of transmission to the single state. Each action would correspond to a strategy at a node and any action's transmission would be in proportion to its payoff against its neighbors.
+\end{itemize}
+Furthermore we observed (although not yet proven) that MDEG games are also encapsulated: 
+\begin{itemize}[leftmargin=*,labelsep=4mm]
+\item   \textbf{MDEG games} seem to be closely analogued in our game as having the exact same states and actions and almost having the same transmissions between states.
+In an MDEG game, the transmissions between states are conservative in the sense that playing an action never directly changes the net total number of individuals in the population but results in an additive payoff whos long-term value determines the growth-rate for the strategy.
+We have observed that the same dynamics can be encapsulated in our game by having the same conservative action transmissions plus a small multiple of the payoff values that would be achieved in the original MDEG game.
+\end{itemize}
+The breadth of our game's flexibility comes from allowing the transmission terms $T_{k,i,j}$ to be any function of population state $P^*_t$.\\
+For instance, the $T$ terms can be non-linear and represent non-linear dynamics between individuals, such as might be encoded in a classical evolutionary game with a 3-player symmetric payoff matrices. The $T$ terms might keep the total population size under a maximum, or only under a maximum or minimum for a particular state. They may encode dynamics similar to various evolutionary models eg. replicator dynamics, best-response dynamics or payoff comparison dynamics.\cite{psr1}
+\\
+In short, the game's $T$ terms can encode significantly complex interactions between organisms, species and populations.
+
+Consideration must be made in running the game's simulation (per algorithm \ref{al:1}) that there is no guarantee it will fall into a stable equilibrium, or that it will do so in a timely manner. This is particularly true if astability is intrinsically part of the model (such as the game of paper-scissors-rock \cite{rockpaperscissors}). It is also worth noting that setting $\alpha$ too high can potentially introduce astability into borderline stable models.
+
+A limitation of our game is that it is intentionally designed to 'wash-out' periodic transients between the states as the simulation progresses (as $\alpha<1$ acts as a dampener on such transients) so it cannot be used to model populations in which long-term periodic behavior between states in the simulation is desired\footnote{although $\alpha$ *could* be set to 1 to facilitate this}.
+Another limitation is that there is no current facilitation for transmission of organisms from one strategy into another, such as might be used to explicitly model the effects of significant mutation on the population (see Novak \cite{nowak} for example analysis).
+
+These limitations notwithstanding, hopefully it is seen that this article serves as a step towards the incorporation of state (in the most general sense) into evolutionary game theory analysis.
+

@@ -1,0 +1,33 @@
+Hello Sir/Madam
+
+I am writing to submit my work on for your review, and in hope of potentially publishing with your journal - 'Games'.
+Within my work i have attempted to extend the scope of phenomena that can be efficiently modeled and analysed using evolutionary game theory concepts, and I believe that I have succeeded.
+The work has passed revision and proof-reading by my colleagues and supervisors, Prof Sylvie Theibeaux and Dr Paul Scott at the Australian National University, and I welcome any further feedback, comments or corrections to what I have written.
+With academic integrity I have not submitted my work or any part thereof to any other institution.
+
+Many of your readers may be familiar with the basic concepts of evolutionary game theory as analysing the replicator growth/decay of individuals which play certain actions (eg. of 'playing hawk' in a canonical hawk-dove game), and yet realise that many entities undergo actions which are intrinsically coupled with their state (eg. hibernation in winter, buying shares in a bear market, signal boosting with battery capacity etc).
+Other readers may have a computational background and be familiar with Markov-Decision-Processes, where actions are dispersed across particular states and where playing actions results in stochastic transitions between states which may afford 'payoffs'.
+Within my work I attempt to extend classical evolutionary game theory analysis to include specification of states, actions and stochastic transitions into the individuals of the evolving population, hence attempting to contribute to the merger of these fields.
+And in contrast to existing work I find that breaking the Markov nature of the transmissions yields a -significantly- more flexible game.
+I also have offered an equilibrium solver and proofs surrounding the efficacy of its workings.
+
+I am currently working through my PhD at the Australian National University under the supervision of Prof Sylvie Thiebaux and Dr Paul Scott who have given me permission to submit my work to you.
+I would like to credit them the help that they have offered me as acknowledgements, but I have removed all identifying information from my Latex source-code as requested.
+This I have attached my Author-details and these acknowledgements as segments at the end of this cover-letter.
+
+Yours sincerely
+
+Mark
+
+
+
+
+Author:
+Mark Burgess, Research School of Computer Science, The Australian National University, Canberra, ACT 0200, Australia; markburgess1989@gmail.com
+
+Acknowledgments:
+A great thankyou to Paul Scott \& Sylvie Thiebaux for essential proof-reading, academic advice and support!\\ This study was conducted under grant of the Australian Postgraduate Award (APA) for participation in PhD program through the Research School of Computer Science (RSCS) at the Australian National University (ANU). No specific funds were received for costs associated with open-access publication.
+
+
+
+

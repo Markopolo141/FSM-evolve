@@ -1,0 +1,76 @@
+\section{Derivation of Hawk-Dove dynamics}\label{appendix3}
+
+The Hawk-Dove game given in the body of the article is simple enough to yield analytic solution.
+It is possible to directly determine the largest real eigenvalue of the tranmsission matrix (as per equation \ref{eq:hd_transmission}) as: $$ \lambda = \sqrt{2\gamma(1-p)(1-pC)+(1-p+A)(DpC+(1-\gamma)(1-pC))} $$
+And by this, it is posible to compute the equilibrium points of the population. The population's equilibrium points will either be on the 'interior' of the strategy space ($1>\gamma >0$) or be on the boundary ($\gamma=1$ or $\gamma=0$).
+We can calculate the interior equilibrium points via the 'indifference principle'\cite{markov5}, whereby the population has reached an 'interior' equilibrium where it makes no more sense to play Dove any more than Hawk. This corresponds to the case where all Dove and Hawk strategies have the same growth-rate.
+
+\subsection{the interior case for $1>\gamma >0$}
+
+Solving for $\frac{\partial \lambda}{\partial \gamma}=0$ gives $$ 1-p=A $$ As the conditions for interior equilibrium.  This condition which corresponds to the Aggressive and Passive Adults having the same expected number of offspring.
+Thus the expected population growth-rate at equilibrium is thus $$\lambda_{\{p=1-A\}} = \sqrt{2A}\sqrt{C(1-A)(D-1)+1}$$ This identifies that the total growth-rate is the multiplication of the roots of transmission rate from young to adult and from adult to young.\\
+Using the shorthand: $P_Y=P^*_{t,b,\mathbf{y},G_{\mathbf{a}}}+P^*_{t,b,\mathbf{y},G_{\mathbf{p}}}$, and $P_A=P^*_{t,b,\mathbf{a},R_{\mathbf{a}}}$, and $P_P=P^*_{t,b,\mathbf{p},R_{\mathbf{p}}}$\\
+The corresponding eigenvector of population proportions is (presented unnormalised for simplicity) as:
+
+$$ \begin{bmatrix}
+    P_Y \\
+    P_A \\
+    P_P \\
+\end{bmatrix} = \begin{bmatrix}
+    \lambda_{\{p=1-A\}} \\
+    \gamma(1-C+CA) \\
+    DC(1-A) + (1-\gamma)(1-C+CA) \\
+\end{bmatrix} $$
+
+Thus the fraction of Child to Adults at equilibrium is $\frac{P_Y}{P_Y+P_A+P_P} = \frac{\sqrt{2A}}{\sqrt{2A}+\sqrt{C(1-A)(D-1)+1}}$
+
+\subsection{the boundary case for $\gamma=1$}
+
+The growth-rate of strategy $\gamma=1$ is $\lambda_{\{\gamma=1\}}=\sqrt{2(1-p)(1-pC)+DpC(1-p+A)}$ and has population proportions:
+$$ \begin{bmatrix}
+    P_Y \\
+    P_A \\
+    P_P \\
+\end{bmatrix} = \begin{bmatrix}
+    \lambda_{\{\gamma=1\}} \\
+    1-pC \\
+    DpC  \\
+\end{bmatrix}$$
+
+A population of $\gamma=1$ (in which $p=\frac{P_A}{P_A+P_P}$) has $p=\frac{-(C+1)+\sqrt{(C+1)^2+4(DC-C)}}{2(DC-C)}$ (which exists if $(C+1)^2+4(DC-C)>0$).
+The strategy $\gamma=1$ is strictly dominant strategy when all other strategies have a lower growth-rate:
+$$\forall\gamma ~~~~ \lambda_{\{\gamma=1,p=\dots\}}^2 > \lambda_{\{p=\dots\}}^2$$
+$$\forall\gamma ~~~~ 2(1-p)(1-pC)+(1-p+A)DpC > 2\gamma(1-p)(1-pC)+(1-p+A)(DpC+(1-\gamma)(1-pC))$$
+$$\forall\gamma ~~~~ 1-p-A > \gamma(1-p-A)$$
+
+which is true iff $p < 1-A$, which thus happens on a condition among the $A,C,D$: 
+
+$$ \sqrt{(C+1)^2+4(DC-D)} > 2(1-A)(DC-D)+C+1 $$
+
+When this condition is met, the strategy $\gamma=1$ dominates, yielding $p=\frac{-(C+1)+\sqrt{(C+1)^2+4(DC-C)}}{2(DC-C)}$ with the fraction of Child to Adults $\frac{P_Y}{P_Y+P_A+P_P} = \frac{\sqrt{DpC(1+p+A)}}{\sqrt{DpC(1+p+A)}+1-pC+DpC}$
+
+\subsection{the boundary case for $\gamma=0$}
+
+The growth-rate of strategy $\gamma=0$ is $\lambda_{\{\gamma=0\}}=\sqrt{(1-p-A)(DpC+1-pC)}$ and has population proportions:
+$$ \begin{bmatrix}
+    P_Y \\
+    P_A \\
+    P_P \\
+\end{bmatrix} = \begin{bmatrix}
+    \lambda_{\{\gamma=0\}} \\
+    0 \\
+    DpC+1-pC  \\
+\end{bmatrix}$$
+A population of $\gamma=0$ (in which $p=\frac{P_A}{P_A+P_P}$) has straightforwardly $p=0$ and growth-rate $\lambda_{\{\gamma=0,p=0\}}=\sqrt{1-A}$.
+
+However, in such a population the strategy $\gamma=1$ has a greater growth-rate than $\gamma=0$ as: $\left(\lambda_{\{\gamma=1,p=0\}} = \sqrt{2}\right) > \left(\sqrt{1-A} = \lambda_{\{\gamma=0,p=0\}}\right)$
+and thus the boundary case $\gamma=0$ is never an dominant strategy.
+
+\subsection{Stitching it together}
+
+Given the parameters of the game $A,C,D$ is: $$(C+1)^2+4(DC-D)>0 ~~~~~~~\text{and}~~~~~~~ \sqrt{(C+1)^2+4(DC-D)} > 2(1-A)(DC-D)+C+1 ~~~~~~~\text{?} $$
+\begin{itemize}[leftmargin=*,labelsep=3mm]
+\item	if so then the Game equilibrium is Hawk-Saturated:$$p=\frac{-(C+1)+\sqrt{(C+1)^2+4(DC-C)}}{2(DC-C)}~~~~~~\text{and}~~~~~~~\frac{P_Y}{P_Y+P_A+P_P} = \frac{\sqrt{DpC(1+p+A)}}{\sqrt{DpC(1+p+A)}+1-pC+DpC}$$
+\item	if not then a Hawk-Dove equilibrium exists:$$p=1-A~~~~~~\text{and}~~~~~~~\frac{P_Y}{P_Y+P_A+P_P} = \frac{\sqrt{2A}}{\sqrt{2A}+\sqrt{C(1-A)(D-1)+1}}$$
+\end{itemize}
+

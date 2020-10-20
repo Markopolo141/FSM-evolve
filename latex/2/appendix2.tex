@@ -1,0 +1,56 @@
+\section{That any stable equilibrium point can always be among pure strategies}\label{appendix5}
+In this section we will attempt to prove that any stable equilibrium point can be established among pure strategies alone. The total demonstration of this claim is formulated in matrix mathematics to avoid any possible vagueness as Theorem \ref{th:5}.
+But because of this, there is a step of interpretation needed between accepting the Theorem and understanding its connection and relevance to our game. It is this interpretation that we address in this section.
+
+To make this connection we begin by coming to a definition of a strategy's being `replaceable' by other strategies, if there exists a possible replacement of one's organisms for the others' in a population such as would not disturb the equilibrium point. Then we re-frame this condition in terms of matrices such as to directly relate to the theorems. The theorems are then shown to demonstrate that all mixed strategies are replaceable by sets of pure strategies, which demonstrates the claim of this appendix.
+
+\subsection{on `replaceable' strategy}
+
+Suppose that there are two populations $P1$ and $P2$ consisting of the same set of strategies $W^k$ except that $P2$ has an additional mixed strategy $w^\Sigma$.
+Suppose that both have the same values of $P1^*_{t,k,s,a} = P2^*_{t,k,s,a} = P^*_{t,k,s,a}$ ie. the same numbers of the organisms at time $t$, of species $k$, in states $s$ taking actions $a$ in the population (as per definition in section \ref{section:formalism}). \\
+As $P^*_t$ defines the transmission matrices of any strategies (via equation \ref{eq:transmission_matrix}) then the strategies in both populations have the same transmission matrices.
+Therefore if $P1$ is in stable equilibrium then so to is $P2$ and they both have the same equilibrium point.\\
+At a stable equilibrium each strategy $w^k$ in the population has the same maximal exponential growth-rate of $\gamma$ (as per equation \ref{eq:growth} in Appendix \ref{appendix1}) as:
+$$P_{t,k,s_{k,j},w^k}= \gamma^tb^{w^k} \hat{v}^{w^k}_j$$ 
+And per definition of $P^*_t$ (in section \ref{section:formalism}):
+$$P^*_{t,k,s_{k,j},a} = \sum_{w^k\in W^k}P_{t,k,s_{k,j},w^k}w^k_{a,s_{k,j}} = \gamma^t\sum_{w^k\in W^k} b^{w^k} \hat{v}^{w^k}_jw^k_{a,s_{k,j}}$$
+where each $b^{w^k}$ is interpreted as the relative 'amount' of strategy $w^k$ (especially if $\hat{v}^{w^k}$ is normalised), Thus:
+$$P1^*_{t,k,s_{k,j},a} = P2^*_{t,k,s_{k,j},a}~~~~~~~~~\text{implies:}~~~~~~~~~\gamma^t\left(\sum_{w^k\in W^k} b^{w^k} \hat{v}^{w^k}_jw^k_{a,s_{k,j}}\right)=\gamma^t\left(c^{w^\Sigma}\hat{v}^{w^\Sigma}_jw^\Sigma_{a,s_{k,j}} + \sum_{w^k\in W^k} c^{w^k} \hat{v}^{w^k}_jw^k_{a,s_{k,j}} \right)$$
+If we let $d^{w^k}=\frac{b^{w^k}-c^{w^k}}{c^{w^\Sigma}}$, then this implies:
+$$ \hat{v}^{w^\Sigma}_jw^\Sigma_{a,s_{k,j}} = \sum_{w^k\in W^k} d^{w^k} \hat{v}^{w^k}_jw^k_{a,s_{k,j}} $$
+Thus if there exists positive `amounts' $d^{w^k}$ of strategies in the set $w^k\in W^k$ such that the above condition is true, then $P1$ and $P2$ will have identical equilibrium point.
+And indeed any `amount' of strategy $w^\Sigma$ can be exchanged one for the others while keeping equilibrium. This leads naturally to our informal definition:
+
+\begin{Definition}\label{def1}
+A strategy in the population $w^\Sigma\in W^k$ of growth-rate $\gamma$ is `replaceable at stable equilibrium' by a set of other strategies $W^k$, if all strategies $w\in W^k$ have a growth-rate $\gamma$ and there exists positive coefficients $c_{w}$ such that:
+$$\forall j,a~~~~ \hat{v}^{w^\Sigma}_jw^\Sigma_{a,s_{k,j}} = \sum_{w\in W^k}c_w\hat{v}^w_jw_{a,s_{k,j}} $$
+With $\hat{v}^w$ denoting an eigenvector corresponding to growth-rate $\gamma$ of $w$'s transmission matrix per Appendix \ref{appendix1}.
+\end{Definition}
+
+\subsection{`replaceable' strategy terms}
+The span of strategy transmission matrices are defined by their columns as weighted sums of column vectors (see equation \ref{eq:columns}). Each set of weights are the subsets of the strategy's terms, and suffer the constraints of their being non-negative and summing to unity.
+The pure strategies have terms which are entirely $0$s and $1$s and their matrices are the extreme poles of such a span.\\
+The condition of replaceability (as per the above definition \ref{def1}) is a relationship of eigenvectors $\hat{v}^{w}$ between several transmission matrices and the same probabilities which define them $w_{a,s}$.
+And thus replaceability is actually a very specific relationship of the eigenvectors of sets of matrices who's columns are weighted sums of column vectors and the weights themself.
+
+We conclude this Appendix by giving a definition of "replaceability", as it applies to the terms of strategies in precise mathematical language.
+It in relation to this definition that Theorem \ref{th:5} applies, to the conclusion that any strategy is replaceable by pure strategies.
+
+\begin{Definition}
+A `strategy's terms' $q_{j,i}$ is a set of numbers indexed by $j,i$ such that\\ $\forall j~\sum_iq_{j,i}=1$ and $\forall j,i~q_{j,i}\in\mathbb{R}_+\bigcup\{0\}$
+\end{Definition}
+\begin{Definition}
+A `pure' strategy's terms is a strategy's terms $q_{i,j}$ such that $\forall i,j~~q_{i,j}\in\{1,0\}$
+\end{Definition}
+\begin{Definition}\label{def2}
+For sets of element-wise non-negative column vectors $y_{j,i}$, a `strategy terms' $q_{j,i}$ is `replaceable at stable equilibrium' by other strategy terms $q0,q1,\dots$ iff there exists positive real coefficients $c_0,c_1,\dots$ such that:
+$$ \lambda=\max_z\rho(m(z))=\rho(m(q))=\rho(m(q0))=\rho(m(q1))=\dots$$
+$$\text{and}~~~~\forall i,j~~~~~~~ V(m(q),\lambda)_jq_{j,i} = c_0V(m(q0),\lambda)_jq0_{j,i} + c_1V(m(q1),\lambda)_jq1_{j,i} + \dots$$
+Where $m(q)$ denotes the matrix $m(q)_{l,j} = \sum_iy_{j,i,l}q_{j,i} = \left[\begin{array}{c|c|c}
+y_{0,0}q_{0,0}+y_{0,1}q_{0,1}+\dots & 
+y_{1,0}q_{1,0}+\dots & 
+\dots
+\end{array}\right]$\\
+Where $\rho(\cdot)$ denotes spectral radius.\\
+Where $\hat{V}(\cdot,\lambda)$ denotes an eigenvector of a matrix with an eigenvalue of magnitude $\lambda$
+\end{Definition}

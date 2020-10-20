@@ -1,0 +1,20 @@
+\section{Searching for Stable Equilibria}\label{sec:equilibria}
+
+In direct correspondence with standard game theory language \cite{weibull}, it is possible to define basic relationships between the strategies.
+Each organism's strategy $w^k$ encodes the probabilities of what actions it will take across its states.  A strategy is `pure' if these probabilities encode certainty of taking a single action per state otherwise it is `mixed'. Any mixed strategy can be decomposed (perhaps not uniquely) into a linear combination of pure strategies. And any set of pure strategies defines a span of mixed strategies which can be linearly composed of them.
+The set of pure strategies which could feature in a linear decomposition of a mixed strategy is defined as the `support' of the mixed strategy.
+
+If we define an `equilibrium' as being the condition where all the $m_{l,j}$ transmission matrices remain constant - and an `equilibrium point' being defined by those values.
+Then then it is necessarily the case that an equilibrium leads to a condition where all the species and strategies that are significantly present in the population are steadily growing by the same growth-rate in steady-state (see appendix \ref{appendix1} for discussion and a limited proof). For if any organisms of a strategy existed in the population with a lesser steady-state growth-rate then it would proportionally die out, or if any organisms of a strategy existed with a greater steady-state growth-rate then it would lead the others to proportionately die out.
+
+We further define the equilibrium as being `stable' in a similar way to Maynard Smith \cite{maynard, maynard2, weibull}, specifically if it cannot be disturbed from equilibrium by the presence of a small incorporation-of (or `invaded by') any possible `mutant' strategy. We note that this is at-least the case where no `mutant' strategy has a greater steady-state growth-rate in the context of the population.
+
+It is proven in appendix \ref{appendix5} that for any stable equilibrium established with a population of mixed strategies that it is possible to establish the same equilibrium point without mixed strategies at all.
+Informally the reasoning is that: because any mixed strategy is a stochastic mix of its supporting pure strategies it can only perform as well as the best of them. And when it performs equal to the best then they must all perform equally. And in this case there is an equivalent combination of the supporting strategies which have the same state-action profile $P^*_{t,k,s,a}$ as as the mixed strategy; the same profile which defines the transmission matrices and thus the equilibrium point itself.
+
+From these considerations it is thus unnecessary to consider mixed strategies in the search for stable equilibria because every stable equilibria can be established by combinations of pure strategies alone (although there may be zero or multiple such stable equilibria between them).
+In this way, multiple runs of Algorithm \ref{al:1} with different initial combinations of pure strategies is sufficient to determine all possible stable equilibria of the game.
+
+\subsection{Software Implementation}\label{sec:implementation}
+An implementation of Algorithm \ref{al:1} for arbitrary configuration of Species/States/Actions using pure strategies was written in the \href{https://www.python.org/}{Python} programming language using \href{http://pyscoop.org/}{Scoop} and \href{http://www.sympy.org/}{SymPy} libraries for parallelisation and for mathematical expression parsing respectively. The source-code is available at \href{https://github.com/Markopolo141/FSM-evolve/}{https://github.com/Markopolo141/FSM-evolve/} and at the time of publication consists of a small and readable $\sim$400 lines.
+

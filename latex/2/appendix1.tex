@@ -1,0 +1,15 @@
+\section{That all proportionally present strategies have the same growth-rate at equilibrium}\label{appendix1}
+At an equilibrium, if $m^{w^k}_{l,j}$ is the constant transmission matrix for strategy $w^k$, and if $v^{w^k,t}_j=P_{t,k,s_{k,j},w^k}$ is a vector of the number of organisms at time $t$ of strategy $w^k$ in the $j$th state.
+Then application of the transmission matrix to the vector gives the vector at the next time index $t+1$ via Algorithm \ref{al:1} as:
+$$ v^{w^k,t+1}_l=\alpha\left(\sum_jm^{w^k}_{l,j}v^{w^k,t}_j\right) + (1-\alpha)v^{w^k,t+1}_l ~~~~~~~~~~\text{ie.}~~~~~~~~~~v^{w^k,t+1} = \left(\alpha m^{w^k} + (1-\alpha)I\right)v^{w^k,t}$$
+Thus the strategy's population vector $v^{w^k,t}$ can be stepped forward in time by repeated matrix multiplication by the non-negative matrix $Z = (\alpha m^{w^k} + (1-\alpha)I)$ where $I$ is identity matrix.\\
+It is generally observed that repeated matrix powers often yields exponential growth and if we assume $Z$ is irreducible and diagonalisable matrix then the proof is straightforward and Theorem \ref{th:0} gives the desired result:
+\begin{equation}\label{eq:growth}\lim_{m\rightarrow\infty}\frac{v^{w^k,t}}{(\alpha\lambda_{w^k}+(1-\alpha))^t}=b^{w^k}\hat{v}^{w^k}~~~~~~~~~~~\text{thus:}~~~~~~~~~~~v^{w^k,t}\approx(\alpha\lambda_{w^k}+(1-\alpha))^tb^{w^k}\hat{v}^{w^k}\end{equation}
+Where $\lambda_{w^k}$ and $\hat{v}^{w^k}$ are largest eigenvalue and corresponding eigenvector of $m^{w^k}$, and $b^{w^k}$ is a constant.
+If we assume the same is true for all strategies in the population then each has an asymptotic exponential growth-rate $\gamma_{w^k}=\alpha\lambda_{w^k}+1-\alpha$.
+And so between any two strategies $w^k$ and $w^p$, that if $\lambda_{w^k}>\lambda_{w^p}$ then $\gamma_{w^k}>\gamma_{w^p}$ and strategy $w^k$ dominates strategy $w^p$.
+Thus between the strategies in the population the only strategies that will be ultimately undominated are those of the maximum growth-rate.
+And thus at equilibrium the only strategies of significant proportion in the population have the same growth-rate $\gamma$.
+\\
+
+The set of possible matrices $m^{w^k}$ (and $Z$) is obviously much larger than those diagonalisable and irreducible. And while is generally observed that most matrices yield the same exponential-growth character there are some which don't, specifically defective matrices\footnote{consider the linear growth of vector $\begin{bmatrix}1\\1\end{bmatrix}$ by repeated multiplications of matrix $\begin{bmatrix}1 & 1\\0 & 1\end{bmatrix} $}. In this paper we assume such matrices are the rare exception and our analysis does not treat their case. Although we believe that all conclusions of the paper hold with their case included it will be left to future (and more mathematically involved) work to demonstrate such.

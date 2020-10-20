@@ -1,0 +1,327 @@
+
+\documentclass[journal,article,accept,oneauthors,pdftex,10pt,a4paper]{mdpi} 
+
+\firstpage{1} 
+\makeatletter 
+\setcounter{page}{\@firstpage} 
+\makeatother 
+\articlenumber{x}
+\doinum{10.3390/------}
+\pubvolume{xx}
+\pubyear{2016}
+\copyrightyear{2016}
+%\externaleditor{Academic Editor: name}
+%\history{Received: date; Accepted: date; Published: date}
+
+%------------------------------------------------------------------
+% The following line should be uncommented if the LaTeX file is uploaded to arXiv.org
+%\pdfoutput=1
+
+%=================================================================
+% Add packages and commands here. The following packages are loaded in our class file: fontenc, calc, indentfirst, fancyhdr, graphicx, lastpage, ifthen, lineno, float, amsmath, setspace, enumitem, mathpazo, booktabs, titlesec, etoolbox, amsthm, hyphenat, natbib, hyperref, footmisc, geometry, caption, url, mdframed
+
+%=================================================================
+%% Please use the following mathematics environments: Theorem, Lemma, Corollary, Proposition, Characterization, Property, Problem, Example, ExamplesandDefinitions, Remark, Definition
+%% For proofs, please use the proof environment (the amsthm package is loaded by the MDPI class).
+
+%=================================================================
+% Full title of the paper (Capitalized)
+\Title{A Numerical Solver for arbitary Markov-Decision-Evolutionary-Games}
+
+% If this is an expanded version of a conference paper, please cite it here: enter the full citation of your conference paper, and add $^\dagger$ in the end of the title of this article.
+%\conference{}
+
+% Authors, for the paper (add full first names)
+\Author{Mark Burgess}
+% Authors, for metadata in PDF
+\AuthorNames{Mark Burgess}
+
+% Affiliations / Addresses (Add [1] after \address if there is only one affiliation.)
+\address{%
+ \quad Research School of Computer Science, The Australian National University, Canberra, ACT 0200, Australia; markburgess1989@gmail.com}
+
+
+% Simple summary
+%\simplesumm{}
+
+% Abstract (Do not use inserted blank lines, i.e. \\) 
+\abstract{We introduce a structure for the presentation of Markov-Decision-Evolutionary-Games (MDEG) conductive to a new computational technique to determine Evolutionary Stable Strategies.
+The treatment incorporates arbitary numbers of states with arbitary decisions between states and can incorporate non-linear transitions (as dependant on endogenous variables) between states in the game. The software presented is designed to be extensible to the purpose of analysing the distribution of Evolutionary Stable Strategies across relevant sets of exogenous variables.\\
+Following the example of others we introduce a statefull Hawk-Dove MDEG and solve for its Evolutionary Stable Strategies; we compare computed results with thoes attained via analysis and also via monty-carlo methods as example of the working system. We then move on to examine a significantly more complex game examining the hypothetical relationship between Paternal Uncertainty and Paternal investment in mating dynamics. We finish with philosophical remarks on the role and use of this and other similar software.}
+
+% Keywords
+\keyword{Evolutionary stable strategies (ESS); Markov decision evolutionary games (MDEG); Hawk-Dove game; Evolutionary dynamics; Evolutionary Game Theory;}
+
+%\setcounter{secnumdepth}{4}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\section{Introduction}
+
+The merging of Game Theory and Evolutionary Concepts is often credited to John Maynard Smith and George R. Price \cite{maynard}\cite{maynard2} specifically the introduction of the concept of Evolutionary Stable Strategy (ESS) with basic games and replicator dynamics to illustrate evolution with the concepts of game theory.
+Sometimes the analysis of evolutionary games is used as grounds to explain various features of the biological world (eg. where tit-for-tat strategy superiority is sometimes thought to be indicative for the emergence of reciprocity in species\cite{titfortat}).
+ESS stategies are held to be attractors of the process of evolution:
+\begin{quote}"The presence of such [ESS] users then. in whatever small numbers initially, intuitively would suggest that an eventual stable equilibrium would occur if for no other reason than because the numbers of ESS users would steadily increase indefinitely otherwise, and in that manner alone force the population to the ESS ...."\cite{ess1}\end{quote}
+Some go so far as to say that:
+\begin{quote}"[ESS] has become widely incorporated into our thinking about biological phenomena.. a valuable point of attack on a surprising number of questions about the practice of theoretical biology"\cite{ess1}\end{quote}
+Yet ESS itself is a precisely defined mathematical concept existing in the context of specific game theory analysis of populations and have precise mathematical definition in terms of the expectations of the strategy payoffs.
+J\"orgen Weibull gives outline and particular restrictions on the concept's applicability: 
+\begin{quote}"Suppose that individuals are taken from a large population to play a symmetric two-person game, and suppose that all individuals are genetically or otherwise 'programmed' to play a certain pure or mixed strategy in this game. Now inject a small population share of individuals who are likewise programmed to play some other pure or mixed strategy. The incumbent strategy is said to be 'Evolutionary Stable' if for each such mutant strategy, there exists a positive invasion barrier such that if the population share of individuals playing the mutant strategy falls below this barrier then the incumbent strategy earns a higher payoff than the mutant strategy"\cite{weibull}\end{quote}
+
+Particular attention must be drawn to the representative link between the game's assigned payoffs and biological fitness:
+\begin{quote}"[ESS] is focused on symmetric pair-wise interractions within a single large population. In particular it does not deal with interactions that take place between more than two individuals at a time. Moreover the criterion of evolutionary stability refers implicitly to a close connection between the payoffs in the game and the spreading of a strategy in a population. The payoffs in the game are supposed to represent the gain in biological fitness or gain in reproductive value from the interaction in question. ... and evolutionary stability is a robustness test against a \textit{single} mutation at a time"\cite{weibull}\end{quote}
+
+It is noted that fitness is a concept that is suprisingly nuanced and held to be quite central to evolutionary theory.\cite{sep-fitness} Among many things it can not only refers to a biological individual's probably having more immediate offspring over lifespan than a less 'fitter' individual, but also of thoes decendants themself potentially having more offspring, and their decendants and so on. Another note, is that fitness is often held to be relative to the environment of the individual including the context of its peers and/or competitors.
+In this paper we work with a notion of the fitness of an individual as the expected growth-rate of a steady-state population of such individuals in the context of particular environment and we introduce a specification of Evolutionary game design that does away with having to explicitly specify payoff values.
+
+\subsection{The Introduction of State}
+
+Evolutionary Game-Theory (and Classical Game-Theory) typically involves the analysis and dynamics only between player strategies but there has been work to extend this analysis to include states aswell. A particularly well established extension involves incorporation of state as position on a 'grid', such games are called 'Spacial Evolutionary Games'\cite{spacial1} with unique and dynamic behavior\cite{spacial2} and results such as from studying cooperation and reciprocity\cite{spacial3} for instance.
+Yet more recent work has been done to generalise this incorporation of state into evolutionary games, particularly the work of Eitan Altman\cite{markov2}\cite{markov3}\cite{markov4}\cite{markov5} who introduces the concept of the Markov-Decision-Evolutionary-Game (MDEG) as:
+\begin{quote}
+"We consider a large population of players in which frequent interactions occur between small numbers of chosen individuals. Each interaction in which a player is involved can be described as one stage of a dynamic game. The state and actions of the players at each stage determine an immediate payoff (also called fitness in behavioral ecology) for each player as well as the transition probabilities of a controlled Markov chain associated with each player. Each player wishes to maximize its expected fitness averaged over time.
+This model extends the basic evolutionary games by introducing a controlled state that characterizes each player.
+The stochastic dynamic games at each interaction replace the matrix games, and the objective of maximizing the expected long-term payoff over an infinite time horizon replaces the objective of maximizing the outcome of a matrix game. Instead of a choice of a (possibly mixed) action, a player is now faced with the choice of decision rules (called strategies) that determine what actions should be chosen at a given interaction for given present and past observations."\cite{markov3}
+\end{quote}
+The MDEG bears and extremely close similarity of concept with the well studied Markov Decision Processes (MDP) except without the population coupling. MDPs have well known general solution methodologies such as various schemes of policy-iteration with iterative methods of refining the policy (aka strategy/decision rules) to optimum; and there are evolutionary schemes as well.\cite{markov6}
+The central refinement of MDEG which we present is that rather than considering the individual's fitness to be the expected sum of game payoffs it achieves over an infinite time-horison we instead consider the fitness to be the expected growth of a steady-state population of such individuals.
+
+\subsection{Stationary Growth}
+
+in both MDP and MDEG one of the core structrures underlying the analysis is that of a Markov Chain/s representing states and probability of transitioning between them.
+It is well established that if the set of states in a Markov chain are mutually connected (specifically that the Markov chain is ergodic) then there exists a unique steady state between the transitions called a 'steady distributon'.
+The existance of such a distribution is due to the fact that Markov chains can be represented as non-negative matricies sufficient for the Perron–Frobenius theorem to yield existance and uniqueness of the positive eigenvector representing the 'stationary distribution'; such a distribution is redily calculated numerically and one simple technique is the eigenvector calculating 'power iteration' method.\cite{markov7}
+A central tennent in the definition of a Markov chain is that an individual in any state must transition to some states and thus the total probability of all transitions from any state must sum to one.
+This restriction is represented in the columns of the representing matrix must sum to one and thus the eigenvector corresponding to the 'steady distribution' has an eigenvalue of one.
+
+It is important to note there are other known matricies representing probable transitions between states which relax this restriction and yet have unique steady state via the same Perron–Frobenius theorem.
+A particularly well known example class of such a matricies are the Leslie Matricies used for studying the structure of populations of individuals (origionally for female individuals) transitioning between age-states.
+Leslie Matricies (just like markov chain matricies) are square, and they have form:\cite{leslie}
+
+\begin{equation*}
+M=\begin{bmatrix}
+    F_0 & F_1 & F_2 & F_3 & \dots  & F_{m-2} & F_{m-1} & F_m  \\
+    P_0 &  0  &  0  &  0  & \dots  &    0    &  0    &  0   \\
+     0  & P_1 &  0  &  0  & \dots  &    0    &  0    &  0   \\
+     0  &  0  & P_2 &  0  & \dots  &    0    &  0    &  0   \\
+     0  &  0  &  0  & P_3 & \dots  &    0    &  0    &  0   \\
+    \vdots & \vdots & \vdots & \vdots & \ddots & \vdots & \vdots & \vdots \\
+     0  &  0  &  0  &  0  & \dots  & P_{m-2} &  0    &  0   \\
+     0  &  0  &  0  &  0  & \dots  &    0    & P_{m-1} & 0   \\
+\end{bmatrix}
+~~~0<P_x<1;~~F_x\ge0
+\end{equation*}
+For a column vector $n = [n_0,n_1,n_2,\dots,n_m]$ with each $n_x$ representing the number of individuals in each incremental (and evenly spaced) age-bracket within the population, with $P_x$ representing the probability of and individual in the $x$th age bracket successfully living into the $x+1$th age bracket, and $F_x$ being the expectation on the number of offspring for an individual in $x$th age bracket within the duration of the age bracket.
+
+Application of the matrix $M$ to the column vector, $Mn$ gives the expected number of individuals in the population after the duration of one age bracket of time, and $M^2n$ the expectation individuals after two age brackets, $M^3n$ the population distribution after three, and so on.
+Successive applications of the matrix eventually yeild a steady population profile between the $n_x$, and a constant exponential growth rate $\lambda$ given by the Euler–Lotka equation.
+The $\lambda$ is simply the dominant and only real-positive eigenvalue of the matrix, with the steady distribution $n$ its eigenvector, that is $Mn=\lambda n$.
+
+Although the elements in the Leslie matrix are positive and represent states and transition between, it cannot be representative of a Markov-chain because its columns dont nessisarily sum to one.
+The informal summary difference is that wheras in a Markov-chain matrix the elements represent expectation of \textit{transition} between states, Leslie matrix elements represent expectation of \textit{transmission} between states (which we will term a 'transmission matrix').
+
+It is in light of the calculation of growth rate via Leslie Matricies that we reiterate our interpretation of biological fitness - that the fitness of an individual is the expected growth of a steady-state population of such individuals.
+As an example of the rationale of this interpretation: Consider a population of organisms where there is a single instance of a mutation that significantly increases expected number of offspring but leaves all the offspring (or perhaps the offspring's offspring) in a state of sterility.
+It is quite intuitive to think that such a mutation would have the lowest possible fitness and would certainly die out in the process of evolution despite the fact that the organism with the mutation would have a high number of offspring and the growth-rate in number of organism may be significant. Under our interpretation the fitness of the mutant organism would be represented as a value of zero as a steady-state population of such mutants would have zero growth rate.
+
+In what follows we derive the transmission matrix of different strategies, and evaluate the strategies growth as its fitness measure in the context of an evolutionary scheme.
+Interpreting the fitness (or the payoff) to be the eigenvalue of a matrix seems to be something that is missing from literature at large and contrasts with existing literature on MDEG (and MDP) where the fitness of a mutation (or optimality of a policy respectively) is taken to be the sum of smaller fitnes/payoff values expected to achieved by following a markov-chain transition matrix.
+By taking our evaluation of fitness we are freed from having to specify payoff/fitness values over-and-above specifying transmission rates, however this introduces quite subtle differences in Evolutionary-Game-Theory definitions and dynamics.
+
+\section{The new Evolutionary Game}
+
+There are three essential elements to the evolutionary game - $S$,$A$,$T$:
+\begin{itemize}[leftmargin=*,labelsep=4mm]
+\item	$S$ is a finite set of states
+\item	$A_s$ is finite set of actions available from a state $s\in S$; $A=\cup_s A_s$
+\item	$T_s(a,P)$ is the transmission to state $s\in S$ when action $a\in A$ is taken in the context of $P$; $T_s\ge 0$\\ where $P(s)$ is the proportion of the population in state $s\in S$; $P(s)\ge 0$; $\sum_{s\in S}P(s)=1$
+\end{itemize}
+We consider the game with the restriction that there is at-least one action per state even if it transmitts zero to all states.
+
+\subsection{strategy sets}
+
+In the game we consider the probability of taking what actions across what states as defining a strategy.
+That is, a map from states to actions as defining a 'pure' strategy and a probability distribution across 'pure' strategies as a 'mixed' strategy.
+A strategy then can thus be considered as a random function $Z: S \rightarrow A$, with $Z(s)\in A_s$.
+
+If we enumerate the states of the game $S=(s_0,s_1,s_2,\dots,s_m)$ and we take the expectation of transmission as a result of playing a strategy $Z$, then $E[T_{s_j}(Z(s_i),P)]$ is the transmission from state $i$ to $j$ and thus our transmission matrix is:
+$$M(Z,P)_{i,j}=E[T_{s_j}(Z(s_i),P)]$$
+
+Matrix $M(Z,P)_{i,j}$ is the transmission matrix between indexed states $i$ to $j$ and so its positive real eigenvalue is the growth-rate and fitness/payoff of strategy $Z$ in context of population $P$.\footnote{Note should be made that the rather general matrix $M(Z,P)$ occasionally may not satisfy the conditions of the Perron–Frobenius theorem and thus not have a positive-eigenvalue that is nessisarily unique, though it will have a largest positive eigenvalue (as for instance, found by power-iterations) which is sufficient for our purposes.}
+
+\subsection{Evolutionary Stable Strategies (ESS)}
+
+Broadly speaking ESS are "a strategy which, if adopted by a population in a given environment, cannot be invaded by any alternative strategy that is initially rare"\cite{gloss1} and in classical Evolutionary-Game-Theory has precise restrictions:
+
+\begin{quote}"[ESS] is focused on symmetric pair-wise interractions within a single large population. In particular it does not deal with interactions that take place between more than two individuals at a time ... and evolutionary stability is a robustness test against a \textit{single} mutation at a time"\cite{weibull}\end{quote}
+
+
+
+
+
+
+and ESS points are demonstrably a subset of Nash Equlibrium strategies which may not exist in a given game at all\cite{weibull} "[Nash equilibrium is] where no player can increase its payoff by changing its strategy, while the other players keep their strategy unchanged. Each evolutionary stable strategy is a Nash equilibrium, but the converse is not true." \cite{gloss1}
+And nor does "the evolutionary stability property does not explain \textit{how} a population arrives at such a strategy, Instead it asks whether, once reached, a strategy is robust to evolutionary pressures"\cite{weibull}
+
+if we enumerate the 'pure' strategies of the game as $z_1,z_2,z_3\dots,z_n$ then any mixed is uniquely represented as a 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Results}
+
+This section may be divided by subheadings. It should provide a concise and precise description of the experimental results, their interpretation as well as the experimental conclusions that can be drawn.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Subsection}
+
+\subsubsection{Subsubsection}
+
+Bulleted lists look like this:
+\begin{itemize}[leftmargin=*,labelsep=4mm]
+\item	First bullet
+\item	Second bullet
+\item	Third bullet
+\end{itemize}
+
+Numbered lists can be added as follows:
+\begin{enumerate}[leftmargin=*,labelsep=3mm]
+\item	First item
+\item	Second item
+\item	Third item
+\end{enumerate}
+
+The text continues here.
+
+\subsection{Figures, Tables and Schemes}
+
+All figures and tables should be cited in the main text as Figure 1, Table 1, etc.
+
+\begin{figure}[H]
+\centering
+%\includegraphics[width=3cm]{logo-mdpi}
+\caption{This is a figure, Schemes follow the same formatting. If there are multiple panels, they should be listed as: (\textbf{a}) Description of what is contained in the first panel. (\textbf{b}) Description of what is contained in the second panel. Figures should be placed in the main text near to the first time they are cited. A caption on a single line should be centered.}
+\end{figure}   
+
+\begin{table}[H]
+\caption{This is a table caption. Tables should be placed in the main text near to the first time they are cited.}
+\centering
+%% \tablesize{} %% You can specify the fontsize here, e.g.  \tablesize{\footnotesize}. If commented out \small will be used.
+\begin{tabular}{ccc}
+\toprule
+\textbf{Title 1}	& \textbf{Title 2}	& \textbf{Title 3}\\
+\midrule
+entry 1		& data			& data\\
+entry 2		& data			& data\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Formatting of Mathematical Components}
+
+This is an example of an equation:
+
+\begin{equation}
+\mathbb{S}
+\end{equation}
+
+%% If the documentclass option "submit" is chosen, please insert a blank line before and after any math environment (equation and eqnarray environments). This ensures correct linenumbering. The blank line should be removed when the documentclass option is changed to "accept" because the text following an equation should not be a new paragraph. 
+Please punctuate equations as regular text. Theorem-type environments (including propositions, lemmas, corollaries etc.) can be formatted as follows:
+%% Example of a theorem:
+\begin{Theorem}
+Example text of a theorem.
+\end{Theorem}
+
+The text continues here. Proofs must be formatted as follows:
+
+%% Example of a proof:
+\begin{proof}[Proof of Theorem 1]
+Text of the proof. Note that the phrase `of Theorem 1' is optional if it is clear which theorem is being referred to.
+\end{proof}
+The text continues here.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Discussion}
+
+Authors should discuss the results and how they can be interpreted in perspective of previous studies and of the working hypotheses. The findings and their implications should be discussed in the broadest context possible. Future research directions may also be highlighted.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Materials and Methods}
+
+Materials and Methods should be described with sufficient details to allow others to replicate and build on published results. Please note that publication of your manuscript implicates that you must make all materials, data, computer code, and protocols associated with the publication available to readers. Please disclose at the submission stage any restrictions on the availability of materials or information. New methods and protocols should be described in detail while well-established methods can be briefly described and appropriately cited.
+
+Research manuscripts reporting large datasets that are deposited in a publicly available database should specify where the data have been deposited and provide the relevant accession numbers. If the accession numbers have not yet been obtained at the time of submission, please state that they will be provided during review. They must be provided prior to publication.
+
+Interventionary studies involving animals or humans, and other studies require ethical approval must list the authority that provided approval and the corresponding ethical approval code. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusions}
+
+This section is not mandatory, but can be added to the manuscript if the discussion is unusually long or complex.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\vspace{6pt} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% optional
+\supplementary{The following are available online at www.mdpi.com/link, Figure S1: title, Table S1: title, Video S1: title.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\acknowledgments{All sources of funding of the study should be disclosed. Please clearly indicate grants that you have received in support of your research work. Clearly state if you received funds for covering the costs to publish in open access.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\authorcontributions{For research articles with several authors, a short paragraph specifying their individual contributions must be provided. The following statements should be used ``X.X. and Y.Y. conceived and designed the experiments; X.X. performed the experiments; X.X. and Y.Y. analyzed the data; W.W. contributed reagents/materials/analysis tools; Y.Y. wrote the paper.'' Authorship must be limited to those who have contributed substantially to the work reported.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\conflictofinterests{Declare conflicts of interest or state ``The authors declare no conflict of interest.'' Authors must identify and declare any personal circumstances or interest that may be perceived as inappropriately influencing the representation or interpretation of reported research results. Any role of the funding sponsors in the design of the study; in the collection, analyses or interpretation of data; in the writing of the manuscript, or in the decision to publish the results must be declared in this section. If there is no role, please state ``The founding sponsors had no role in the design of the study; in the collection, analyses, or interpretation of data; in the writing of the manuscript, and in the decision to publish the results''.} 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% optional
+\abbreviations{The following abbreviations are used in this manuscript:\\
+
+\noindent 
+\begin{tabular}{@{}ll}
+MDPI & Multidisciplinary Digital Publishing Institute\\
+DOAJ & Directory of open access journals\\
+TLA & Three letter acronym\\
+LD & linear dichroism
+\end{tabular}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% optional
+\appendixtitles{no} %Leave argument "no" if all appendix headings stay EMPTY (then no dot is printed after "Appendix A"). If the appendix sections contain a heading then change the argument to "yes".
+\appendixsections{multiple} %Leave argument "multiple" if there are multiple sections. Then a counter is printed ("Appendix A?). If there is only one appendix section then change the argument to ?one? and no counter is printed (?Appendix?).
+\appendix
+\section{}
+The appendix is an optional section that can contain details and data supplemental to the main text. For example, explanations of experimental details that would disrupt the flow of the main text, but nonetheless remain crucial to understanding and reproducing the research shown; figures of replicates for experiments of which representative data is shown in the main text can be added here if brief, or as Supplementary data. Mathemtaical proofs of results not central to the paper can be added as an appendix.
+
+\section{}
+All appendix sections must be cited in the main text. In the appendixes, Figures, Tables, etc. should be labeled starting with `A', e.g., Figure A1, Figure A2, etc. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Citations and References in Supplementary files are permitted provided that they also appear in the reference list here. 
+\bibliographystyle{mdpi}
+
+%=====================================
+% References, variant A: internal bibliography
+%=====================================
+\renewcommand\bibname{References}
+\begin{thebibliography}{999}
+% Reference 1
+\bibitem{ref-journal}
+Lastname, F.; Author, T. The title of the cited article. {\em Journal Abbreviation} {\bf 2008}, {\em 10}, 142-149.
+% Reference 2
+\bibitem{ref-book}
+Lastname, F.F.; Author, T. The title of the cited contribution. In {\em The Book Title}; Editor, F., Meditor, A., Eds.; Publishing House: City, Country, 2007; pp. 32-58.
+\end{thebibliography}
+
+%=====================================
+% References, variant B: external bibliography
+%=====================================
+%\bibliography{your_external_BibTeX_file}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% optional
+\sampleavailability{Samples of the compounds ...... are available from the authors.}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document}
+

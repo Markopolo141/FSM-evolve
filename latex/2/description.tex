@@ -1,0 +1,76 @@
+\section{Description of the Game}\label{section:formalism}
+
+Consider an ecosystem of different species of organisms, where the organisms of each species have a distinct set of states which they can occupy. Further imagine that each state has a set of actions which an organism in the state can execute.
+Let:
+\begin{itemize}[leftmargin=*,labelsep=4mm]
+\item   $K$ be a finite set of species
+\item	$S$ be the finite set of all states
+\item   $S_k$ be nonempty disjoint subsets of states $S$ available to species $k\in K$
+\item   $A$ be the finite set of all actions
+\item   $A_k$ be nonempty disjoint subsets of actions $A$ available to species $k\in K$
+\item   $A_{k,s}$ be nonempty subset of actions $A_k$ available to species $k\in K$ in state $s\in S_k$
+\end{itemize}
+Further imagine that each individual organism has a strategy in addition to its state, which encodes the probabilities of what action it will execute depending on the state it is in.
+Let:
+
+\begin{itemize}[leftmargin=*,labelsep=4mm]
+\item   $W^k$ be the set of possible strategies for species $k\in K$, such that for any strategy $w^k \in W^k$ that $w^k_{a,s}$ denotes the probability that an organism with strategy $w^k$ will execute action $a\in A_{k,s}$ if it is in state $s\in S_k$.
+\end{itemize}
+The elements of $W^k$ are all that satisfy the basic rules of probability:
+\begin{itemize}[leftmargin=*,labelsep=4mm]
+\item[--]   probabilities of taking actions from any state must sum to one:\\\-\hspace{8mm} $\forall k\in K~~\forall w^k\in W^k~~\forall s\in S_k~~ \sum_{a\in A_{k,s}}w^k_{a,s}=1$
+\item[--]   all probabilities must be non-negative:\\\-\hspace{8mm} $\forall k\in K~~\forall w^k\in W^k~~\forall s\in S_k~~\forall a\in A_{k,s}~~ w^k_{a,s}\ge 0$
+\item[--]   inaccessible actions have probability of zero:\\\-\hspace{8mm} $\forall k\in K~~\forall w^k\in W^k~~\forall s\in S_k~~\forall a\notin A_{k,s}~~ w^k_{a,s}= 0$
+\end{itemize}
+The remaining elements are:
+
+\begin{itemize}[leftmargin=*,labelsep=4mm]
+\item	$P_{t,k,s,w}$ is the number\footnote{$P_{t,k,s,w}$ defines a distribution of the population at time $t$, which may be normalised and hence represent a probability distribution or left unnormalised as representing actual numbers of organisms. The only constraint is that it be non-negative $\forall t,k,s,w~~P_{t,k,s,w}\ge 0$. If the probability distribution is to be normalised then the normalisation can either be `built-in' to the transmission $T$ terms or included as a separate step in the algorithm \ref{al:1}} of organisms at time $t$ of species $k\in K$ in a state $s\in S^k$ with strategy $w\in W^k$; 
+\item   $P^*_{t,k,s,a} = \sum_{w^k\in W^k}P_{t,k,s,w^k}w^k_{a,s}$ is the number of organisms at time $t$ of species $k\in K$ in a state $s\in S^k$ which are going to take action $a\in A_{k,s}$.
+\item   $T_{k,s,a}(P^*_t)$ are positive functions of argument\footnote{where $P^*_t$ is shorthand for the set of all the numbers across $k$, $s$ and $a$,  $P^*_t = \{P^*_{t,k,s,a}~|~k\in K,~s\in S_k,~a\in A_{k,s}\}$} $P^*_t$, giving transmission of organisms (of a strategy $w^k$) \textit{to} state $s\in S_k$ when action $a\in A_k$ is executed by an organism (of strategy $w^k$).
+\item   $\alpha$ as the proportion of the population that will take an action at a time step $t\rightarrow t+1$; $0<\alpha<1$.
+\end{itemize}
+
+Once the above elements $K,S,A,T,\alpha$ and initial population $P_0$ are specified - the game's process is fully specified.\\
+The game's process consists of stages: The organisms in the population of a strategy $w^k$ have population distribution across states given by $P_t$.  $\alpha$ of the those individuals have $w^k$ strategy which determines the distribution of actions taken by them.  The total actions taken by all strategies determines the total transmissions among the states - thus updating $P_t$ to $P_{t+1}$. The process is embedded as Algorithm \ref{al:1}.
+
+\begin{algorithm}[h]
+\caption{Forward Stepping Algorithm}\label{al:1}
+\begin{algorithmic}[1]
+\setstretch{1.8}
+
+\Procedure{Simulate}{$K,S,W,T,P_0,\alpha,t_{max}$}
+\State $t\gets 0$
+\While{$t<t_{max}$}
+    \State $P^*_{t,k,s,a} \gets \sum_{w^k\in W^k}P_{t,k,s,w^k}w^k_{a,s}$\Comment{calculate reduced population distribution}
+    \For{$k \in K$}\Comment{for each species:}
+        \For{$w^k \in W^k$}\Comment{for each strategy:}
+            \State $M^{t,k,w^k}_{s_1,s_2} \gets \sum_{a\in A_{k,s_2}}T_{k,s_1,a}(P^*_t) w^k_{a,s_2}$\Comment{calculate total transmissions}
+            \State $z_{s_1} \gets \sum_{s\in S^k} M^{t,k,w^k}_{s_1,s}P_{t,k,s,w^k}$\Comment{apply matrix to the strategy's population}
+            \State $P_{t+1,k,s,w^k} \gets \alpha z_s + (1-\alpha)P_{t,k,s,w^k}$\Comment{incorporate new population by $\alpha$}
+        \EndFor
+    \EndFor
+    \State $t\gets t+1$
+\EndWhile
+\State \textbf{return} $P^*_{t_{max}}$
+\EndProcedure
+
+\end{algorithmic}
+\end{algorithm}
+From Algorithm \ref{al:1} is noticed that if the states were indexed $S_k=\{s_{k,0},s_{k,1},\dots\}$, that every strategy $w^k$ would have its own transmission matrix analogous to those given in section \ref{sec:2}:\begin{equation}\label{eq:transmission_matrix}m_{l,j} = M^{t,k,w^k}_{s_{k,l},s_{k,j}} = \sum_{a\in A_{k,s_j}}T_{k,s_{k,l},a}(P^*_t) w^k_{a,s_{k,j}}\end{equation}
+Such that $m_{l,j}$ would be net transmission from the $j$th state to the $l$th state for the individuals that take actions. We term such a matrix the "strategy's transmission matrix".
+Furthermore that if the actions were indexed $A_{k,s_{k,j}}=\{a_{k,j,0},a_{k,j,1},\dots\}$ that the probabilities of any strategy $w^k\in W^k$ would form an indexed set of numbers which we define to be the strategy's "terms".
+\begin{equation}\label{eq:probability_indices}q_{j,i}=w^k_{a_{k,j,i},s_{k,j}}\end{equation}
+Any appropriately dimensioned indexed set of numbers $q_{j,i}$ can be the terms of a strategy if it is "implementable". which is iff: 
+$\forall j~\sum_iq_{j,i}=1$ and $\forall i,j~q_{i,j}\in\mathbb{R}_+\bigcup\{0\}$, ie. if the numbers could be taken to be probabilities of a strategy.
+The terms of a strategy are the same size and dimensions as all the strategies of the same species, and so it possible to add, subtract and multiply them together element-wise to form linear combinations of strategy terms.
+The result of a linear combination of strategy terms is implementable if the coefficients of the linear combination are positive and sum to unity.
+In the next section we will talk of linear combinations of strategies in this manner.
+\\
+
+In anticipation of Appendix \ref{appendix5} we will present it here that: any strategy's transmission matrix has a form where it has columns are linear combination of column vectors weighted by its terms. Consider that if we index the $T$ functions as $y_{j,i,l}=T_{k,s_{k,l},a_{k,j,i}}$, and if $y_{j,i}$ denotes a column of such terms then $m_{l,j}$ has form:
+\begin{equation}\label{eq:columns} m_{l,j} = \sum_iy_{j,i,l}q_{j,i} = \left[\begin{array}{c|c|c}
+y_{0,0}q_{0,0}+y_{0,1}q_{0,1}+y_{0,2}q_{0,2}+\dots & 
+y_{1,0}q_{1,0}+y_{1,1}q_{1,1}+\dots & 
+y_{2,0}q_{2,0}+\dots
+\end{array}\right]\end{equation}
