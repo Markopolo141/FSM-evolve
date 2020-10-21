@@ -1,0 +1,98 @@
+\documentclass[journal,article,accept,oneauthor,pdftex,10pt,a4paper,games]{mdpi} 
+
+\firstpage{1} 
+\makeatletter 
+\setcounter{page}{\@firstpage} 
+\makeatother 
+\articlenumber{x}
+\doinum{10.3390/------}
+\pubvolume{xx}
+\pubyear{2017}
+\copyrightyear{2017}
+\externaleditor{Academic Editor: name}
+\history{Received: date; Accepted: date; Published: date}
+
+% import of libraries
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{mathtools}
+\usepackage{tikz}
+\usepackage{listings}
+\usepackage{pgfplots}
+\usepackage{color}
+\usepackage{subcaption}
+\usepackage{mathdots}
+\usepackage{hyperref}
+
+% configuration of libraries
+\usetikzlibrary{arrows,automata}
+\usetikzlibrary{positioning}
+\tikzset{
+    state/.style={
+           rectangle,
+           rounded corners,
+           draw=black, very thick,
+           minimum height=2em,
+           inner sep=2pt,
+           text centered,
+           },
+}
+\lstset{language=Python}
+\pgfplotsset{width=10.5cm,compat=1.8}
+\makeatletter
+
+% newcommand for inline equations used in appendices
+\newcommand*{\inlineequation}[2][]{
+  \begingroup
+    \refstepcounter{equation}
+    \ifx\\#1\\
+    \else
+      \label{#1}
+    \fi
+    \relpenalty=10000
+    \binoppenalty=10000
+    \ensuremath{
+      #2
+    }
+    ~\@eqnnum
+  \endgroup
+}
+\makeatother
+
+
+
+\Title{Non-Markov Stateful Evolutionary Games}
+\Author{Mark Burgess, Research School of Computer Science, The Australian National University, Canberra, ACT 0200, Australia; markburgess1989@gmail.com}
+\AuthorNames{}
+\address[1]{
+ \quad }
+
+\abstract{A evolutionary game is introduced which explicitly models states and actions in the strategies of the organisms of the evolving population. The game principally features actions that result in demographic flow between states that may not conserve organism numbers.
+The game's formalism is expounded and the nature of the game's equilibrium is discussed. This discussion leads to an algorithm for numerically determining the stable equilibrium points which is exemplified in the context of a modified Hawk-Dove game. The game's flexibility for modeling population dynamics is discussed in the context of other evolutionary games.}
+\keyword{Evolutionary stable strategies (ESS); Markov decision evolutionary games (MDEG); Hawk-Dove game; Evolutionary dynamics; Evolutionary Game Theory}
+
+% not sure if I should include these or not?
+%\PACS{02.50.Le}
+%\MSC{91A22}
+%\JEL{C73}
+
+
+\datasetlicense{CC-BY}
+\begin{document}
+
+\input{introduction}
+\input{description}
+\input{equilibrium}
+
+\vspace{6pt} 
+\acknowledgments{A great thankyou to Paul Scott \& Sylvie Thiebaux for essential proof-reading, academic advice and support!\\ This study was conducted under grant of the Australian Postgraduate Award (APA) for participation in PhD program through the Research School of Computer Science (RSCS) at the Australian National University (ANU). No specific funds were received for costs associated with open-access publication.}
+\conflictsofinterest{The authors declare no conflict of interest. And the founding sponsors had no role in the design of the study; in the collection, analyses, or interpretation of data; in the writing of the manuscript, and in the decision to publish the results.} 
+
+\appendixtitles{no}
+\appendixsections{multiple}
+\appendix
+\input{appendix3}
+
+\bibliography{./bib}
+\end{document}
+

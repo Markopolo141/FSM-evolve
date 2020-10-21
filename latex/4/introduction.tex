@@ -1,0 +1,65 @@
+
+\section{Introduction}
+Biological species are well recognized as being engaged in an evolutionary fight-for-survival and Evolutionary Game Theory has been used to analyze the strategies in such a fight.
+Evolutionary Game Theory encompases games of different forms, but one of the most standard forms concerns the continuous growth/decay of organism types where the organism types are defined by the strategy they play as they are continuously randomly paired to participate in a simultaneous symmetric two-player game where the expected payoff determines each participant's growth rate.\cite{maynard,maynard2}
+
+However the sets of actions (or broadly speaking, the 'strategies') that organisms instantiate can depend-apon and influence the lifecycles of other organisms within an ecosystem, and the stages of these lifecycles and the web of mutual influences between them, are seldom directly modeled in evolutionary game theory.
+Lifecycles interractions are most directly described by nonlinear matrix models of population dynamics, where interraction between lifecycle stages is recognised as a potential source of non-linear and chaotic behavior \cite{doi:10.1080/10236198.2019.1699916}\cite[Chapter 16,17]{population1}.
+
+Within this paper we consider game-theoretic strategies in the context of arbitrary lifecycle interractions, and make a contribution by showing that any search for equilibrium points in these games need only consider pure strategies, and can ignore stochastic combinations of actions - or 'mixed' strategies.
+In this way, dynamic points of interest in these complicated games can be discovered and characterised much more directly.
+
+
+\subsection{Related Work}\label{sec:-1}
+
+
+MDPs bear a strong conceptual similarity with Lloyd Shapley's multiple-player Stochastic-Games (SG) \cite{shapley53}\cite{Solan2015} in which the game itself has a set of possible states or 'positions'. Within this context each of the finite number of players have actions which they can execute. The actions which the players execute determine the transitions between the states of the game and also the immediate payoffs to each of them.
+
+Another example in which state can be seen in literature is in the context of various `Evolutionary games on graphs' where the organisms have the state of belonging to nodes on a grid or graph structure. In these games the organisms at a node play actions against their nearest neighbors. It can be seen that these games capture a general sense of location as a state for the organisms, and this inclusion also introduces unique and dynamic behaviors.\cite{spacial1,nowak,spacial2,spacial3}\footnote{We note that in Szabó and Fáth\cite{spacial4} there is faithfully detailed a large collection of these games}
+
+Another approach of integrating state into game theory extends from the pioneering work of Eitan Altman, and his colleagues Ilaria Brunetti and Yezekael Hayel \cite{markov2,markov3,markov4,markov5,markov8,markov9} who introduce the Markov-Decision-Evolutionary-Game (MDEG) and variants thereof.
+
+In MDEG games each organism can occupy one of a finite set of states, and has actions available to it depending on what state it is in.
+Within the population, the organisms are paired randomly and each of the participants chooses one of their available actions (as determined by their strategy) to execute.
+Within this interaction the actions that the two organisms execute determine the immediate payoff to both and also the probable transitions in state that the organisms will make.
+In these games the expected long-term expected sum of payoffs that the organisms receives for their strategy determine the growth-rate of the presence of the strategy in the population.
+This growth then changes the composition of the population in which the pairings occur.
+
+MDEG includes many features for modeling state-action interactions within evolutionary game theory and serves to provide a primary contrast for our game.
+
+
+\subsection{Structure}
+The remainder of this paper is organised as follows: blah
+
+
+\section{Vital Rates and Population Matrix Models}\label{sec:2}
+
+%It is also worth noting that fitness is not a very simple concept\cite{sep-fitness}
+The demographic flow of individuals of a population between states of a lifecycle is sometimes described in ecological-studies by a matrix that is not necessarily markov.
+The simplest example of such matrices are Leslie Matrices used for studying the structure of populations of individuals transitioning between evenly spaced age-states.
+Leslie Matrices are square, and they have form \cite{leslie}:
+
+\begin{equation*}
+\mathbf{M}=\begin{bmatrix}
+    F_0 & F_1 & F_2 & \dots & F_{m-1} & F_m  \\
+    P_0 &  0  &  0  & \dots &  0      &  0   \\
+     0  & P_1 &  0  & \dots &  0      &  0   \\
+     0  &  0  & P_2 & \dots &  0      &  0   \\
+    \vdots & \vdots & \vdots & \ddots & \vdots & \vdots \\
+     0  &  0  &  0  & \dots  & P_{m-1} &  0   \\
+\end{bmatrix}
+\end{equation*}
+Where $P_i$ represents the probability of and individual in the $i$th age bracket successfully living into the $(i+1)$th age bracket, and $F_i$ is average number of offspring for an individual in $i$th age bracket within the duration of the age bracket.
+The positive elements of these matricies identify the `flow' of individuals from one state to another and are called \textit{vital rates}.
+For a column vector $\mathbf{n}(t)$ representing the number of individuals in each age-bracket at time $t$, $\mathbf{M}\mathbf{n}(t)$ gives the number of individuals in the population after the duration of one age bracket of time, and $\mathbf{M}^2\mathbf{n}(t)$ the number of individuals after two age brackets, and so on. $$\mathbf{n}(t+1)=\mathbf{M}\mathbf{n}(t)$$
+Successive applications eventually yield a steady population profile and a constant exponential growth rate $\lambda$ given by the Euler–Lotka equation, where $\lambda$ is the dominant and only real-positive eigenvalue of the matrix, with the steady population profile $\mathbf{n}$ as its corresponding eigenvector, that is $\mathbf{M}\mathbf{n}=\lambda \mathbf{n}$.
+
+A Leslie matrix is a specific example of a population matrix which projects the growth/decline of a population whose vital rates remain constant.
+However more complicated scenarios exist where the vital rates vary depending on the distribution of the population itself.
+In this context the elements of $\mathbf{M}$ depend on $\mathbf{n}(t)$ in some way, which we denote as $\mathbf{M}_{\mathbf{n}(t)}$ and:
+$$\mathbf{n}(t+1) = \mathbf{M}_{\mathbf{n}(t)}\mathbf{n}(t)$$
+This is then an example of a non-linear population matrix model which may yeild dynamic behaviors such as non-linear growth, unstable cyclic behavior and chaos depending on the instance.
+Additionally as the matrix $\mathbf{M}$ is non-negative it has a maximum non-negative real eigenvalue $\lambda$ (which might be $1$) and corresponding population vector $\mathbf{n}$
+$$\mathbf{M}_{\mathbf{n}}\mathbf{n} = \lambda\mathbf{n}$$
+We consider then that the vector $\mathbf{n}$ characterises a potential equilibrium of the population with $\lambda$ its equilibrium growth rate. We now consider how to represent different strategies within the population.
+

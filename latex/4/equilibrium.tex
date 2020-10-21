@@ -1,0 +1,50 @@
+\section{Searching for Stable Equilibria}\label{sec:equilibria}
+
+In direct correspondence with common game theory language \cite{weibull}, it is possible to define basic relationships between the strategies.
+Each organism's strategy $w$ encodes the probabilities of what actions it will take across its states.  A strategy is `pure' if these probabilities encode certainty of taking a single action per state otherwise it is `mixed'. Any mixed strategy can be decomposed into a linear combination of pure strategies. And any set of pure strategies defines a span of mixed strategies which can be linearly composed of them.
+%The set of pure strategies which could feature in a linear decomposition of a mixed strategy is defined as the `support' of the mixed strategy.
+
+If we define an `equilibrium' as being the condition where all the $\mathbf{M}_{P^*}^w$ population matrices remain constant - and an `equilibrium point' being defined by those matricies.
+Then it is necessarily the case that an equilibrium leads to a condition where all the strategies that are significantly present in the population are steadily growing by the same growth-rate in steady-state. For if any organisms of a strategy existed in the population with a lesser steady-state growth-rate then it would proportionally die out, or if any organisms of a strategy existed with a greater steady-state growth-rate then it would lead the others to proportionately die out.
+
+We further define the equilibrium as being `stable' in a similar way to Maynard Smith \cite{maynard, maynard2, weibull}, specifically if it cannot be disturbed from equilibrium by the presence of a small incorporation-of (or `invaded by') any possible `mutant' strategy. We note that this is at-least the case where no `mutant' strategy has a greater steady-state growth-rate in the context of the population.
+
+In the next section \ref{appendix5} there is a demonstration that for any stable equilibrium established with a population of mixed strategies that it is possible to establish the same equilibrium point without the mixed strategies at all.
+Informally the reasoning is that: because any mixed strategy is a stochastic mix of pure strategies then it can only perform as well as the best of them. And when it performs equal to the best then they must all perform equally. And in this case there is a combination of the pure strategies which have the same state-action profile $P^*$ as the mixed strategy; the same profile which defines the population matrices and thus the equilibrium point itself.
+From these considerations it is thus unnecessary to consider mixed strategies in the search for stable equilibria because every stable equilibria can be established by combinations of pure strategies alone (although there may be zero or multiple such stable equilibria between them).
+
+In our mathematics we assume that all matricies are real, non-negative and grow exponentially under stable equilibrium with a common growth-rate equal to a maximum real non-negative eigenvalue (which may be one), and population profile in proportion to a corresponding eigenvalue.
+This is a simplifying assumption which might be considered to often hold true, however there do exist possible population matricies where this assumption would be violated, such in the context of defective matricies; and in this context, other mathematics would need to be used to assert the same conclusions.
+
+\section{That any stable equilibrium point can always be rendered among pure strategies}\label{appendix5}
+We consider a strategy's being \textit{replaceable} by other strategies if there exists a possible replacement of one's organisms for the others' in a population such as would not disturb the stable equilibrium point. The equilibrium point is defined by constant matricies $\mathbf{M}_{P^*}^w$, which is preserved at least when $P^*$ remains unchanged.
+%Thus a strategy is replaceable at least when it can be replaced by organisms of other strategies such as not to change $P^*$.
+If there is a stable equilibrium, each strategy $w$ has population in proportion to an eigenvector $\mathbf{n}^w$ with components $n^w_s$, thus its contribution to $P^*$ (per its definition) is:
+$$P_{s,a}w_{a,s} \propto n^w_sw_{a,s}$$
+The strategy is replaceable if there is a combination of other strategy's organisms to give this same contribution.
+
+\begin{Definition}\label{def1}
+A strategy $\bar{w}$ is \textbf{replaceable at stable equilibrium} by a set of other strategies $W$, if all strategies $w\in W$ have population matricies with the same maximal real eigenvalue and there exists non-negative corresponding eigenvectors $n^w_s$ and positive coefficients $d^w$ such that:
+$$\forall a,s~~~~~~~~~~~ n^{\bar{w}}_s\bar{w}_{a,s} = \sum_{w\in W}d^wn^w_sw_{a,s} $$
+\end{Definition}
+
+%Thus replaceability is a relationship between the eigenvectors of different matrices (with equal maximum eigenvalues) who's columns are weighted sums of column vectors, and the weights themself.
+
+
+Consider that for any mixed strategy $\bar{w}$ and for any specific state $\bar{s}$ and action $\bar{a}\in A_{\bar{s}}$, if $\bar{w}_{\bar{a},\bar{s}}$ equals zero or one, then we regard it as \textit{`extreme'} with regard to that action.
+If the mixed strategy $\bar{w}$ is not extreme with regards to action $\bar{a}$, then the strategy can be considered as a linear combination of two other similar mixed strategies $w^1$ and $w^2$ that are otherwise the same except with reweighted actions about the $\bar{s}$ state, such as to make them extreme in regards to action $\bar{a}$, ie. that $w^1_{\bar{a},\bar{s}}=1$ and $w^2_{\bar{a},\bar{s}}=0$.
+$$ \mathbf{M}_{P^*}^{\bar{w}} = \bar{w}_{\bar{a},\bar{s}}\mathbf{M}_{P^*}^{w^1} + \left(\sum_{a\in A_{\bar{s}}\setminus \{\bar{a}\}} \bar{w}_{a,\bar{s}}\right)\mathbf{M}_{P^*}^{w^2} $$
+$$\text{where}\qquad \forall a\in A_{\bar{s}}\setminus \{\bar{a}\},\qquad  w^1_{a,\bar{s}}=0 \quad\text{and}\quad w^2_{a,\bar{s}} = \frac{\bar{w}_{a,s}}{\sum_{a\in A_{\bar{s}}\setminus \{\bar{a}\}} \bar{w}_{a,\bar{s}}} $$
+We note that if $\bar{w}$ is extreme with regards to any other action $a^*$ then the two other strategies $w^1$ and $w^2$ also extreme with regards to action $a^*$.\\
+If we consider $\alpha = \bar{w}_{\bar{a},\bar{s}}$ then $\mathbf{M}_{P^*}^{\bar{w}} = \alpha\mathbf{M}_{P^*}^{w^1} + (1-\alpha)\mathbf{M}_{P^*}^{w^2} = \mathbf{M}(\alpha)$ and Theorems \ref{th:2} and \ref{th:3} apply.\\
+Theorem \ref{th:2} informs us that the equilibrium growth rate (the spectral radius of the matricies) of strategies $w^1$ to $\bar{w}$ to $w^2$ is either monotonically increasing or decreasing or otherwise constant.
+If it is monotonically increasing/decreasing then either $w^1$ or $w^2$ will have a greater equilibrium growth rate than $\bar{w}$, then $\bar{w}$ is not replaceable at stable equlibrium because it is not part of stable equilibrium; thus for stable equilibrium conditions $w^1$,$w^2$ and $\bar{w}$ must have the same growth rate.\\
+Consequantly Theorem \ref{th:3} informs us that $\mathbf{n}^{\bar{w}} = \alpha \mathbf{n}^{w^1} + (1-\alpha)\mathbf{n}^{w^2}$ and that $n^{\bar{w}}_{\bar{s}} = n^{w^1}_{\bar{s}} = n^{w^2}_{\bar{s}}$\\
+thus for all $s\ne \bar{s}: n^{\bar{w}}_s\bar{w}_{a,s} = d^{w^1}n^{w^1}_{\bar{s}}w^1_{a,\bar{s}} + d^{w^2}n^{w^2}_{\bar{s}}w^2_{a,\bar{s}}$ and $n^{\bar{w}}_{\bar{s}}\bar{w}_{a,\bar{s}} = d^{w^1}n^{w^1}_{\bar{s}}w^1_{a,\bar{s}}$ and the conditions required for replaceability are staisfied.
+
+
+In this way any mixed strategy which is not extreme with regards to action $\bar{a}$ is replaceable by two other strategies that are extreme with respect to any specific action $\bar{a}$, each of these other strategies are in turn replaceable by strategies that are even more extreme with regards to other actions, and so on, until such a point as all these strategies are all replaceable by strategies which are maximally extreme, ie. pure strategies.
+In this way any mixed strategy is replaceable at stable equilibrium by pure strategies.
+
+
+
