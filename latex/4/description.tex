@@ -1,6 +1,6 @@
 \section{Description of the Game}\label{section:formalism}
 
-Consider an ecosystem of different organisms, where the organisms have a distinct set of states which they can occupy and each state has a set of actions which an organism in the state will execute depending on its strategy:
+Consider an ecosystem of different organisms, where the organisms a set of states and each state has a set of actions which they will execute depending on their strategy. let:
 
 \begin{itemize}[leftmargin=*,labelsep=4mm]
 \item	$S$ be indexed finite set of states
@@ -16,7 +16,7 @@ Consider an ecosystem of different organisms, where the organisms have a distinc
 
 Thus every strategy $w$ has its own population matrix $\mathbf{M}_{P^*}^w$ with components $M^{w}_{i,j}$.%, and population vector $\mathbf{n}^w$.
 \begin{equation}\label{eq:transmission_matrix}\mathbf{M}_{P^*}^w = M^{w}_{i,j} = \sum_{a\in A_i}T_{j,a}(P^*) w_{a,i}\end{equation}
-And thus the matrix of a strategy $\mathbf{M}_{P^*}^w$ is composed of columns which are weighted by its probability terms $w_{a,s}$.
-Thus it is possible to consider probabilistic mixes of strategies, for instance if strategies $w^1$ and $w^2$ are mixed by a factor $0\le\alpha\le 1$ to form a new strategy $w^\alpha$ whose matrix is then:
+And thus the matrix of a strategy $\mathbf{M}_{P^*}^w$ is composed of columns which are weighted by its probability terms $w_{a,s}$,
+and it is possible to consider probabilistic mixes of strategies, for instance if strategies $w^1$ and $w^2$ are mixed by a factor $0\le\alpha\le 1$ to form a new strategy $w^\alpha$ whose matrix is then:
 \begin{equation}\label{eq:transmission_matrix2}\mathbf{M}_{P^*}^{w^\alpha} = \sum_{a\in A_i}T_{j,a}(P^*) \left(\alpha w^1_{a,i}+(1-\alpha)w^2_{a,i}\right) = \alpha\mathbf{M}_{P^*}^{w^1} + (1-\alpha)\mathbf{M}_{P^*}^{w^2}\end{equation}
 In this way one strategy can be considered as a linear combination of other strategies.
