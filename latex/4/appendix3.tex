@@ -18,11 +18,11 @@ Thus it is demonstrated that $\lambda$ is also an eigenvalue for $\alpha A + (1-
 \end{proof}
 
 \begin{Theorem}\label{th:2}
-For a real $n\times n$ element-wise non-negative matrix $A$, and real element-wise non-negative column vector $b$, with $A^{b,k}$ denoting the matrix with its $k$th column as $b$.
+For a real $n\times n$ non-negative matrix $A$, and real non-negative column vector $b$, with $A^{b,k}$ denoting the matrix with its $k$th column as $b$.
 For the matrix mapping $B(\alpha) = \alpha A + (1-\alpha)A^{b,k}$ defined on a range $0\le\alpha\le1$. If $\rho(B(\alpha))$ denotes the spectral radius of $B(\alpha)$.\\ Then $\rho(B(\alpha))$ is continuous, and either constant or strictly monotonic with $\alpha$.
 \end{Theorem}
 \begin{proof}
-Because $B(\alpha) = \alpha A + (1-\alpha)A^{b,k}$ is a matrix continuous in all its elements it will have $n$ continuous eigenvalues.
+Because $B(\alpha) = \alpha A + (1-\alpha)A^{b,k}$ is a matrix continuous in all its elements it will have $n$ continuous eigenvalues (counting multiplicities).\footnote{An informal outline of the proof is that: 1. If the elements of a matrix are continuous 2. Then the coefficients of the characteristic polynomial are continuous (as they are additions and multiplications of them) 3. Then the $n$ roots (via fundamental theorem of algebra) of the characteristic polynomial are continuous (see \cite{10.2307/2045978}) 4. Hence the eigenvalues are continuous}
 Thus $\rho(B(\alpha))$ is also continuous with $\alpha$ for all $\alpha$.\\
 Furthermore the value $\rho(B(\alpha))$ is itself an eigenvalue of $B(\alpha)$ for all $\alpha$ via the Perron-Frobenius theorem for non-negative matrices.
 Suppose for a contradiction that $\rho(B(\alpha))$ is not monotone, in this case there must exist at least three values of alpha, $\alpha_1<\alpha_2<\alpha_3$ such that $\rho(B(\alpha_2))>\max(\rho(B(\alpha_0)),\rho(B(\alpha_3)))$ or $\rho(B(\alpha_2))<\min(\rho(B(\alpha_0)),\rho(B(\alpha_3)))$.
@@ -40,23 +40,22 @@ Which completes the proof.
 
 
 \begin{Theorem}\label{th:3}
-For a $n\times n$ matrix $A_{i,j}$, and column vectors $b$ and $c$, with $A^{b,k}$ and $A^{c,k}$ denoting the matrix with its $k$th column as $b$ and $c$ respectively. For the matrix mapping $B(\alpha) = \alpha A^{b,k} + (1-\alpha)A^{c,k}$ for $\alpha\in\mathbb{R}$. Let $\lambda(\alpha)$ and $v(\alpha)$ be an eigenvalue/vector pairing of $B(\alpha)$\\
+For a real $n\times n$ non-negative matrix $A_{i,j}$, and non-negative column vector $b$ with $A^{b,k}$ denoting the matrix with its $k$th column as $b$. For the matrix mapping $B(\alpha) = \alpha A + (1-\alpha)A^{b,k}$ for $\alpha\in\mathbb{R}$. Let $\lambda(\alpha)$ and $v(\alpha)$ be an eigenvalue/vector pairing of $B(\alpha)$\\
 If there exists different $\alpha_1$ and $\alpha_2$ such that $\lambda(\alpha_1)=\lambda(\alpha_2)$, then $\lambda(\alpha)=\lambda(\alpha_1)$ and $v(\alpha)=\frac{\alpha-\alpha_1}{\alpha_2-\alpha_1}v(\alpha_2)+\frac{\alpha-\alpha_2}{\alpha_1-\alpha_2}v(\alpha_1)$ is an eigenvalue/vector pairing for all $\alpha$, with the $k$th value of the eigenvector - $v(\alpha)_k$ being constant.
 \end{Theorem}
 \begin{proof}
-if $b=c$ then $A^{b,k}=A^{c,k}$ and $B(\alpha) = A^{b,k}$, then $\lambda(\alpha)=\lambda(\alpha_1)$ and $v(\alpha)=v(\alpha_1)$ is trivial solution which fulfills the proof. Otherwise $b\ne c$.\\
 Since $\lambda(\alpha_1)$ is an eigenvalue for all $B(\alpha)$ via Lemma \ref{lem2} then $\frac{\partial \lambda(\alpha)}{\partial \alpha}=0$ and $\lambda(\alpha)=\lambda(\alpha_1)=\lambda$ is true.\\
-As: $~\left(\alpha A^{b,k} + (1-\alpha)A^{c,k}\right)v(\alpha)=\lambda v(\alpha)$\\
+As: $~\left(\alpha A + (1-\alpha)A^{b,k}\right)v(\alpha)=\lambda v(\alpha)$\\
 If $v(\alpha)_k$ denotes the $k$th value of $v(\alpha)$, then differentiating with respect to $\alpha$ \\
-Gives: $\left(\alpha A^{b,k} + (1-\alpha)A^{c,k} - \lambda I\right)\frac{\partial v(\alpha)}{\partial\alpha}+(b-c)v(\alpha)_k=0$\\
+Gives: $\left(\alpha A + (1-\alpha)A^{b,k} - \lambda I\right)\frac{\partial v(\alpha)}{\partial\alpha}+(b-c)v(\alpha)_k=0$\\
 now, there are two cases:\\
 if there is an $\alpha_3$ such that $v(\alpha_3)_k=0$ then:\\
-\-\hspace{8mm}$\left(\alpha_3 A^{b,k} + (1-\alpha_3)A^{c,k} - \lambda I\right)\frac{\partial v(\alpha_3)}{\partial\alpha}=0$\\
+\-\hspace{8mm}$\left(\alpha_3 A + (1-\alpha_3)A^{b,k} - \lambda I\right)\frac{\partial v(\alpha_3)}{\partial\alpha}=0$\\
 \-\hspace{8mm}Setting $\frac{\partial v(\alpha)}{\partial\alpha}=0$ is permissible, making $v(\alpha)_k=0$.\\
 \-\hspace{8mm}therefore constant $v(\alpha)=v(\alpha_3)$ is solution which fulfills the proof\\
 if there is not an $\alpha_3$ such that $v(\alpha_3)_k=0$, then:\\
 \-\hspace{8mm}It is possible do scaling, thus setting $v(\alpha)_k=d$ to be a non-zero constant and therefore $\frac{\partial v(\alpha)_k}{\partial \alpha}=0$\\
-\-\hspace{8mm}Thus there is a $\frac{\partial v(\alpha)}{\partial\alpha}$ such that: $\left(\alpha A^{b,k} + (1-\alpha)A^{c,k} - \lambda I\right)\frac{\partial v(\alpha)}{\partial\alpha}+d(b-c)=0$\\
+\-\hspace{8mm}Thus there is a $\frac{\partial v(\alpha)}{\partial\alpha}$ such that: $\left(\alpha A + (1-\alpha)A^{b,k} - \lambda I\right)\frac{\partial v(\alpha)}{\partial\alpha}+d(b-c)=0$\\
 \-\hspace{8mm}Thus there is a $\frac{\partial v(\alpha)}{\partial\alpha}$ such that for all $i$: $\left(\sum_{j,j\ne k}\left(A_{i,j}-\lambda I_{i,j}\right)\frac{\partial v(\alpha)_j}{\partial\alpha}\right) +d(b_i-c_i)=0 $\\
 \-\hspace{8mm}Therefore $\frac{\partial v(\alpha)}{\partial\alpha}$ can be constant\\
 \-\hspace{8mm}Therefore $v(\alpha)=\frac{\alpha-\alpha_1}{\alpha_2-\alpha_1}v(\alpha_2)+\frac{\alpha-\alpha_2}{\alpha_1-\alpha_2}v(\alpha_1)$ is only linear solution that adjoins $v(\alpha_2)$ and $v(\alpha_2)$.\\
