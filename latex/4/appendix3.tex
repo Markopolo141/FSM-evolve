@@ -40,25 +40,24 @@ Which completes the proof.
 
 
 \begin{Theorem}\label{th:3}
-For a real $n\times n$ non-negative matrix $A_{i,j}$, and non-negative column vector $b$ with $A^{b,k}$ denoting the matrix with its $k$th column as $b$. For the matrix mapping $B(\alpha) = \alpha A + (1-\alpha)A^{b,k}$ for $\alpha\in\mathbb{R}$. Let $\lambda(\alpha)$ and $v(\alpha)$ be an eigenvalue/vector pairing of $B(\alpha)$\\
-If there exists different $\alpha_1$ and $\alpha_2$ such that $\lambda(\alpha_1)=\lambda(\alpha_2)$, then $\lambda(\alpha)=\lambda(\alpha_1)$ and $v(\alpha)=\frac{\alpha-\alpha_1}{\alpha_2-\alpha_1}v(\alpha_2)+\frac{\alpha-\alpha_2}{\alpha_1-\alpha_2}v(\alpha_1)$ is an eigenvalue/vector pairing for all $\alpha$, with the $k$th value of the eigenvector - $v(\alpha)_k$ being constant.
+For a real $n\times n$ non-negative matrix $A_{i,j}$, and non-negative column vectors $b$ and $c$, with $A^{b,k}$ and $A^{c,k}$ denoting the matrix with its $k$th column as $b$ and $c$ respectively. For the non-defective matrix mapping $B(\alpha) = \alpha A^{b,k} + (1-\alpha)A^{c,k}$ let $\rho(B(\alpha))$ be the specral radius of $B(\alpha)$.
+If $\rho(B(\alpha))$ is a constant $\lambda$ then there is a corresponding eigenvector $v(\alpha)$ that changes linearly with $\alpha$, with its $k$th value $v(\alpha)_k$ being constant.
 \end{Theorem}
 \begin{proof}
-Since $\lambda(\alpha_1)$ is an eigenvalue for all $B(\alpha)$ via Lemma \ref{lem2} then $\frac{\partial \lambda(\alpha)}{\partial \alpha}=0$ and $\lambda(\alpha)=\lambda(\alpha_1)=\lambda$ is true.\\
-As: $~\left(\alpha A + (1-\alpha)A^{b,k}\right)v(\alpha)=\lambda v(\alpha)$\\
-If $v(\alpha)_k$ denotes the $k$th value of $v(\alpha)$, then differentiating with respect to $\alpha$ \\
-Gives: $\left(\alpha A + (1-\alpha)A^{b,k} - \lambda I\right)\frac{\partial v(\alpha)}{\partial\alpha}+(b-c)v(\alpha)_k=0$\\
-now, there are two cases:\\
-if there is an $\alpha_3$ such that $v(\alpha_3)_k=0$ then:\\
-\-\hspace{8mm}$\left(\alpha_3 A + (1-\alpha_3)A^{b,k} - \lambda I\right)\frac{\partial v(\alpha_3)}{\partial\alpha}=0$\\
-\-\hspace{8mm}Setting $\frac{\partial v(\alpha)}{\partial\alpha}=0$ is permissible, making $v(\alpha)_k=0$.\\
-\-\hspace{8mm}therefore constant $v(\alpha)=v(\alpha_3)$ is solution which fulfills the proof\\
-if there is not an $\alpha_3$ such that $v(\alpha_3)_k=0$, then:\\
-\-\hspace{8mm}It is possible do scaling, thus setting $v(\alpha)_k=d$ to be a non-zero constant and therefore $\frac{\partial v(\alpha)_k}{\partial \alpha}=0$\\
-\-\hspace{8mm}Thus there is a $\frac{\partial v(\alpha)}{\partial\alpha}$ such that: $\left(\alpha A + (1-\alpha)A^{b,k} - \lambda I\right)\frac{\partial v(\alpha)}{\partial\alpha}+d(b-c)=0$\\
-\-\hspace{8mm}Thus there is a $\frac{\partial v(\alpha)}{\partial\alpha}$ such that for all $i$: $\left(\sum_{j,j\ne k}\left(A_{i,j}-\lambda I_{i,j}\right)\frac{\partial v(\alpha)_j}{\partial\alpha}\right) +d(b_i-c_i)=0 $\\
-\-\hspace{8mm}Therefore $\frac{\partial v(\alpha)}{\partial\alpha}$ can be constant\\
-\-\hspace{8mm}Therefore $v(\alpha)=\frac{\alpha-\alpha_1}{\alpha_2-\alpha_1}v(\alpha_2)+\frac{\alpha-\alpha_2}{\alpha_1-\alpha_2}v(\alpha_1)$ is only linear solution that adjoins $v(\alpha_2)$ and $v(\alpha_2)$.\\
-Which completes the proof.
+By the Perron-Frobenius theorem for non-negative matrices for any $\alpha$ there exists a non-negative $v(\alpha)$ which is an eigenvector for eigenvalue $\rho(B(\alpha))$, thus for any $\alpha$: \\
+$\left(\alpha A^{b,k} + (1-\alpha)A^{c,k}\right)v(\alpha)=\lambda v(\alpha)$\\
+The derivative of non-defective matrix eigenvectors exist \cite{Aa2006ComputationOE,juang1989eigenvalue}, and so it is possible to differentiate with respect to $\alpha$ giving:\\
+$\left(\alpha A^{b,k} + (1-\alpha)A^{c,k} - \lambda I\right)\frac{\partial v(\alpha)}{\partial\alpha}+(b-c)v(\alpha)_k=0$\\
+There are two cases:  if there is an $\bar{\alpha}$ such that $v(\bar{\alpha})_k=0$ then:\\
+\-\hspace{8mm}$\left(\bar{\alpha} A^{b,k} + (1-\bar{\alpha})A^{c,k} - \lambda I\right)\frac{\partial v(\bar{\alpha})}{\partial\alpha}=0$\\
+\-\hspace{8mm}Setting $\frac{\partial v(\alpha)}{\partial\alpha}=0$ is permissible, thus constant $v(\alpha)=v(\bar{\alpha})$ is a solution.\\
+Otherwise:\\
+\-\hspace{8mm}It is possible do scaling, thus setting $v(\alpha)_k=d$ to be a non-zero constant, thus\\
+\-\hspace{8mm}$\left(\alpha A^{b,k} + (1-\alpha)A^{c,k} - \lambda I\right)\frac{\partial v(\alpha)}{\partial\alpha}+d(b-c)=0$\\
+\-\hspace{8mm}$\left(\sum_{j,j\ne k}\left(A_{i,j}-\lambda I_{i,j}\right)\frac{\partial v(\alpha)_j}{\partial\alpha}\right) +d(b_i-c_i)=0$\\
+\-\hspace{8mm}therefore $\frac{\partial v(\alpha)}{\partial\alpha}$ can be constant, thus $v(\alpha)$ changes linearly.
 \end{proof}
+
+
+
 
