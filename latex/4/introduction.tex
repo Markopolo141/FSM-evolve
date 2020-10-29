@@ -1,11 +1,11 @@
 
 \section{Introduction}
 Biological species are well recognised as being engaged in an fight-for-survival and Evolutionary Game Theory has been used to analyse the strategies in such a fight.
-Evolutionary Game Theory encompasses games of different forms, but one of the most standard forms concerns the continuous growth/decay of organism types where the organism types are defined by the strategy they play as they are continuously randomly paired to participate in a simultaneous symmetric two-player game where the expected payoff determines each participant's growth-rate.\cite{maynard,maynard2,weibull}
+Evolutionary Game Theory encompasses games of different forms, but one of the most standard forms concerns the continuous growth/decay of organism types where the organism types are defined by the strategy they play as they are continuously randomly paired to participate in a simultaneous symmetric two-player game where the expected payoff determines the growth-rate of their strategy.\cite{maynard,maynard2,weibull}
 
 Whereas the sets of actions that actual organisms employ can depend-apon and influence the lifecycles of organisms within an ecosystem, which in turn determines their growth-rate.
 These details, such as the stages of the lifecycles of organisms and the web of mutual influences between them, are seldom directly modelled in evolutionary game theory.
-Lifecycles are most directly described by matrix models of population dynamics, where the growth-rate of an organism type is naturally given by its population matrix and where the influences between lifecycle stages are recognised as a potential source of non-linear dynamics and chaotic behaviour \cite{doi:10.1080/10236198.2019.1699916, DEVRIES2020108875, population1}.
+Lifecycles are most directly described by matrix models of population dynamics, where the growth-rate of an organism type is naturally given by its population matrix, and where the influences between lifecycle stages are recognised as a potential source of non-linear dynamics and chaotic behaviour \cite{doi:10.1080/10236198.2019.1699916, DEVRIES2020108875, population1}.
 
 Within this paper we consider game-theoretic strategies in the context of lifecycles, and make a contribution by providing a proof that in such games that any search for equilibrium points need only consider pure strategies, and can ignore stochastic combinations of actions - or 'mixed' strategies.
 In this way, dynamic points of interest in these complicated games can be discovered and characterised much more directly.
@@ -26,11 +26,11 @@ The formal theory of state has been introduced and considered in the context of 
 such as by Boling \cite{BOLING1973485} Caswell et.al \cite{nla.cat-vn662318} and Metz \cite{Metz1977}. Particularly Metz \& Diekmann\cite{nla.cat-vn2330051} considered the state of an individual organism (or the `i-state') as the information nessisary to make the response of an organism to its environment determinate, and contrasts this against the population state variable (or 'p-state') characterising the number of individuals in each i-state. 
 Where it is possible to consider the population dynamics determined by the p-state, population matrix models have been increasingly employed in ecological studies to model the lifecycles and dynamics of various organisms between states.\cite{doi:10.1111/j.1461-0248.2010.01540.x}
 Example models include modelling growth-rate by fecundity across age brackets \cite{leslie}, the dynamics of sexual reproduction and sex ratios \cite{Shyu2018,doi:10.1111/1365-2664.12177} as well as the dynamics of genetic spread and population control measures \cite{DEVRIES2020108875} etc.
-In these matrix models, the ratio of population numbers moving between states are called \textit{vital rates}, which directly model the increase or decrease in organism numbers between states.\cite{population1}
+In these matrix models, the ratio of population numbers moving between states are called \textit{vital rates}, which directly model the increase or decrease in organism numbers between states.
 
 State also has a history as part of Game Theory literature, particularly the concept of state and actions are most directly modelled in Markov Decision Processes (MDPs) which can bear direct extension to many players in Lloyd Shapley's Stochastic-Games (SG) \cite{shapley53,Solan2015}. Stochastic Games are games where the game itself has a set of possible states or 'positions' (which might be the combination of the states of all players). Within this context each of the individual players have actions which they can execute which jointly determine the likely transitions between the states of the game and the immediate payoffs to each of them.
 
-State has some history in the context of Evolutionary Game Theory, which can be seen in the context of various `evolutionary games on graphs' where the players have the state of belonging to nodes on a grid or graph structure. In these games the players at a node play actions against their nearest neighbours and it can be seen that these games capture a general sense of location as a state for the players, and this introduces unique and dynamic behaviours.\cite{nowak,spacial2,spacial4}
+State has some history in the context of Evolutionary Game Theory, which can be seen in the context of various `evolutionary games on graphs' where the players have the state of belonging to nodes on a grid or graph structure. In these games the players at a node play actions against their nearest neighbours and it can be seen that the structure in these games capture a general sense of position as a state for the players, and this introduces unique and dynamic behaviours.\cite{nowak,spacial2,spacial4}
 
 Another approach of integrating state into Evolutionary Game Theory extends from the works of Eitan Altman et.al \cite{markov2,markov3,markov4,markov5,markov8,markov9} who introduce the Markov-Decision-Evolutionary-Game (MDEG) and variants thereof.
 In MDEG games each organism can occupy one of a finite set of states and has actions available to it depending on what state it is in.
@@ -38,7 +38,7 @@ The organisms are paired randomly and each of the participants chooses one of th
 The actions that the organisms execute determine their immediate payoffs and the probable transitions in state that they will make.
 The expected sum of payoffs determine the growth-rate of the presence of the strategy in the population, and this then changes the composition of the population in which the random pairings occur.
 
-Our work contrasts against other games, primarily as we model the growth-rate of strategies not in relation to the expected summation of payoffs, but in relation to the equilibrium between states defined by vital rates. This attitude is also reflected in the works of Jim M. Cushing \cite{doi:10.1080/10236198.2016.1177522, Cushing2017,doi:10.1080/17513758.2019.1574034} who analyses evolutionary dynamics in population matrix models in various ways.
+Our work contrasts against other games, primarily as we model the growth-rate of strategies not in relation to the expected summation of payoffs, but in relation to the equilibrium between states defined by vital rates. This attitude is also reflected in the works of J. M. Cushing \cite{doi:10.1080/10236198.2016.1177522, Cushing2017,doi:10.1080/17513758.2019.1574034} who analyses evolutionary dynamics in population matrix models particularly focusing on bifurcation.
 
 \section{Vital Rates and Population Matrix Models}\label{sec:2}
 
@@ -62,7 +62,7 @@ The positive elements of these matrices identify the `flow' of individuals from 
 For a column vector $\mathbf{n}(t)$ representing the number of individuals in each age-bracket at time $t$, $\mathbf{M}\mathbf{n}(t)$ gives the number of individuals in the population after the duration of one age bracket of time, and $\mathbf{M}^2\mathbf{n}(t)$ the number of individuals after two age brackets, and so on. $$\mathbf{n}(t+1)=\mathbf{M}\mathbf{n}(t)$$
 Successive applications eventually yield a steady population profile and a constant exponential growth rate $\lambda$ given by the Euler–Lotka equation, where $\lambda$ is the dominant and only real-positive eigenvalue of the matrix, with the steady population profile $\mathbf{n}$ as its corresponding eigenvector, that is $\mathbf{M}\mathbf{n}=\lambda \mathbf{n}$.
 
-A Leslie matrix is a specific example of a population matrix which projects the growth/decline of a population whose vital rates remain constant.
+A Leslie matrix is a specific example of a population/projection matrix which projects the growth/decline of a population whose vital rates remain constant.
 However, more complicated scenarios exist where the vital rates vary depending on the distribution of the population itself.
 For instance, the number of offspring and survival probability to a successive age-state may depend on the density of predators, mates and/or competitors for resources.
 In this context the elements of $\mathbf{M}$ may depend on $\mathbf{n}(t)$ in some arbitrary way, which we denote as $\mathbf{M}_{\mathbf{n}(t)}$ and:
