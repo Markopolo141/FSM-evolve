@@ -57,6 +57,7 @@ Leslie Matrices are square, and they have form \cite{leslie}:
      0  &  0  &  0  & \dots  & P_{m-1} &  0   \\
 \end{bmatrix}
 \end{equation*}
+
 Where $P_i$ represents the probability of and individual in the $i$th age bracket successfully living into the $(i+1)$th age bracket, and $F_i$ is average number of offspring for an individual in $i$th age bracket within the duration of the age bracket.
 The positive elements of these matrices identify the `flow' of individuals from one state to another and are called \textit{vital rates}.
 For a column vector $\mathbf{n}(t)$ representing the number of individuals in each age-bracket at time $t$, $\mathbf{M}\mathbf{n}(t)$ gives the number of individuals in the population after the duration of one age bracket of time, and $\mathbf{M}^2\mathbf{n}(t)$ the number of individuals after two age brackets, and so on. $$\mathbf{n}(t+1)=\mathbf{M}\mathbf{n}(t)$$

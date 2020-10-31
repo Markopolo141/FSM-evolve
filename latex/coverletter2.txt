@@ -1,0 +1,30 @@
+Hello Sir/Madam
+
+I am writing to submit my work on for your review, and in hope of potentially publishing with your journal - Games.
+Within my work I have attempted to extend the scope what can be modelled and analysed using evolutionary game theory.
+This work or any part thereof is not under consideration for publication with any other institution, and I welcome any further feedback, comments or corrections to what I have written.
+
+Many of your readers may be familiar with the basic concepts of evolutionary game theory as analysing the replicator growth/decay of individuals which play certain actions, and yet realise that many individuals undergo actions which are intrinsically coupled with their state, and this dynamic is seldom modelled in evolutionary game theory.
+Other readers may have a computational background and be familiar with Markov-Decision-Processes, where actions are dispersed across particular states and where playing actions results in stochastic transitions between states which may afford 'payoffs'.
+Within my work I attempt to extend classical evolutionary game theory analysis to include specification of states, actions and stochastic transitions into the individuals of the evolving population, hence attempting to contribute to the merger of these fields.
+
+The paper is a significantly altered and trimmed-down version of a paper that was rejected from Games some years ago, under the title of "Non-Markov Stateful Evolutionary Games"
+I have commented-out all identifying information in my Latex source-code as requested, and have attached my Author-details and these acknowledgements as segments at the end of this cover-letter.
+
+Yours sincerely
+
+Mark A. Burgess
+
+
+
+
+
+Author: Mark A. Burgess, Research School of Computer Science, The Australian National University, Canberra, ACT 0200, Australia; mark.burgess@anu.edu.au
+
+Acknowledgments: A great thankyou to Paul Scott \& Sylvie Thiebaux for academic advice and support!
+
+Funding: This study was conducted under grant of the Australian Postgraduate Award (APA) for participation in PhD program through the Research School of Computer Science (RSCS) at the Australian National University (ANU). No specific funds were received for costs associated with open-access publication.
+
+
+
+
