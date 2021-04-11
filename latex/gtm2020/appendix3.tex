@@ -1,0 +1,63 @@
+\section{Matrix Proofs}\label{appendix5b}
+
+
+
+\begin{lemma}\label{lem2}
+for a $n\times n$ matrix $A$, and $n$ column vector $b$, with $A^{b,k}$ denoting the matrix with its $k$th column as $b$.
+If $\lambda$ is an eigenvalue for both $A$ and $A^{b,k}$ then it is also an eigenvalue for $\alpha A + (1-\alpha)A^{b,k}$ for any $\alpha \in \mathbb{R}$
+\end{lemma}
+\begin{proof}
+Consider the characteristic polynomials of $\lambda$ for $A$ and $A^{b,k}$:\\
+$\det(A-\lambda I)=\det(A^{b,k}-\lambda I)=0$\\
+If we let $C(\cdot)_{i,j}$ denote the $i$,$j$th cofactor of a matrix, then these determinants can be expanded along the $k$th column to give:\\
+$\left(\sum_iA_{i,k}C(A-\lambda I)_{i,k}\right)-\lambda C(A-\lambda I)_{k,k}=\left(\sum_ib_iC(A-\lambda I)_{i,k}\right)-\lambda C(A-\lambda I)_{k,k}=0$\\
+Therefore:\\
+$\alpha\left(\left(\sum_iA_{i,k}C(A-\lambda I)_{i,k}\right)-\lambda C(A-\lambda I)_{k,k}\right) + (1-\alpha)\left(\left(\sum_ib_iC(A-\lambda I)_{i,k}\right)-\lambda C(A-\lambda I)_{k,k}\right)=0$\\
+$=\left(\sum_i(\alpha A_{i,k}+(1-\alpha)b_i)C(A-\lambda I)_{i,k}\right)-\lambda C(A-\lambda I)_{k,k} =\det(\alpha A + (1-\alpha)A^{b,k}-\lambda I)=0$\\
+Thus it is demonstrated that $\lambda$ is also an eigenvalue for $\alpha A + (1-\alpha)A^{b,k}$.
+\end{proof}
+
+\begin{theorem}\label{th:2}
+For a real $n\times n$ non-negative matrix $A$, and real non-negative column vector $b$, with $A^{b,k}$ denoting the matrix with its $k$th column as $b$.
+For the matrix mapping $B(\alpha) = \alpha A + (1-\alpha)A^{b,k}$ defined on a range $0\le\alpha\le1$. If $\rho(B(\alpha))$ denotes the spectral radius of $B(\alpha)$.\\ Then $\rho(B(\alpha))$ is continuous, and either constant or strictly monotonic with $\alpha$.
+\end{theorem}
+\begin{proof}
+Because $B(\alpha) = \alpha A + (1-\alpha)A^{b,k}$ is a matrix continuous in all its elements it will have $n$ continuous eigenvalues (counting multiplicities).\footnote{An informal outline of the proof is that: 1. If the elements of a matrix are continuous 2. Then the coefficients of the characteristic polynomial are continuous (as they are additions and multiplications of them) 3. Then the $n$ roots (via fundamental theorem of algebra) of the characteristic polynomial are continuous (see \cite{10.2307/2045978}) 4. Hence the eigenvalues are continuous}
+Thus $\rho(B(\alpha))$ is also continuous with $\alpha$ for all $\alpha$.\\
+Furthermore the value $\rho(B(\alpha))$ is itself an eigenvalue of $B(\alpha)$ for all $\alpha$ via the Perron-Frobenius theorem for non-negative matrices.
+Suppose for a contradiction that $\rho(B(\alpha))$ is not monotone, in this case there must exist at least three values of alpha, $\alpha_1<\alpha_2<\alpha_3$ such that $\rho(B(\alpha_2))>\max(\rho(B(\alpha_0)),\rho(B(\alpha_3)))$ or $\rho(B(\alpha_2))<\min(\rho(B(\alpha_0)),\rho(B(\alpha_3)))$.
+\begin{itemize}
+\item	suppose that $\rho(B(\alpha_2))>\max(\rho(B(\alpha_1)),\rho(B(\alpha_3)))$: let $\beta$ be a value between $\rho(B(\alpha_2))$ and $\max(\rho(B(\alpha_1)),\rho(B(\alpha_3)))$. Thus via the intermediate value theorem there exists $\gamma_1$ ($\alpha_1<\gamma_1<\alpha_2$) and $\gamma_2$ ($\alpha_2<\gamma_2<\alpha_3$) such that $\rho(B(\gamma_1))=\rho(B(\gamma_2))=\beta$. Thus $\beta$ is an eigenvalue of $B(\alpha_1)$ (via Lemma \ref{lem2}), and $\beta > \rho(B(\alpha_1))$ which contradicts the construction of $\rho(B(\alpha_1))$.
+\item   suppose that $\rho(B(\alpha_2))<\min(\rho(B(\alpha_1)),\rho(B(\alpha_3)))$: let $\beta$ be a value between $\rho(B(\alpha_2))$ and $\min(\rho(B(\alpha_1)),\rho(B(\alpha_3)))$. Thus via the intermediate value theorem there exists $\gamma_1$ ($\alpha_1<\gamma_1<\alpha_2$) and $\gamma_2$ ($\alpha_2<\gamma_2<\alpha_3$) such that $\rho(B(\gamma_1))=\rho(B(\gamma_2))=\beta$. Thus $\beta$ is an eigenvalue of $B(\alpha_2)$ (via Lemma \ref{lem2}), and $\beta > \rho(B(\alpha_2))$ which contradicts the construction of $\rho(B(\alpha_2))$.
+\end{itemize}
+Therefore $\rho(B(\alpha))$ is monotonic.\\
+If there does not exist any $\alpha_1,\alpha_2\in[0,1]$ such that $\rho(B(\alpha_1))$ = $\rho(B(\alpha_2))$\\
+\-\hspace{8mm}then $\rho(B(\alpha))$ is strictly monotonic.\\
+If there does exist an $\alpha_1,\alpha_2\in[0,1]$ such that $\rho(B(\alpha_1))$ = $\rho(B(\alpha_2))$\\
+\-\hspace{8mm}then $\rho(B(\alpha))$ is constant via lemma \ref{lem2}.\\
+Which completes the proof.
+\end{proof}
+
+
+\begin{theorem}\label{th:3}
+For a real $n\times n$ non-negative matrix $A_{i,j}$, and non-negative column vectors $b$ and $c$, with $A^{b,k}$ and $A^{c,k}$ denoting the matrix with its $k$th column as $b$ and $c$ respectively. For the non-defective matrix mapping $B(\alpha) = \alpha A^{b,k} + (1-\alpha)A^{c,k}$ let $\rho(B(\alpha))$ be the specral radius of $B(\alpha)$.
+If $\rho(B(\alpha))$ is a constant $\lambda$ then there is a corresponding eigenvector $v(\alpha)$ that changes linearly with $\alpha$, with its $k$th value $v(\alpha)_k$ being constant.
+\end{theorem}
+\begin{proof}
+By the Perron-Frobenius theorem for non-negative matrices for any $\alpha$ there exists a non-negative $v(\alpha)$ which is an eigenvector for eigenvalue $\rho(B(\alpha))$, thus for any $\alpha$: \\
+$\left(\alpha A^{b,k} + (1-\alpha)A^{c,k}\right)v(\alpha)=\lambda v(\alpha)$\\
+The derivative of non-defective matrix eigenvectors exist \cite{Aa2006ComputationOE,juang1989eigenvalue}, and so it is possible to differentiate with respect to $\alpha$ giving:\\
+$\left(\alpha A^{b,k} + (1-\alpha)A^{c,k} - \lambda I\right)\frac{\partial v(\alpha)}{\partial\alpha}+(b-c)v(\alpha)_k=0$\\
+There are two cases:  if there is an $\bar{\alpha}$ such that $v(\bar{\alpha})_k=0$ then:\\
+\-\hspace{8mm}$\left(\bar{\alpha} A^{b,k} + (1-\bar{\alpha})A^{c,k} - \lambda I\right)\frac{\partial v(\bar{\alpha})}{\partial\alpha}=0$\\
+\-\hspace{8mm}Setting $\frac{\partial v(\alpha)}{\partial\alpha}=0$ is permissible, thus constant $v(\alpha)=v(\bar{\alpha})$ is a solution.\\
+Otherwise:\\
+\-\hspace{8mm}It is possible do scaling, thus setting $v(\alpha)_k=d$ to be a non-zero constant, thus\\
+\-\hspace{8mm}$\left(\alpha A^{b,k} + (1-\alpha)A^{c,k} - \lambda I\right)\frac{\partial v(\alpha)}{\partial\alpha}+d(b-c)=0$\\
+\-\hspace{8mm}$\left(\sum_{j,j\ne k}\left(A_{i,j}-\lambda I_{i,j}\right)\frac{\partial v(\alpha)_j}{\partial\alpha}\right) +d(b_i-c_i)=0$\\
+\-\hspace{8mm}therefore $\frac{\partial v(\alpha)}{\partial\alpha}$ can be constant, thus $v(\alpha)$ changes linearly.
+\end{proof}
+
+
+
+

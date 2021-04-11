@@ -1,0 +1,22 @@
+\section{Description of the Game}\label{section:formalism}
+
+Consider an ecosystem of different organisms, where the organisms a set of states and each state has a set of actions which they will execute depending on their strategy. let:
+
+\begin{itemize}
+\item	$S$ be indexed finite set of states
+%\item   $A$ be the finite set of all actions
+\item   $A_s$ be set of actions available organisms in state $s\in S$
+\item   $W$ be the set of possible strategies such that for any strategy $w \in W$ that $w_{a,s}$ denotes the probability that an organism with strategy $w$ will execute action $a$ if it is in state $s$.
+\item	$P_{s,w}$ is the number of organisms in a state $s\in S$ with strategy $w\in W$; 
+\item   $P^*_{s,a} = \sum_{w\in W}P_{s,w}w_{a,s}$ is the number of organisms in a state $s\in S$ which are going to take action $a$.
+\item   $T_{s,a}(P^*)$ are vital rates depending\footnote{where $P^*$ is shorthand for the set of all the numbers across $s$ and $a$,  $P^* = \{P^*_{s,a}~|~s\in S,~a\in A_s\}$} on $P^*$, giving the rate of the organism \textit{to} a state $s\in S$ when it executes an action $a\in A_s$.
+\end{itemize}
+
+
+
+Thus every strategy $w$ has its own population matrix $\mathbf{M}_{P^*}^w$ with components $M^{w}_{i,j}$.%, and population vector $\mathbf{n}^w$.
+\begin{equation}\label{eq:transmission_matrix}\mathbf{M}_{P^*}^w = M^{w}_{i,j} = \sum_{a\in A_i}T_{j,a}(P^*) w_{a,i}\end{equation}
+And thus the matrix of a strategy $\mathbf{M}_{P^*}^w$ is composed of columns which are weighted by its probability terms $w_{a,s}$,
+and it is possible to consider probabilistic mixes of strategies, for instance if strategies $w^1$ and $w^2$ are mixed by a factor $0\le\alpha\le 1$ to form a new strategy $w^\alpha$ whose matrix is then:
+\begin{equation}\label{eq:transmission_matrix2}\mathbf{M}_{P^*}^{w^\alpha} = \sum_{a\in A_i}T_{j,a}(P^*) \left(\alpha w^1_{a,i}+(1-\alpha)w^2_{a,i}\right) = \alpha\mathbf{M}_{P^*}^{w^1} + (1-\alpha)\mathbf{M}_{P^*}^{w^2}\end{equation}
+In this way one strategy can be considered as a linear combination of other strategies.

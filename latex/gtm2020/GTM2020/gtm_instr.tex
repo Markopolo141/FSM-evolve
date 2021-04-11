@@ -1,0 +1,757 @@
+% This is ICM_instr.TEX the documentation file of
+% the LaTeX2e class GTM2019
+\documentclass[citeauthoryear]{GTM2020}
+\pagestyle{plain}
+\begin{document}
+
+\newcounter{pp}
+\setcounter{pp}{2}
+\begin{center}
+\LARGE\bfseries Instructions for Authors
+\end{center}
+\vskip20mm
+\centerline{\Large\bf Table of Contents} \vskip10mm
+
+\noindent\hbox to 5in {1. Introduction\dotfill \arabic{pp}}
+
+\noindent\hbox to 5in {2. How to Invoke the GTM2020 Document
+Class\dotfill \arabic{pp}}
+
+\noindent\hbox to 126.7mm {3. The Heading of Your Contribution
+\dotfill \arabic{pp}}
+\addtocounter{pp}{2}
+
+\noindent\hbox to 5in {4. How to Code Your Text \dotfill\arabic{pp}}
+
+\noindent\hbox to 126.7mm {5. Predefined Theorem-like Environments\dotfill \arabic{pp}}
+\addtocounter{pp}{1}
+
+\noindent\hbox to 5in {6. Defining your Own Theorem-like Environments\dotfill \arabic{pp}}
+
+\hbox to 5in {\qquad 6.1 \ Method 1 ({\itshape preferred\/})\dotfill \arabic{pp}}
+\addtocounter{pp}{1}
+
+\hbox to 5in {\qquad 6.2 \ Method 2 \dotfill \arabic{pp}}
+
+\hbox to 5in {\qquad 6.3 \ Unnumbered Environments\dotfill \arabic{pp}}
+
+\noindent\hbox to 5in {7. How to Edit Your Input (Source) File\dotfill \arabic{pp}}
+
+\hbox to 5in {\qquad 7.1 \ Capitalization and Non-capitalization\dotfill \arabic{pp}}
+
+\hbox to 5in {\qquad 7.2 \ Abbreviation of Words\dotfill \arabic{pp}}
+\addtocounter{pp}{1}
+
+\hbox to 5in {\qquad 7.3 \ Signs and Characters\dotfill \arabic{pp}}
+
+\noindent\hbox to 126.7mm {8. Figures\dotfill \arabic{pp}}
+\addtocounter{pp}{1}
+
+\noindent\hbox to 5in {9. Tables\dotfill \arabic{pp}}
+
+\noindent\hbox to 5in {10. References\dotfill \arabic{pp}}
+
+\newpage
+\section{Introduction}
+
+Authors are requested to adhere strictly to these instructions;
+{\em the class file must not be changed}.
+
+The text output area is automatically set within an area of
+5\,in horizontally  and 7.8\,in vertically.
+
+If you are already familiar with \LaTeX{}, then the GTM2020 class
+should not give you any major difficulties. The GTM2020 class is an
+extension of the standard \LaTeX{} ``article'' document class.
+Therefore you may use all ``article'' commands for the main body of
+your paper to prepare your manuscript. It will change the layout to
+the required GTM2020 style (it will for instance define the layout
+of \verb|\section|). We had to invent some extra commands, which are
+not provided by \LaTeX{} (e.\,g.\ \verb|\institute|, see also
+Sect.\,\ref{contbegin})
+
+Furthermore, the documentation provides suggestions about the proper
+editing and use of the input files (capitalization, abbreviation etc.) (see
+Sect.\,\ref{refedit} How to Edit Your Input File).
+
+For the input of the references at the end of your contribution,
+please follow our instructions given in Sect.\,\ref{refer} References.
+
+\section{How to Invoke the GTM2020 Document Class}
+
+GTM2020  class is invoked by replacing ``article'' by ``GTM2020'' in
+the first line of your document:
+
+\noindent \verb|\documentclass[citeauthoryear]{GTM2020}|
+
+\begin{verbatim}
+\begin{document}
+  <Your paper>
+\end{document}
+\end{verbatim}
+Option \verb|[citeauthoryear]| is necessary to cite properly references
+in the text (see also Sect.\,\ref{refer} References).
+
+\section{The Heading of Your Contribution}
+\label{contbegin}
+
+The title of a contribution should be coded as
+follows:
+\begin{verbatim}
+\title{<Your contribution title>}
+\end{verbatim}
+All words in titles should be capitalized except for conjunctions,
+prepositions (e.g.\ on, of, by, and, or, but, from, with, without,
+under) and definite and indefinite articles (the, a, an) unless they
+appear at the beginning. Formula letters must be typeset as in the text.
+Titles have no end punctuation. If a long \verb|\title| must be divided
+please use the code \verb|\\| (for new line).
+
+Now the name(s) of the author(s) must be given:
+\begin{verbatim}
+\author{<author(s) name(s)>}
+\end{verbatim}
+If there is more than one author, the order is up to you;
+the \verb|\and| command provides for the separation:
+\begin{verbatim}
+\author{Ivar Ekeland \and Roger Temam \and Alfred Holmes}
+\end{verbatim}
+Numbers referring to different addresses or affiliations are
+to be attached to each author with the \verb|\inst{<no>}| command.
+If you have done this correctly, this entry now reads, for example:
+\begin{verbatim}
+\author{Ivar Ekeland\inst{1} \and Roger Temam\inst{2}
+    \and Alfred Holmes\inst{3}}
+\end{verbatim}
+The first name\footnote{Other initials are optional
+and may be inserted if this is the usual
+way of writing your name, e.\,g.\ Alfred J.~Holmes, E.~Henry Green.}
+is followed by the surname.
+
+Next the address(es) of institute(s), company etc.\ is (are) required.
+If there is more than one address, the entries are numbered
+automatically with \verb|\and|, in the order in which you type them.
+Please make sure that the numbers match those placed next to
+the authors' names to reflect the affiliation.
+\begin{verbatim}
+\institute{<name of an institute>
+\and <name of the next institute>
+\and <name of the next institute>}
+\end{verbatim}
+
+In addition, you can use
+\begin{verbatim}
+\email{<email address>}
+\end{verbatim}
+to provide your email address within \verb|\institute|. If you need to
+typeset the tilde character --- e.\,g.\ for your web page in your unix
+system's home directory --- the \verb|\homedir| command will happily do
+this.
+
+\medskip
+If footnote like things are needed anywhere in the contribution heading
+please code (immediately after the word where the footnote indicator
+should be placed):
+\begin{verbatim}
+\thanks{<text>}
+\end{verbatim}
+\verb|\thanks| may only appear in \verb|\title|, \verb|\author|
+and \verb|\institute| to footnote anything. If there are two or more
+footnotes or affiliation marks to a specific item separate them with
+\verb|\fnmsep| (i.\,e.\ {\itshape f}oot\emph note \emph mark
+\emph{sep}arator).
+
+\medskip
+\noindent The command
+\begin{verbatim}
+\maketitle
+\end{verbatim}
+then formats the complete heading of your article. If you leave
+it out the work done so far will produce \emph{no} text.
+
+Then the abstract should follow. Simply code
+\begin{verbatim}
+\begin{abstract}
+<Text of the summary of your article>
+\end{abstract}
+\end{verbatim}
+
+\section{How to Code Your Text}
+\label{headings}
+
+All headings, as the contribution title, should be capitalized except
+for conjunctions, prepositions (e.\,g.\ on, of, by, and, or, but,
+from, with, without, under) and definite and indefinite articles (the,
+a, an) unless they appear at the beginning. Formula letters must be
+typeset as in the text.
+
+Headings will be automatically numbered by the following codes.\\[2mm]
+{\itshape Sample Input}
+\begin{verbatim}
+\section{This is a First-Order Title}
+\subsection{This is a Second-Order Title}
+\subsubsection{This is a Third-Order Title.}
+\paragraph{This is a Fourth-Order Title.}
+\end{verbatim}
+{\it Note.} \verb|\section| and \verb|\subsection| have no end punctuation.
+\verb|\subsubsection| and \verb|\paragraph| need to be punctuated at the end.
+
+In addition to the above-mentioned headings your text may be structured
+by subsections indicated by run-in headings (theorem-like environments).
+
+\section{Predefined Theorem-like Environments}\label{builtintheo}
+
+The following variety of run-in headings are at your disposal:
+\begin{itemize}
+\item
+{\bfseries Bold} run-in headings with {\it italicized text\/}
+as built-in environments:
+\begin{verbatim}
+\begin{corollary} <text> \end{corollary}
+\begin{lemma} <text> \end{lemma}
+\begin{proposition} <text> \end{proposition}
+\begin{theorem} <text> \end{theorem}
+\begin{axiom} <text> \end{axiom}
+\end{verbatim}
+\item
+{\bfseries Bold} run-in headings with roman text as built-in environments:
+\begin{verbatim}
+\begin{definition} <text> \end{definition}
+\begin{problem} <text> \end{problem}
+\begin{property} <text> \end{property}
+\begin{remark} <text> \end{remark}
+\end{verbatim}
+{\it Note.} The determinated notion in the text of a definition should be
+{\it italicized}.\vskip2mm
+
+\item
+Further {\itshape italic} run-in headings with roman environment body may also
+occur:
+\begin{verbatim}
+\begin{case} <text> \end{case}
+\begin{conjecture} <text> \end{conjecture}
+\begin{example} <text> \end{example}
+\begin{exercise} <text> \end{exercise}
+\begin{note} <text> \end{note}
+\begin{question} <text> \end{question}
+\begin{solution} <text> \end{solution}
+\end{verbatim}
+\item
+The following generally appears as {\itshape italic} run-in heading:
+\begin{verbatim}
+\begin{proof} <text>    \qed    \end{proof}
+\end{verbatim}
+It is unnumbered and may contain an eye catching square (call for that
+with \verb|\qed|) before the environment ends.
+\end{itemize}
+
+All the theorem-like environments are numbered automatically
+throughout the sections of your document --- each with its own counter.
+
+If you want the theorem-like environments to use the same counter
+just specify the documentclass option \verb|envcountsame|:
+\begin{verbatim}
+\documentclass[citeauthoryear, envcountsame]{GTM2020}
+\end{verbatim}
+If your first call for a theorem-like environment then is e.\,g.\
+\verb|\begin{lemma}|, it will be numbered 1; if corollary follows,
+this will be numbered 2; if you then call lemma again, this will be
+numbered 3.
+
+But in case you want to reset such counters to 1 in each section,
+please specify the documentclass option \verb|envcountreset|.
+
+Even a numbering on section level (including the section counter) is
+possible with the documentclass option \verb|envcountsect|.
+
+\section{Defining your Own Theorem-like Environments}
+
+We have enhanced the standard \verb|\newtheorem| command and slightly
+changed its syntax to get two new commands \verb|\spnewtheorem| and
+\verb|\spnewtheorem*| that now can be used to define additional
+environments. They require two additional arguments namely the type
+style in which the keyword of the environment appears and second the
+style for the text of your new environment.
+
+\verb|\spnewtheorem| can be used in two ways.
+
+\subsection{Method 1 ({\itshape preferred})}
+
+You may want to create an environment that shares its counter
+with another environment, say {\em main theorem\/} to be numbered like
+the predefined {\em theorem}. In this case, use the syntax
+\begin{verbatim}
+\spnewtheorem{<env_nam>}[<num_like>]{<caption>}
+{<cap_font>}{<body_font>}
+\end{verbatim}
+
+\noindent
+Here the environment with which the new environment should share its
+counter is specified with the optional argument \verb|[<num_like>]|.
+\smallskip
+
+\noindent
+{\em Sample Input}
+\begin{verbatim}
+\spnewtheorem{mainth}[theorem]{Main Theorem}{\bfseries}{\itshape}
+\begin{theorem} The early bird gets the worm. \end{theorem}
+\begin{mainth} The early worm gets eaten. \end{mainth}
+\end{verbatim}
+
+\noindent
+{\em Sample Output}
+\smallskip
+
+\noindent {\bfseries Theorem 3.} {\em The early bird gets the worm.}
+\smallskip
+
+\noindent {\bfseries Main Theorem 4.} {\em The early worm gets eaten.}
+\medskip
+
+The sharing of the default counter (\verb|[theorem]|) is desired. If you
+omit the optional second argument of \verb|\spnewtheorem| a separate
+counter for your new environment is used throughout your document.
+
+\subsection[Method 2]{Method 2 ({\itshape assumes {\tt[envcountsect]}
+documentstyle option})}
+\vskip3mm
+
+\begin{verbatim}
+\spnewtheorem{<env_nam>}{<caption>}[<within>]
+{<cap_font>}{<body_font>}
+\end{verbatim}
+
+\noindent
+This defines a new environment \verb|<env_nam>| which prints the caption
+\verb|<caption>| in the font \verb|<cap_font>| and the text itself in
+the font \verb|<body_font>|. The environment is numbered beginning anew
+with every new sectioning element you specify with the optional
+parameter \verb|<within>|.
+\smallskip
+
+\noindent
+{\em Example} \leavevmode
+\smallskip
+
+\noindent
+\verb|\spnewtheorem{joke}{Joke}[subsection]{\bfseries}{\rmfamily}|
+\smallskip
+
+\noindent defines a new environment called \verb|joke| which prints the
+caption {\bf Joke} in boldface and the text in roman. The jokes are
+numbered starting from 1 at the beginning of every subsection with the
+number of the subsection preceding the number of the joke e.\,g.\ 7.2.1 for
+the first joke in subsection 7.2.
+
+\subsection{Unnumbered Environments}
+
+If you wish to have an unnumbered environment, please
+use the syntax
+\begin{verbatim}
+\spnewtheorem*{<env_nam>}{<caption>}{<cap_font>}{<body_font>}
+\end{verbatim}
+
+\section{How to Edit Your Input (Source) File}
+\label{refedit}
+
+\subsection{Capitalization and Non-capitalization}
+
+\begin{itemize}
+\item
+The following should always be capitalized:
+\begin{itemize}
+\item
+Headings (see Sect.\,\ref{headings})
+\item
+Abbreviations and expressions
+in the text such as  Fig(s)., Table(s), Sect(s)., Chap(s).,
+Theorem, Corollary, Definition etc. when used with numbers, e.\,g.\
+Fig.\,3, Table\,1, Theorem 2.
+\end{itemize}
+\item
+The following should {\em not\/} be capitalized:
+\begin{itemize}
+\item
+The words figure(s), table(s), equation(s), theorem(s) in the text when
+used without an accompanying number.
+\item
+Figure legends and table captions except for names and abbreviations.
+\end{itemize}
+\end{itemize}
+
+\subsection{Abbreviation of Words}\label{abbrev}
+
+\begin{itemize}
+\item
+The following {\em should\/} be abbreviated when they appear in running
+text {\em unless\/} they come at the beginning of a sentence: Chap.,
+Sect., Fig.; e.\,g.\ ``The results are depicted in Fig.\,5.''
+``Figure 9 reveals that \dots .''\\
+{\em Please note\/}: Equations should usually be referred to solely by
+their number in parentheses: e.\,g.\ (14). However, when the reference
+comes at the beginning of a sentence, the unabbreviated word
+``Equation'' should be used: e.\,g.\ ``Equation (14) is very important.''
+``However, (15) makes it clear that \dots .''
+\item
+If abbreviations of names or concepts are used
+throughout the text, they should be defined at first occurrence,
+e.\,g.\ Plurisubharmonic (PSH) Functions, Strong Optimization (SOPT)
+Problem.
+\end{itemize}
+
+\subsection{Signs and Characters}
+%
+\subsubsection*{Special Signs.}
+%
+We have created further symbols for math mode (enclosed in \verb|\$|):
+\begin{center}
+\begin{tabular}{l@{\hspace{1em}yields\hspace{1em}}
+c@{\hspace{3em}}l@{\hspace{1em}yields\hspace{1em}}c}
+\verb|\grole| & $\grole$ & \verb|\getsto| & $\getsto$\\
+\verb|\lid|   & $\lid$   & \verb|\gid|    & $\gid$
+\end{tabular}
+\end{center}
+%
+\subsubsection*{Gothic (Fraktur).}
+%
+In \LaTeX{} only the following gothic letters are available:
+\verb|$\Re$| yields $\Re$ and \verb|$\Im$| yields $\Im$.
+If gothic letters are {\it necessary}, please use
+the amstex package of the American Mathematical Society (\verb|amsfonts|,
+\verb|amssymb|).
+
+For the real and the imaginary
+parts of a complex number within math mode you should use:
+\verb|$\mathrm{Re}$| (which yields $\mathrm{Re}$) or \verb|$\mathrm{Im}$|
+(which yields $\mathrm{Im}$).
+%
+\subsubsection*{Special Roman.}
+%
+We created the blackboard bold characters listed below.
+\begin{flushleft}
+\begin{tabular}{@{}ll@{ yields }
+c@{\hspace{1.em}}ll@{ yields }c}
+\verb|\bbbc| & (complex numbers)   & $\bbbc$
+  & \verb|\bbbf| & (blackboard bold F) & $\bbbf$\\
+\verb|\bbbh| & (blackboard bold H) & $\bbbh$
+  & \verb|\bbbk| & (blackboard bold K) & $\bbbk$\\
+\verb|\bbbm| & (blackboard bold M) & $\bbbm$
+  & \verb|\bbbn| & (natural numbers N) & $\bbbn$\\
+\verb|\bbbp| & (blackboard bold P) & $\bbbp$
+  & \verb|\bbbq| & (rational numbers)  & $\bbbq$\\
+\verb|\bbbr| & (real numbers)      & $\bbbr$
+  & \verb|\bbbs| & (blackboard bold S) & $\bbbs$\\
+\verb|\bbbt| & (blackboard bold T) & $\bbbt$
+  & \verb|\bbbz| & (whole numbers)     & $\bbbz$\\
+\verb|\bbbone| & (symbol one)      & $\bbbone$
+\end{tabular}
+\end{flushleft}
+\begin{displaymath}
+\begin{array}{c}
+\bbbc^{\bbbc^{\bbbc}} \otimes
+\bbbf_{\bbbf_{\bbbf}} \otimes
+\bbbh_{\bbbh_{\bbbh}} \otimes
+\bbbk_{\bbbk_{\bbbk}} \otimes
+\bbbm^{\bbbm^{\bbbm}} \otimes
+\bbbn_{\bbbn_{\bbbn}} \otimes
+\bbbp^{\bbbp^{\bbbp}}\\[2mm]
+\otimes
+\bbbq_{\bbbq_{\bbbq}} \otimes
+\bbbr^{\bbbr^{\bbbr}} \otimes
+\bbbs^{\bbbs_{\bbbs}} \otimes
+\bbbt^{\bbbt^{\bbbt}} \otimes
+\bbbz \otimes
+\bbbone^{\bbbone_{\bbbone}}
+\end{array}
+\end{displaymath}
+
+\subsubsection*{Vectors }{\bf(\verb|\vec{Symbol}|).}
+Vectors may only appear in math mode. The default \LaTeX{} vector
+symbol has been adapted to GTM2020 conventions.
+\smallskip
+
+\noindent \verb|$\vec{A \times B\cdot C}$| \ yields \ $\vec{A\times B\cdot C}$ \\
+\verb|$\vec{A}^{T} \otimes \vec{B} \otimes \vec{\hat{D}}$| \ yields \
+$\vec{A}^{T} \otimes \vec{B} \otimes \vec{\hat{D}}$
+
+\section{Figures}
+
+All schemas, graphs, diagrams and photographs are to be referred to
+as figures. Do not use coloured photographs or figures.
+A figure environment should be inserted in the text as close as
+possible to the first reference to the figure.
+Figures will be numbered automatically.
+\smallskip
+
+\noindent{\it Sample Input}
+
+\begin{verbatim}
+\begin{figure}
+\vspace{2.0cm}
+\caption{This is the caption of the figure displaying a white
+eagle and a white horse on a snow field}
+\end{figure}
+\end{verbatim}
+
+\noindent{\it Sample Output}
+
+\begin{figure}
+\vspace{2.0cm}
+\caption{This is the caption of the figure displaying a white eagle and
+a white horse on a snow field}
+\end{figure}
+
+\section{Tables}
+
+Only horizontal lines should be used within a table, to distinguish
+the column headings from the body of the table.
+Table captions should be treated in the same way as figure legends,
+except that the table captions appear {\it above\/} the tables and
+are centred. The tables will be numbered automatically.
+\smallskip
+
+\noindent{\it Sample Input}
+
+\begin{verbatim}
+\begin{table}
+\caption{Critical $N$ values}
+\begin{tabular}{llllll}
+\hline\noalign{\smallskip}
+${\mathrm M}_\odot$ & $\beta_{0}$ & $T_{\mathrm c6}$ & $\gamma$
+  & $N_{\mathrm{crit}}^{\mathrm L}$
+  & $N_{\mathrm{crit}}^{\mathrm{Te}}$\\
+\noalign{\smallskip}
+\hline
+\noalign{\smallskip}
+ 30 & 0.82 & 38.4 & 35.7 & 154 & 320 \\
+ 60 & 0.67 & 42.1 & 34.7 & 138 & 340 \\
+120 & 0.52 & 45.1 & 34.0 & 124 & 370 \\
+\hline
+\end{tabular}
+\end{table}
+\end{verbatim}
+
+\noindent{\it Sample Output}
+
+\begin{table}
+\caption{Critical $N$ values}
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\setlength\tabcolsep{3pt}
+\begin{tabular}{llllll}
+\hline\noalign{\smallskip}
+${\mathrm M}_\odot$ & $\beta_{0}$ & $T_{\mathrm c6}$ & $\gamma$
+  & $N_{\mathrm{crit}}^{\mathrm L}$
+  & $N_{\mathrm{crit}}^{\mathrm{Te}}$\\
+\noalign{\smallskip}
+\hline
+\noalign{\smallskip}
+ 30 & 0.82 & 38.4 & 35.7 & 154 & 320 \\
+ 60 & 0.67 & 42.1 & 34.7 & 138 & 340 \\
+120 & 0.52 & 45.1 & 34.0 & 124 & 370 \\
+\hline
+\end{tabular}
+\end{center}
+\end{table}
+
+\section{References}
+\label{refer}
+
+A reference list should be included at the end of your paper placing
+the \LaTeX{} environment \verb|thebibliography| there. Only
+essential references, which are directly referred to in the text,
+should be included in the reference list. At the moment there is no
+special Bib\TeX{} style for GTM2020 --- sorry. To use the reference
+system you have to specify the option \verb|[citeauthoryear]| in the
+\verb|documentclass|, like:
+\begin{verbatim}
+\documentclass[citeauthoryear]{GTM2020}
+\end{verbatim}
+
+References are cited in the text --- using the \verb|\cite| command ---
+by name and year of publication in brackets, e.\,g.\  (\cite{back}),
+according to your use of the \verb|\bibitem| command in the
+\verb|thebibliography| environment. The coding is as follows:
+if you choose your own label for the sources by giving an optional
+argument to the \verb|\bibitem| command the citations
+in the text are marked with the label you supplied.
+
+\begin{verbatim}
+The results in this section are a refined version
+of (\cite{clar:eke}); the minimality result of Proposition~14
+was the first of its kind.
+\end{verbatim}
+The above input produces the citation:
+\smallskip
+
+\noindent ``The results in this section are a refined version of
+(Clarke and Ekeland, 1982); the min\-i\-mality \dots''.
+\smallskip
+
+\noindent Then the \verb|\bibitem| entry of the \verb|thebibliography|
+environment should read:
+
+\begin{verbatim}
+\begin{thebibliography}{}  % (do not forget {})
+.
+\bibitem[Clarke and Ekeland, 1982]{clar:eke}
+Clarke, F.\ and I.\ Ekeland (1982).
+{\em Nonlinear oscillations and boundary-value problems for
+Hamiltonian systems}. Arch.\ Rat.\ Mech.\ Anal., {\bf 78}, 315--333.
+.
+\end{thebibliography}
+\end{verbatim}
+
+For one author, use author's surname and the year (\cite{ab:45}).
+For two authors, give both names and the year (\cite{ab:sm}).
+For three or more authors, use a surname of the first author, plus
+``et al.'', and the year (\cite{ab:et}, 1954).
+You may put also the number of section, chapter, theorem, etc.,
+after the year: (\cite{ab:45}, Theorem 2), (\cite{ab:sm}, Sect.\,2.1),
+(\cite{back}, Chap.\,3). If giving a list of references, separate them
+using semi-colons (Jones, 1965; \cite{tar:a}, b).
+Put only the year in brackets when referring to the author(s) of
+the referenced publication (for example, ``This work was first developed
+by Clarke and Ekeland \cite{clar:eke}, and later expanded by \cite{subb},
+who demonstrated that ...'')
+
+The reference list should contain all citations occurring in the text,
+ordered alphabetically by surname (with initials following). If there
+are several works by the same author(s) the references should be listed
+in the appropriate order indicated below:
+\begin{itemize}
+\item  One author: list works chronologically;
+\item  Author and same co-author(s): list works chronologically;
+\item  Author and different co-author(s): list works alphabetically
+according to co-author(s).
+\end{itemize}
+If there are several works by the same author(s) and in the same year,
+but which are cited separately, they should be distinguished by
+the use of ``a'', ``b'', etc., put after the year.
+\smallskip
+
+References should appear {\it only\/} in the following three forms:
+journal reference, reference to book, reference to multi-author work.
+\smallskip
+
+{\bf Journal reference\/} should include: author's surname and initials;
+surnames and initials of remaining authors; year of publication
+(in brackets); article title (in {\it italics\/}); abbreviated
+journal title; volume number (in {\bf bold}, without ``Vol.'',
+``No.'', etc.); page numbers (without ``pp.'');
+language of publication except for English if relevant (in brackets) .
+\smallskip
+
+{\bf Reference to book\/} should include: author's surname and initials;
+surnames and initials of remaining authors; year of publication
+(in brackets); the book title (in {\it italics\/}); volume (with ``Vol.''),
+chapter (with ``Chap.'')  or page (with ``pp.'') numbers if relevant;
+the name of the publisher: place of publication;
+language of publication except for English if relevant (in brackets).
+\smallskip
+
+{\bf Reference to multi-author work\/} should include after the year
+of publication: the chapter title (in {\it italics\/});
+``In:'' followed by book title; surname(s) and initials of editor(s)
+and abbr.\ ``ed'' or ``eds'' (in brackets); ``Vol.'' and volume number when
+appropriate; ``pp.'' and page numbers; the name of the publisher:
+place of publication; language of publication except for English
+if relevant (in brackets).
+\smallskip
+
+\noindent{\it Note.} Please, call your attention to punctuation marks
+in the different forms of references (see {\it Samlpe\/} below).
+\medskip
+
+\noindent {\it Sample Input}
+\begin{verbatim}
+\begin{thebibliography}{}  % (do not forget {})
+
+\bibitem[Abell, 1945]{ab:45}           % Journal reference
+Abell, B.\,C.\ (1945). {\em The examination of cell nuclei}.
+Biochemical Journal, {\bf 35}, 123--126.
+
+\bibitem[Abell and Smith, 1956]{ab:sm}  % Journal reference
+Abell, B.\,C.\ and S.\,E.\ Smith (1956). {\em Nucleic acid content
+of microsomes}. Nature, {\bf 135(2)}, 7--9.
+
+\bibitem[Abell et al.]{ab:et}     % Reference to multi-author work
+Abell, B.\,C., R.\,C.\ Tagg and M.\ Push (1954).
+{\em Enzyme catalyzed cellular transaminations}.
+In: Advanced in Enzymology (Round, A.\,F., ed),
+Vol.\,2, pp.\,125--247. Academic Press: New York.
+
+\bibitem[Backer, 1963]{back}           % Reference to book
+Backer, R.\,C.\ (1963). {\em Microscopic Staining Technicues},
+Chap.\,3. Butterworth: London.
+
+\bibitem[(1982)]{clar:eke}         % Journal reference
+Clarke, F.\ and I.\ Ekeland (1982).
+{\em Nonlinear oscillations and boundary-value problems for
+Hamiltonian systems}. Arch.\ Rat.\ Mech.\ Anal., {\bf 78}, 315--333.
+
+\bibitem[Subbotina (1986)]{subb}  % Reference to multi-author work
+Subbotina, N.\,N.\  (1986). {\em Necessary and sufficient optimality
+conditions for controls and trajectories}. In: Synthesis of optimal
+control to game-theoretical problems (Subbotin, A.\,I.\  and
+A.\,F.\ Kleimenov, eds), Vol.\,1, Chap.\,3, pp.\,86--96.
+Inst.\ Math.\ Mech.: Sverdlovsk (in Russian).
+
+\bibitem[Tarantello, 2001a]{tar:a}     % Journal reference
+Tarantello, G.\ (2001a). {\em Subharmonic solutions with prescribed
+minimalperiod for nonautonomous Hamiltonian systems}.
+J.\ Diff.\ Eq.,  {\bf 2(3)}, 28--55.
+
+\bibitem[Tarantello (2001b)]{tar:b}    % Journal reference
+Tarantello, G.\ (2001b). {\em Subharmonic solutions for
+Hamiltonian systems via a pseudoindex theory}. Annali di Matematica
+Pura (to appear).
+
+\end{thebibliography}
+\end{verbatim}
+\smallskip
+
+\noindent{\it Sample Output}
+
+\begin{thebibliography}{}  % (do not forget {})
+
+\bibitem[Abell, 1945]{ab:45}
+Abell, B.\,C.\ (1945). {\em The examination of cell nuclei}.
+Biochemical Journal, {\bf 35}, 123--126.
+
+\bibitem[Abell and Smith, 1956]{ab:sm}
+Abell, B.\,C.\ and S.\,E.\ Smith (1956). {\em Nucleic acid content
+of microsomes}. Nature, {\bf 135(2)}, 7--9.
+
+\bibitem[Abell et al.]{ab:et}
+Abell, B.\,C., R.\,C.\ Tagg and M.\ Push (1954). {\em Enzyme catalyzed
+cellular transaminations}. In: Advanced in Enzymology (Round, A.\,F., ed),
+Vol.\,2, pp.\,125--247. Academic Press: New York.
+
+\bibitem[Backer, 1963]{back}
+Backer, R.\,C.\ (1963). {\em Microscopic Staining Technicues},
+Chap.\,3. Butterworth: London.
+
+\bibitem[(1982)]{clar:eke}
+Clarke, F.\ and I.\ Ekeland (1982).
+{\em Nonlinear oscillations and boundary-value problems for
+Hamiltonian systems}. Arch.\ Rat.\ Mech.\ Anal., {\bf 78}, 315--333.
+
+\bibitem[Subbotina (1986)]{subb}
+Subbotina, N.\,N.\  (1986). {\em Necessary and sufficient optimality
+conditions for controls and trajectories}. In: Synthesis of optimal
+control to game-theoretical problems (Subbotin, A.\,I.\  and
+A.\,F.\ Kleimenov, eds), Vol.\,1, Chap.\,3, pp.\,86--96.
+Inst.\ Math.\ Mech.: Sverdlovsk (in Russian).
+
+\bibitem[Tarantello, 2001a]{tar:a}
+Tarantello, G.\ (2001a). {\em Subharmonic solutions with prescribed
+minimalperiod for nonautonomous Hamiltonian systems}.
+J.\ Diff.\ Eq.,  {\bf 2(3)}, 28--55.
+
+\bibitem[Tarantello (2001b)]{tar:b}
+Tarantello, G.\ (2001b). {\em Subharmonic solutions for Hamiltonian
+systems via a pseudoindex theory}. Annali di Matematica Pura (to appear).
+
+\end{thebibliography}
+\end{document}
