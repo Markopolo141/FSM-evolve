@@ -1,0 +1,26 @@
+\documentclass{article}
+\usepackage{amsmath}
+% \title{Perturbation analysis}
+% \author{Mark Burgess}
+\begin{document}
+% \maketitle
+We consider the change in the largest eigenvalue of a real (known) positive $n\times n$ matrix $A$ where the matrix itself is parameterised by its own largest (known) positive eigenvector $X$ with (known) eigenvalue $\lambda$, and we perturb $A$ by small $\epsilon$ to find a new (unknown) eigenvalue/vector $X+X'\epsilon$,$\lambda+\lambda'\epsilon$ to first order of $\epsilon$. 
+$$ \lambda(\epsilon)X(\epsilon) = A(\epsilon,X(\epsilon))X(\epsilon) $$
+$$ \frac{\partial}{\partial \epsilon}\Rightarrow \lambda'(\epsilon)X(\epsilon)+\lambda(\epsilon)X'(\epsilon) = \frac{d A}{d \epsilon}(\epsilon,X(\epsilon))X(\epsilon)+A(\epsilon,X(\epsilon))X'(\epsilon)$$
+$$ =\left(\frac{\partial A}{\partial \epsilon} + \frac{\partial A}{\partial X}X'(\epsilon)\right)X(\epsilon) +A(\epsilon,X(\epsilon))X'(\epsilon) $$
+$$ = \frac{\partial A}{\partial \epsilon}X(\epsilon) + \frac{\partial A}{\partial X}X'(\epsilon)X(\epsilon) +A(\epsilon,X(\epsilon))X'(\epsilon) $$
+We consider the equality evaluated at $\epsilon=0$, letting shorthand $X(\epsilon)=X_0$, $X'(\epsilon)=X'$, $\lambda(\epsilon)=\lambda_0$, $\lambda'(\epsilon)=\lambda'$, $A(\epsilon,X(\epsilon)) = A$ thus:
+$$\lambda'X_0+\lambda X' = \frac{\partial A}{\partial \epsilon}X_0 + \frac{\partial A}{\partial X}X'X_0 +AX' $$
+letting $Z(Y)=\frac{\partial A}{\partial X}YX_0$ be linear operator on vector $Y$ ie. a (known) matrix $Z$:
+$$\lambda'X_0 - \frac{\partial A}{\partial \epsilon}X_0 =  ZX' +AX'-\lambda X'  = (Z+A-\lambda I)X'$$
+We consider that $(Z+A-\lambda I)=V$ is a known matrix, thus we (assume) it has full spectrum, thus we let $X'=\sum_ic_iv_i$ where $Vv_i=\gamma_iv_i$ is known for known constants $\gamma_i$, thus:
+$$\lambda'X_0 - \frac{\partial A}{\partial \epsilon}X_0 = VX' = \sum_ic_i\gamma_iv_i$$
+Letting also $X_0=\sum_id_iv_i$ is known, thus:
+$$\sum_i\left(\lambda'd_i - \gamma_ic_i \right)v_i = \frac{\partial A}{\partial \epsilon}X_0 $$
+Dot product both sides with some $v_k$ knowing that $v_i\cdot v_k = \delta_{i,k}$ gives:
+$$\lambda'd_k - \gamma_kc_k = v_k\cdot\frac{\partial A}{\partial \epsilon}X_0 $$
+Now both $\lambda'$ and all $c_k$ are unknown, but we also know that $X'\cdot X=0$ (if we assume that the eigenvectors are unit normalised), thus $\sum_ic_id_i=0$ thus:
+$$\sum_k\left(\lambda'd_kd_k - \gamma_kc_kd_k\right) = \sum_k\left(v_k\cdot\frac{\partial A}{\partial \epsilon}X_0\right)d_k = \left(\sum_kv_k\right)d_k\cdot\frac{\partial A}{\partial \epsilon}X_0 = X_0\cdot \frac{\partial A}{\partial \epsilon}X_0 $$
+$$ \text{Thus:}\qquad\boxed{\lambda' = X_0\cdot \frac{\partial A}{\partial \epsilon}X_0} \qquad \text{Which is normal perturbation result}$$
+
+\end{document}
