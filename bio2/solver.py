@@ -54,12 +54,37 @@ class Simulator(object):
 
     vnorm = None
 
+    hypermodel_symbols = None
+    hypermodel = None
+    v_hypermodel = None
+
     def get_dict(self):
         return {self.s[i]:float(vv) for i,vv in enumerate(self.v)}
     def get_g_dict(self):
         return {self.g[i]:float(vvg) for i,vvg in enumerate(self.vg)}
+    def get_h_dict(self):
+        if self.hypermodel is None:
+            return {}
+        else:
+            return {self.hypermodel[i]:float(vvh) for i,vvh in enumerate(self.v_hypermodel)}
 
-    def __init__(self, input_matrix, initial_vg=None):
+    def load_vg(self,initial_vg=None):
+        if initial_vg is not None:
+            assert len(initial_vg.values())==len(self.g_symbols)
+            self.vg = matrix([[initial_vg[gg]] for gg in self.g])
+        else:
+            self.vg = matrix([[0.5] for gg in self.g])
+    
+
+    def load_vh(self,v_hypermodel=None):
+        if v_hypermodel is not None:
+            assert len(v_hypermodel)==len(self.hypermodel)
+            self.v_hypermodel = matrix([[vvh] for vvh in v_hypermodel])
+        else:
+            self.v_hypermodel = matrix([[0.0] for i in range(len(self.hypermodel))])
+
+
+    def __init__(self, input_matrix, initial_vg=None, hypermodel_symbols=None, initial_vh=None):
          # extract the dimensions of the matrix
         assert isinstance(input_matrix, Matrix)
         assert input_matrix.shape[0] == input_matrix.shape[1]
@@ -80,16 +105,27 @@ class Simulator(object):
         self.g = [str(gg) for gg in self.g_symbols]
         logging.debug("detecting genetic symbols: {}".format(self.g_symbols))
         
+        # exclude hypermodel symbols
+        if hypermodel_symbols is not None:
+            self.hypermodel_symbols = []
+            self.hypermodel = []
+            for gg in hypermodel_symbols:
+                if gg in self.g:
+                    sym = self.g_symbols[self.g.index(gg)]
+                    self.hypermodel.append(gg)
+                    self.hypermodel_symbols.append(sym)
+                    self.g.remove(gg)
+                    self.g_symbols.remove(sym)
+            if len(self.hypermodel_symbols)!=len(hypermodel_symbols):
+                logging.warn("hypermodel symbols specified by not present")
+            self.load_vh(initial_vh)
+        
         # setup the genetic vectors
-        if initial_vg is not None:
-            assert len(initial_vg.values())==len(self.g_symbols)
-            self.vg = matrix([[initial_vg[gg]] for gg in self.g])
-        else:
-            self.vg = matrix([[0.5] for gg in self.g])
+        self.load_vg(initial_vg)
 
         # compile away our sympy expressions - for speed
-        self.A = dumb_lambdify(self.s+self.g,matrix(input_matrix))
-        self.dA = [dumb_lambdify(self.s+self.g,matrix(diff(input_matrix,gg))) for gg in self.g_symbols]
+        self.A = dumb_lambdify(self.s+self.g+self.hypermodel,matrix(input_matrix))
+        self.dA = [dumb_lambdify(self.s+self.g+self.hypermodel,matrix(diff(input_matrix,gg))) for gg in self.g_symbols]
         self.vnorm = None
 
 
@@ -132,12 +168,13 @@ class Simulator(object):
         outer_incorporation_factor, 
         **inner_arguments
     ):
-        self.run_inner(self.get_g_dict(),**inner_arguments)
+        arguments = self.get_g_dict()
+        arguments.update(self.get_h_dict())
+        self.run_inner(arguments,**inner_arguments)
 
         # calculate the vector of perturbations in eigenvalue
         delta_lambda = []
-        arguments = self.get_dict()
-        arguments.update(self.get_g_dict())
+        arguments.update(self.get_dict())
         for gg in range(len(self.g_symbols)):
             delta_lambda.append([(self.v.transpose()*(self.dA[gg](**arguments)*self.v))[0,0]])
         delta_lambda = matrix(delta_lambda)
@@ -154,8 +191,12 @@ class Simulator(object):
     max_outer_iterations=200,
     outer_incorporation_factor=0.01,
     outer_iteration_target=1e-3,
+    v_hypermodel = None,
     **inner_arguments
     ):
+        if self.hypermodel is not None and v_hypermodel is not None:
+            self.load_vh(v_hypermodel)
+            
         # begin primary loop
         logging.info("Beginning simulation loop")
         j = 0
@@ -173,6 +214,7 @@ class Simulator(object):
         self.run_inner(self.get_g_dict(),**inner_arguments)
         arguments = self.get_dict()
         arguments.update(self.get_g_dict())
+        arguments.update(self.get_h_dict())
         A_xx = self.A(**arguments)
         with open(filename,"w") as ff:
             for a in A_xx.tolist():

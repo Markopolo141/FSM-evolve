@@ -1,0 +1,14 @@
+
+        if "P" in list(from_t.values())+other:
+            if "O" in list(from_t.values())+other or "Y" in list(from_t.values())+other:
+
+
+        is what it should be not:
+
+        
+        if "P" in list(from_t.values())+other:
+            if "P" not in list(from_t.values())+other:
+
+        will never be mutually satisfied
+
+
