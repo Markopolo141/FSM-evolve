@@ -51,6 +51,8 @@ index_combinations = dict_combinations([[]],coords,sorted(coords.keys()))
 
 N = len(index_combinations)
 
+def get_symbol(combination):
+    return symbols("x{}".format(index_combinations.index(combination)))
 
 def apply(matrix,func):
     for i in range(N):
@@ -115,9 +117,6 @@ def punnet_square_likelihood(parent_A,parent_B,offspring):
     
 
 
-def get_symbol(combination):
-    return symbols("x{}".format(index_combinations.index(combination)))
-
 def sex_propagate(old,coords,from_t,to_t):
     #offspring must be young
     if to_t['age']!="S" or from_t['age']=='S':
@@ -134,18 +133,18 @@ def sex_propagate(old,coords,from_t,to_t):
         # young have selection factors
         if from_t["age"]=="Y":
             sym = "".join(from_dict(from_t))+"".join(other)
-            #print("consiering: {}".format(sym))
             sel_fact = symbols(sym)
         else:
             sel_fact = 1
-        conjoined_state = list(from_t.values())+other
+        '''conjoined_state = list(from_t.values())+other
         if "P" in conjoined_state:
             if "O" in conjoined_state or "Y" in conjoined_state:
                 survival_factor = hypermodel_symbols['PN']
             else:
                 survival_factor = 1.0
         else:
-            survival_factor = hypermodel_symbols['NN']
+            survival_factor = hypermodel_symbols['NN']'''
+        survival_factor = 1
         s = get_symbol(other)
         weighting += s
         v += survival_factor*sel_fact*s*punnet_square_likelihood(from_t['genetics'],other_d['genetics'],to_t['genetics'])
@@ -162,9 +161,9 @@ def age_propagate(old,coords,from_t,to_t):
         if from_t['genetics'] == homozygous_positive:
             genetic_factor = 1
         elif from_t['genetics'] == hetrozygous:
-            genetic_factor = hypermodel_symbols['advantage_hetero'] #0.95 #1
+            genetic_factor = 0 #hypermodel_symbols['advantage_hetero'] #0.95 #1
         elif from_t['genetics'] == homozygous_negative:
-            genetic_factor = hypermodel_symbols['advantage_homo'] #0.1 #1
+            genetic_factor = 0 #hypermodel_symbols['advantage_homo'] #0.1 #1
         return genetic_factor
     elif from_t['age']=="Y" and (to_t['age']=="O" or to_t['age']=="P"):
         # consider all possible matings
@@ -205,6 +204,7 @@ apply(matrix,partial(age_propagate))
 apply(matrix,total_morph)
 matrix = matrix.transpose()
 
+
 '''settings_coords = {
 "PN":np.linspace(0.1,0.9,9),
 "NN":np.linspace(0.1,0.9,9),
@@ -232,10 +232,10 @@ settings_coords = {
 
 
 settings_coords = {
-"PN":np.linspace(1.0,1.0,1),
-"NN":np.linspace(1.0,1.0,1),
-"advantage_hetero":np.linspace(0.00,0.00,1),
-"advantage_homo":np.linspace(0.00,0.00,1),
+#"PN":np.linspace(1.0,1.0,1),
+#"NN":np.linspace(1.0,1.0,1),
+#"advantage_hetero":np.linspace(0.00,0.00,1),
+#"advantage_homo":np.linspace(0.00,0.00,1),
 "fertility_factor":np.linspace(0.1,0.1,1)
 }
 
@@ -253,6 +253,27 @@ def to_settings_dict(l):
     return {settings_coords_keys[i]:l[i] for i in range(len(l))}
 
 labels = ["".join(k) for k in index_combinations]
+
+'''
+with open('my_matrix.txt',"w") as f:
+    sub_dict = {get_symbol(c):symbols("".join(c)) for c in index_combinations}
+    transitions_dictionary = defaultdict(list)
+    for y in range(matrix.shape[0]):
+        for x in range(matrix.shape[1]):
+            z = matrix[y,x].subs(sub_dict)
+            if z==0:
+                continue
+            z = str(z)
+            label = "{}->{}".format(labels[x],labels[y])
+            transitions_dictionary[z].append(label)
+    t_keys = list(transitions_dictionary.keys())
+    t_values = list(transitions_dictionary.values())
+    for i in range(len(t_keys)):
+        f.write("{}\n{}\n".format("\n".join(t_values[i]),t_keys[i]))
+    #json.dump(transitions_dictionary,f,indent=4)
+raise Exception("early exit")
+'''
+
 sim = Simulator(matrix, hypermodel_symbols=settings_coords_keys)
 
 outcomes = []

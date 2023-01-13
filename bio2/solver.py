@@ -43,7 +43,8 @@ class Simulator(object):
     N = None
     A = None
     dA = None
-    
+
+    w = None
     v = None
     s = None
     s_symbols = None
@@ -53,33 +54,37 @@ class Simulator(object):
     g_symbols = None
 
     vnorm = None
+    wnorm = None
 
     hypermodel_symbols = None
     hypermodel = None
     v_hypermodel = None
 
     def get_dict(self):
-        return {self.s[i]:float(vv) for i,vv in enumerate(self.v)}
+        if self.v.shape[1]!=0:
+            return {self.s[i]:float(vv) for i,vv in enumerate(self.v)}
+        return {}
+                
     def get_g_dict(self):
-        return {self.g[i]:float(vvg) for i,vvg in enumerate(self.vg)}
+        if self.vg.shape[1]!=0:
+            return {self.g[i]:float(vvg) for i,vvg in enumerate(self.vg)}
+        return {}
     def get_h_dict(self):
-        if self.hypermodel is None:
-            return {}
-        else:
+        if self.v_hypermodel.shape[1]!=0:
             return {self.hypermodel[i]:float(vvh) for i,vvh in enumerate(self.v_hypermodel)}
+        return {}
 
     def load_vg(self,initial_vg=None):
         if initial_vg is not None:
             assert len(initial_vg.values())==len(self.g_symbols)
-            self.vg = matrix([[initial_vg[gg]] for gg in self.g])
+            self.vg = matrix([[float(initial_vg[gg])] for gg in self.g])
         else:
             self.vg = matrix([[0.5] for gg in self.g])
     
-
     def load_vh(self,v_hypermodel=None):
         if v_hypermodel is not None:
             assert len(v_hypermodel)==len(self.hypermodel)
-            self.v_hypermodel = matrix([[vvh] for vvh in v_hypermodel])
+            self.v_hypermodel = matrix([[float(v_hypermodel[gg])] for gg in self.hypermodel])
         else:
             self.v_hypermodel = matrix([[0.0] for i in range(len(self.hypermodel))])
 
@@ -92,6 +97,7 @@ class Simulator(object):
 
         # setup the initial vectors
         self.v = matrix([[0.5] for i in range(self.N)])
+        self.w = matrix([[0.5] for i in range(self.N)])
         self.s = ["x{}".format(i) for i in range(self.N)]
         self.s_symbols = [symbols(x) for x in self.s]
 
@@ -106,9 +112,9 @@ class Simulator(object):
         logging.debug("detecting genetic symbols: {}".format(self.g_symbols))
         
         # exclude hypermodel symbols
+        self.hypermodel_symbols = []
+        self.hypermodel = []
         if hypermodel_symbols is not None:
-            self.hypermodel_symbols = []
-            self.hypermodel = []
             for gg in hypermodel_symbols:
                 if gg in self.g:
                     sym = self.g_symbols[self.g.index(gg)]
@@ -118,7 +124,7 @@ class Simulator(object):
                     self.g_symbols.remove(sym)
             if len(self.hypermodel_symbols)!=len(hypermodel_symbols):
                 logging.warn("hypermodel symbols specified by not present")
-            self.load_vh(initial_vh)
+        self.load_vh(initial_vh)
         
         # setup the genetic vectors
         self.load_vg(initial_vg)
@@ -141,6 +147,7 @@ class Simulator(object):
         # do iterations to find a stable point
         old_old_v = self.v.copy()
         self.vnorm = None
+        self.wnorm = None
         i = 0
         inner_t = time.time()
         inner_difference = float('inf')
@@ -151,12 +158,21 @@ class Simulator(object):
             A_xx = A_x(**self.get_dict())
             if (A_xx<0).any():
                 logging.warning("negative matrix encountered")
-                A_xx.clip(0)
+                A_xx = A_xx.clip(0)
             self.v[:,:] = ((1.0-inner_incorporation_factor)*self.v + 
                 inner_incorporation_factor*A_xx*self.v)
             self.vnorm = self.v.sum()
             self.v[:,:] = self.v / self.vnorm
             inner_difference = norm(self.v - old_v)
+
+            old_w = self.w.copy()
+            A_xxt = A_xx.transpose()
+            self.w[:,:] = ((1.0-inner_incorporation_factor)*self.w + 
+                inner_incorporation_factor*A_xxt*self.w)
+            self.wnorm = self.w.sum()
+            self.w[:,:] = self.w / self.wnorm
+            inner_difference = max(inner_difference,norm(self.w - old_w))
+            
         if i==max_inner_iterations:
             logging.warning("Reached max inner iterations")
         ret = [i,time.time()-inner_t, norm(self.v-old_old_v)]
@@ -176,7 +192,7 @@ class Simulator(object):
         delta_lambda = []
         arguments.update(self.get_dict())
         for gg in range(len(self.g_symbols)):
-            delta_lambda.append([(self.v.transpose()*(self.dA[gg](**arguments)*self.v))[0,0]])
+            delta_lambda.append([(self.w.transpose()*(self.dA[gg](**arguments)*self.v))[0,0]])
         delta_lambda = matrix(delta_lambda)
         #logging.info("dLambda = {}".format(norm(delta_lambda)))
         delta_lambda = delta_lambda / (0.1+norm(delta_lambda))
@@ -194,7 +210,7 @@ class Simulator(object):
     v_hypermodel = None,
     **inner_arguments
     ):
-        if self.hypermodel is not None and v_hypermodel is not None:
+        if v_hypermodel is not None:
             self.load_vh(v_hypermodel)
             
         # begin primary loop
@@ -211,10 +227,10 @@ class Simulator(object):
             logging.warning("Reached max outer iterations, simulation failed to converge")
 
     def debug_matrix(self,filename, labels):
-        self.run_inner(self.get_g_dict(),**inner_arguments)
-        arguments = self.get_dict()
-        arguments.update(self.get_g_dict())
+        arguments = self.get_g_dict()
         arguments.update(self.get_h_dict())
+        self.run_inner(arguments)
+        arguments.update(self.get_dict())
         A_xx = self.A(**arguments)
         with open(filename,"w") as ff:
             for a in A_xx.tolist():
@@ -228,6 +244,8 @@ class Simulator(object):
             ff.write("\n")
             for i in range(self.N):
                 ff.write("{} = {}\n".format(labels[i],float(self.v[i])))
+            ff.write(json.dumps(self.get_g_dict(),indent=4))
+            ff.write(json.dumps(self.get_h_dict(),indent=4))
 
     def print_state(self):
         print("Lambda = {}".format(self.vnorm))
