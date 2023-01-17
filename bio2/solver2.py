@@ -1,8 +1,7 @@
-from sympy import symbols, Matrix, diff
+from sympy import symbols, Matrix, diff, eye
 from sympy.parsing.sympy_parser import parse_expr
-from numpy import matrix
-from numpy.linalg import norm
-from numpy import multiply
+from numpy import matrix, hstack, multiply
+from numpy.linalg import norm, lstsq
 from numpy.random import randint
 import json
 from functools import partial
@@ -13,28 +12,98 @@ import time
 logging.basicConfig()
 logging.getLogger().setLevel(logging.DEBUG)
 
+
+def dot(sA,sB):
+    rA = [float(a) for a in sA]
+    rB = [float(b) for b in sB]
+    N = len(rA)
+    assert N==len(rB)
+    return sum([rA[i]*rB[i] for i in range(N)])
+
+# takes the vector from A->B, and return the point 
+# where the line defined by that vector crosses the plane centered at C with normal dC
+def line_plane_constrain(A,B,C,dc):
+    Adc = dot(A,dc)
+    Bdc = dot(B,dc)
+    Cdc = dot(C,dc)
+    return (A*(Bdc-Cdc)+B*(Cdc-Adc))/(Bdc-Adc)
+
 # take v in the vector direction diff, 
 # where v is constrained in the unit cube
-# auto scales the diff to make the length of the path 
-# travelled around the edge of the cube = norm(diff)
-def box_accent(v,diff):
+# and within the planes specified by the constraints
+# auto scales the sequence diff to make the length of the path 
+# travelled around the edges of the constraints = norm(diff)
+
+#TODO: FIX THIS FUNCTION
+
+def box_accent(v,diff, constraints):
+    epsilon = 1e-6
     dd = norm(diff)
+    constraints = [(c,dc/norm(dc)) for c,dc in constraints]
     while True:
         old_v = v
-        v = (v+diff).clip(0,1)
+        print(v,diff)
+        v = v+diff
+        print(v)
+        new_diff = diff
+        
+        # apply 0-1 bounding box
+        '''for i in range(len(v)):
+            if v[i,0]>1:
+                p = (1-old_v[i,0])/(v[i,0]-old_v[i,0])
+                v = p*v+(1-p)*old_v
+                v[i,0]=1.0
+                new_diff = diff.copy()
+                new_diff[i,0]=0.0
+                print("ping {}".format(i))
+            elif v[i,0]<0:
+                p = (0-old_v[i,0])/(v[i,0]-old_v[i,0])
+                v = p*v+(1-p)*old_v
+                v[i,0]=0.0
+                new_diff = diff.copy()
+                new_diff[i,0]=0.0
+                print("pong {}".format(i))'''
+
+        # apply other constraints
+        for c,dc in constraints:
+            violation = dot((v-c),dc)
+            if violation<-epsilon: #constraint clearly violated
+                print("ptwang")
+                v = line_plane_constrain(old_v,v,c-epsilon*dc,dc)
+                new_diff = diff-(v-old_v)
+                new_diff -= dot(dc,new_diff)*dc + epsilon*dc
+
+        # do calculus and scaling
+        diff=new_diff
+        norm_diff = norm(diff)
         v_minus_old_v = v-old_v
         norm_v_minus_old_v = norm(v_minus_old_v)
-        if norm_v_minus_old_v==0:
+        if norm_v_minus_old_v==0 or norm_diff==0:
+            violation_exists = True
+            while violation_exists:
+                violation_exists = False
+                for c,dc in constraints:
+                    violation = dot((v-c),dc)
+                    v = line_plane_constrain(old_v,v,c,dc)
+                    violation_exists = True
+                for i in range(len(v)):
+                    if v[i,0]>1:
+                        v[i,0]=1.0
+                        violation_exists = True
+                    elif v[i,0]<0:
+                        v[i,0]=0.0
+                        violation_exists = True
             return v
-        dd = max(dd-norm_v_minus_old_v-0.0001,0)
-        diff = dd*v_minus_old_v/norm_v_minus_old_v
+        dd = max(dd-norm_v_minus_old_v-epsilon,0)
+        diff = dd*diff/norm(diff)
+
 
 
 # for a symbolic expression string <element>, consisting of <symbols>
 # variables, compile the expression as a executable lambda,
 # in global namespace 
-def dumb_lambdify(symbols,element):
-    s = "lambda {} : {}".format(",".join(symbols),repr(element))
+def dumb_lambdify_matrix(symbols,element):
+    s = "lambda {} : matrix({},dtype=float)".format(",".join(symbols),repr(element))
     return eval(s, globals())
 
 
@@ -101,6 +170,7 @@ class Simulator(object):
         assert isinstance(input_matrix, Matrix)
         assert input_matrix.shape[0] == input_matrix.shape[1]
         self.N = input_matrix.shape[0]
+        self.lambda_symbol = symbols('l')
 
         # setup the initial vectors
         self.v = matrix([[0.5] for i in range(self.N)])
@@ -136,10 +206,28 @@ class Simulator(object):
         # setup the genetic vectors
         self.load_vg(initial_vg)
 
-        # compile away our sympy expressions - for speed
-        self.A = dumb_lambdify(self.s+self.g+self.hypermodel,matrix(input_matrix))
-        self.dA = [dumb_lambdify(self.s+self.g+self.hypermodel,matrix(diff(input_matrix,gg))) for gg in self.g_symbols]
+        # compile away our sympy expressions - for speed, the matrix, and its derivatives in all genetic symbols
+        self.A = dumb_lambdify_matrix(self.s+self.g+self.hypermodel,input_matrix.tolist())
+        self.dA = [dumb_lambdify_matrix(self.s+self.g+self.hypermodel,diff(input_matrix,gg).tolist()) for gg in self.g_symbols]
+
+        # calculate the augmented matrix for gamma reasoning
+        s_symbols_vector = Matrix(self.s_symbols)
+        self.dV = eye(self.N)*self.lambda_symbol
+        self.dV -= input_matrix
+        for i,ss in enumerate(self.s_symbols):
+            self.dV[:,i] -= diff(input_matrix,ss)*s_symbols_vector
+        self.dV = self.dV.row_join(s_symbols_vector)
+        self.dV = self.dV.col_join(Matrix([[1 for i in range(self.N)] + [0]]))
+        self.dV = dumb_lambdify_matrix(self.s+self.g+self.hypermodel+[str(self.lambda_symbol)],self.dV.tolist())
+        # calculate derivates, with appended zero row
+        self.dAv = [dumb_lambdify_matrix(self.s+self.g+self.hypermodel+[str(self.lambda_symbol)],
+            (diff(input_matrix,gg).col_join(Matrix([[0 for i in range(self.N)]]))).tolist()
+            ) for gg in self.g_symbols]
+#        self.dAv = dumb_lambdify_matrix(self.s+self.g+self.hypermodel+[str(self.lambda_symbol)],
+#        [(diff(input_matrix,gg).col_join(Matrix([[0 for i in range(self.N)]]))).tolist() for gg in self.g_symbols])
+        
         self.vnorm = None
+        self.wnorm = None
 
 
     def run_inner(self,
@@ -201,13 +289,28 @@ class Simulator(object):
         arguments.update(self.get_h_dict())
         self.run_inner(arguments,**inner_arguments)
 
-        # calculate the vector of perturbations in eigenvalue
+        # calculate the vector of perturbations in the eigenvalue for static superpopulation
         delta_lambda = []
         arguments.update(self.get_dict())
-        for gg in range(len(self.g_symbols)):
-            delta_lambda.append([(self.w.transpose()*(self.dA[gg](**arguments)*self.v))[0,0]])
+        for i in range(len(self.g_symbols)):
+            delta_lambda.append([(self.w.transpose()*(self.dA[i](**arguments)*self.v))[0,0]])
         delta_lambda = matrix(delta_lambda)
         logging.info("dLambda = {}".format(norm(delta_lambda)))
+
+        import pdb
+        pdb.set_trace()
+
+        # calculate the vector of purturbations in the eigenvalue for non-static superpopulation
+        arguments.update({str(self.lambda_symbol):self.vnorm})
+        dAv = hstack([self.dAv[i](**arguments)*self.v for i in range(len(self.g_symbols))])
+        v = lstsq(self.dV(**arguments),dAv,rcond=None)
+        if v[2]!=self.N+1:
+            logging.warning("matrix dAv has not got full rank.")
+            
+#        delta_gamma = [v[0][-1,:].transpose()
+
+
+        
         productive_step_size = norm((self.vg+delta_lambda).clip(0,1) - self.vg)
 #        with open("vector_debug.txt","a") as f:
 #            Z = (self.vg+delta_lambda).clip(0,1) - self.vg

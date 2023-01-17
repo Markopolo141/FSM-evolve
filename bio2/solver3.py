@@ -1,8 +1,8 @@
-from sympy import symbols, Matrix, diff
+from sympy import symbols, Matrix, diff, eye
 from sympy.parsing.sympy_parser import parse_expr
-from numpy import matrix
-from numpy.linalg import norm
-from numpy import multiply
+from numpy import matrix, hstack, multiply
+from numpy.linalg import norm, lstsq
+from scipy.optimize import linprog
 from numpy.random import randint
 import json
 from functools import partial
@@ -13,12 +13,38 @@ import time
 logging.basicConfig()
 logging.getLogger().setLevel(logging.DEBUG)
 
+
+
+
+def dot(sA,sB):
+    rA = [float(a) for a in sA]
+    rB = [float(b) for b in sB]
+    N = len(rA)
+    assert N==len(rB)
+    return sum([rA[i]*rB[i] for i in range(N)])
+
+# take v in the vector direction a step approximately diff, a length dd, 
+# subject to a constraint that dc.(v-c)<0
+def box_accent(v,dd,diff,c=None,dc=None):
+    if c is None:
+        result = linprog(-diff,bounds=(0,1))
+    else:
+        result = linprog(-diff,dc.transpose(),dot(c,dc),bounds=(0,1))
+    if result.status==2: #infeasible - already hyperconstrained
+        return v
+    x = matrix(result.x).transpose()-v
+    if norm(x)>dd:
+        x = dd*x/norm(x)
+    return (x+v).clip(0,1)
+
+
+'''
 # take v in the vector direction diff, 
 # where v is constrained in the unit cube
 # auto scales the diff to make the length of the path 
 # travelled around the edge of the cube = norm(diff)
-def box_accent(v,diff):
-    dd = norm(diff)
+def old_box_accent(v,dd,diff):
+    diff = diff*(dd/norm(diff))
     while True:
         old_v = v
         v = (v+diff).clip(0,1)
@@ -27,14 +53,17 @@ def box_accent(v,diff):
         if norm_v_minus_old_v==0:
             return v
         dd = max(dd-norm_v_minus_old_v-0.0001,0)
-        diff = dd*v_minus_old_v/norm_v_minus_old_v
+        diff = v_minus_old_v*(dd/norm_v_minus_old_v)
+'''
+
+
 
 
 # for a symbolic expression string <element>, consisting of <symbols>
 # variables, compile the expression as a executable lambda,
 # in global namespace 
-def dumb_lambdify(symbols,element):
-    s = "lambda {} : {}".format(",".join(symbols),repr(element))
+def dumb_lambdify_matrix(symbols,element):
+    s = "lambda {} : matrix({},dtype=float)".format(",".join(symbols),repr(element))
     return eval(s, globals())
 
 
@@ -101,6 +130,7 @@ class Simulator(object):
         assert isinstance(input_matrix, Matrix)
         assert input_matrix.shape[0] == input_matrix.shape[1]
         self.N = input_matrix.shape[0]
+        self.lambda_symbol = symbols('l')
 
         # setup the initial vectors
         self.v = matrix([[0.5] for i in range(self.N)])
@@ -136,10 +166,28 @@ class Simulator(object):
         # setup the genetic vectors
         self.load_vg(initial_vg)
 
-        # compile away our sympy expressions - for speed
-        self.A = dumb_lambdify(self.s+self.g+self.hypermodel,matrix(input_matrix))
-        self.dA = [dumb_lambdify(self.s+self.g+self.hypermodel,matrix(diff(input_matrix,gg))) for gg in self.g_symbols]
+        # compile away our sympy expressions - for speed, the matrix, and its derivatives in all genetic symbols
+        self.A = dumb_lambdify_matrix(self.s+self.g+self.hypermodel,input_matrix.tolist())
+        self.dA = [dumb_lambdify_matrix(self.s+self.g+self.hypermodel,diff(input_matrix,gg).tolist()) for gg in self.g_symbols]
+
+        # calculate the augmented matrix for gamma reasoning
+        s_symbols_vector = Matrix(self.s_symbols)
+        self.dV = eye(self.N)*self.lambda_symbol
+        self.dV -= input_matrix
+        for i,ss in enumerate(self.s_symbols):
+            self.dV[:,i] -= diff(input_matrix,ss)*s_symbols_vector
+        self.dV = self.dV.row_join(s_symbols_vector)
+        self.dV = self.dV.col_join(Matrix([[1 for i in range(self.N)] + [0]]))
+        self.dV = dumb_lambdify_matrix(self.s+self.g+self.hypermodel+[str(self.lambda_symbol)],self.dV.tolist())
+        # calculate derivates, with appended zero row
+        self.dAv = [dumb_lambdify_matrix(self.s+self.g+self.hypermodel+[str(self.lambda_symbol)],
+            (diff(input_matrix,gg).col_join(Matrix([[0 for i in range(self.N)]]))).tolist()
+            ) for gg in self.g_symbols]
+#        self.dAv = dumb_lambdify_matrix(self.s+self.g+self.hypermodel+[str(self.lambda_symbol)],
+#        [(diff(input_matrix,gg).col_join(Matrix([[0 for i in range(self.N)]]))).tolist() for gg in self.g_symbols])
+        
         self.vnorm = None
+        self.wnorm = None
 
 
     def run_inner(self,
@@ -201,31 +249,43 @@ class Simulator(object):
         arguments.update(self.get_h_dict())
         self.run_inner(arguments,**inner_arguments)
 
-        # calculate the vector of perturbations in eigenvalue
+        # calculate the vector of perturbations in the eigenvalue for static superpopulation
         delta_lambda = []
         arguments.update(self.get_dict())
-        for gg in range(len(self.g_symbols)):
-            delta_lambda.append([(self.w.transpose()*(self.dA[gg](**arguments)*self.v))[0,0]])
+        for i in range(len(self.g_symbols)):
+            delta_lambda.append([(self.w.transpose()*(self.dA[i](**arguments)*self.v))[0,0]])
         delta_lambda = matrix(delta_lambda)
         logging.info("dLambda = {}".format(norm(delta_lambda)))
-        productive_step_size = norm((self.vg+delta_lambda).clip(0,1) - self.vg)
-#        with open("vector_debug.txt","a") as f:
-#            Z = (self.vg+delta_lambda).clip(0,1) - self.vg
-#            ZZ = Z.transpose().tolist()[0]
-#            ZZ = ["#" if z>0 else "." if z<0 else " " for z in ZZ]
-#            f.write("".join(ZZ))
-#            f.write(" {}\n".format(productive_step_size))
-        if randomising_step:
-            delta_lambda = multiply(matrix(randint(2,size=delta_lambda.size)).transpose(),delta_lambda) # add some randomisation
+
+        # calculate the vector of purturbations in the eigenvalue for non-static superpopulation
+        arguments.update({str(self.lambda_symbol):self.vnorm})
+        dAv = hstack([self.dAv[i](**arguments)*self.v for i in range(len(self.g_symbols))])
+        v = lstsq(self.dV(**arguments),dAv,rcond=None)
+        if v[2]!=self.N+1:
+            logging.warning("matrix dAv has not got full rank.")
+        delta_gamma = v[0][-1,:].transpose()
+        if norm(delta_gamma)==0:
+            raise Exception("delta gamma is zero.")            
+
+        # determine the size of the step desired
         if inner_delta_multiplier==float("inf"):
-            if norm(delta_lambda)!=0:
-                delta_lambda = max_delta_magnitude * delta_lambda / norm(delta_lambda)
+            step_size=1
         else:
-            delta_lambda = max_delta_magnitude * inner_delta_multiplier * delta_lambda / (1.0+inner_delta_multiplier*norm(delta_lambda))
-        delta_lambda *= outer_incorporation_factor
+            step_size = inner_delta_multiplier*norm(delta_gamma) / (1+inner_delta_multiplier*norm(delta_gamma))
+        step_size *= max_delta_magnitude * outer_incorporation_factor 
+
+        # make the step in the direction delta_gamma, respecting a non-decrease in direction delta_lambda
         old_vg = self.vg.copy()
-        self.vg[:,:] = box_accent(self.vg,delta_lambda)
-        return productive_step_size,norm(self.vg-old_vg)
+        self.vg[:,:] = box_accent(self.vg,step_size,delta_gamma,self.vg,-delta_lambda)
+        
+        with open("vector_debug.txt","a") as f:
+            ZZ = (self.vg-old_vg).transpose().tolist()[0]
+            ZZ = ["#" if z>0 else "." if z<0 else " " for z in ZZ]
+            f.write("".join(ZZ))
+            f.write(" {} {}\n".format(norm(self.vg-old_vg), dot(box_accent(old_vg,1.0,delta_lambda)-old_vg,delta_lambda) ))
+
+        return norm(self.vg-old_vg), dot(box_accent(self.vg,1.0,delta_lambda)-self.vg,delta_lambda)
+         
 
 
 
@@ -243,20 +303,23 @@ class Simulator(object):
         logging.info("Beginning simulation loop")
         j = 0
         outer_difference = float('inf')
+        differences = [float('inf')]*5
         while ((j<max_outer_iterations) and 
         (outer_difference>outer_incorporation_factor*outer_iteration_target)):
             j += 1
-#            if j==700:
-#                import pdb
-#                pdb.set_trace()
             logging.info("beginning {} loop".format(j))
-            outer_difference,_ = self.outer_run(outer_incorporation_factor,**inner_arguments)
+            if j==12:
+                import pdb
+                pdb.set_trace()
+            new_outer_difference,stability = self.outer_run(outer_incorporation_factor,**inner_arguments)
+            differences[j % len(differences)] = new_outer_difference
+            outer_difference = sum(differences) / len(differences)
             logging.info("diff_Lambda = {}".format(outer_difference))
         if j==max_outer_iterations:
             logging.warning("Reached max outer iterations, simulation failed to converge")
             raise ConvergenceException("outer loop iteration limit reached")
-            return False
-        return True
+            return False,None
+        return True,stability
 
     def debug_matrix(self,filename, labels):
         arguments = self.get_g_dict()

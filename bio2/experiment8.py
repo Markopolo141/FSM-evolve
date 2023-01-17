@@ -1,9 +1,11 @@
-from solver import *
+from solver3 import *
 import numpy as np
 from collections import defaultdict
 from tqdm import tqdm
+from random import shuffle
 
 logging.getLogger().setLevel(logging.WARNING)
+#logging.getLogger().setLevel(logging.INFO)
 
 #from sympy import symbols, Matrix
 #import json
@@ -149,8 +151,8 @@ def sex_propagate(old,coords,from_t,to_t):
         s = get_symbol(other)
         weighting += s
         v += survival_factor*sel_fact*s*punnet_square_likelihood(from_t['genetics'],other_d['genetics'],to_t['genetics'])
-    return v/weighting #TODO: undo this
-    #return v
+#    return v/weighting #TODO: undo this
+    return v
 
 
 
@@ -183,7 +185,7 @@ def age_propagate(old,coords,from_t,to_t):
             s = get_symbol(other)
             weighting += s
             v += sel_fact*s
-        v = v/weighting
+#        v = v/weighting
         if to_t['age']=="O":
             if from_t['sex']=="F":
                 return v * hypermodel_symbols['fertility_factor']
@@ -196,6 +198,9 @@ def age_propagate(old,coords,from_t,to_t):
 
 def total_morph(old,coords,from_t,to_t):
     return old+0.00003
+#    if to_t['age']=="S":
+#        return old+0.00003
+#    return old
 
 
 
@@ -222,21 +227,43 @@ settings_coords = {
 }
 
 
+
+
 settings_coords = {
 "PN":np.linspace(0.0,1.0,21),
 "NN":np.linspace(0.0,1.0,21),
-"advantage_hetero":np.linspace(0.00,0.00,1),
-"advantage_homo":np.linspace(0.00,0.00,1),
+"advantage_hetero":np.linspace(0.0,1.0,11),
+"advantage_homo":np.linspace(0.0,0.9,10),
+"fertility_factor":np.linspace(0.5,0.9,5)
+}
+
+
+
+settings_coords = {
+"PN":np.linspace(0.0,1.0,21),
+"NN":np.linspace(0.0,1.0,21),
+"advantage_hetero":np.linspace(0.10,0.10,1),
+"advantage_homo":np.linspace(0.01,0.01,1),
 "fertility_factor":np.linspace(0.9,0.9,1)
 }
 
 
 settings_coords = {
-"PN":np.linspace(1.0,1.0,1),
-"NN":np.linspace(1.0,1.0,1),
-"advantage_hetero":np.linspace(0.00,0.00,1),
-"advantage_homo":np.linspace(0.00,0.00,1),
-"fertility_factor":np.linspace(0.1,0.1,1)
+"PN":np.linspace(0.65,0.65,1),
+"NN":np.linspace(0.2,0.2,1),
+"advantage_hetero":np.linspace(0.10,0.10,1),
+"advantage_homo":np.linspace(0.01,0.01,1),
+"fertility_factor":np.linspace(0.9,0.9,1)
+}
+
+
+
+settings_coords = {
+"PN":np.linspace(0.9,0.9,1),
+"NN":np.linspace(0.1,0.1,1),
+"advantage_hetero":np.linspace(0.10,0.10,1),
+"advantage_homo":np.linspace(0.01,0.01,1),
+"fertility_factor":np.linspace(0.9,0.9,1)
 }
 
 
@@ -249,6 +276,7 @@ settings_coords = {
 assert set(settings_coords.keys())==set(hypermodel_symbols.keys())
 settings_coords_keys = sorted(settings_coords.keys())
 settings_combinations = dict_combinations([[]],settings_coords,sorted(settings_coords.keys()))
+#shuffle(settings_combinations)
 def to_settings_dict(l):
     return {settings_coords_keys[i]:l[i] for i in range(len(l))}
 
@@ -258,8 +286,21 @@ sim = Simulator(matrix, hypermodel_symbols=settings_coords_keys)
 outcomes = []
 results = defaultdict(list)
 #tqdm = list
-#import pdb
-#pdb.set_trace()
+
+
+max_outer_iterations=2000
+outer_incorporation_factor=0.5
+outer_iteration_target= 1e-5 #0
+max_inner_iterations=5000
+inner_iteration_target=1e-9
+
+max_delta_magnitude= 1.0
+inner_delta_multiplier=float('inf')#10000.0
+
+
+with open("vector_debug.txt","w") as f:
+    f.write("header\n")
+
 try:
     for settings in tqdm(settings_combinations):
         settings_dict = to_settings_dict(settings)
@@ -267,39 +308,52 @@ try:
 
         sim.load_vh(settings_dict)
 
-        max_outer_difference = 0
+        max_outer_difference = float('inf')
         max_outer_difference_index = None
         for i in range(len(outcomes)):
             sim.load_vg(outcomes[i])
-            outer_difference = sim.outer_run(
-            outer_incorporation_factor=0.3,
-            max_inner_iterations=200,
-            max_outer_iterations=60000,
-            inner_iteration_target=1e-6)
+            try:
+                outer_difference, stability = sim.outer_run(
+                outer_incorporation_factor=outer_incorporation_factor,
+                max_inner_iterations=max_inner_iterations,
+                max_outer_iterations=max_outer_iterations,
+                inner_iteration_target=inner_iteration_target,
+                max_delta_magnitude=max_delta_magnitude,
+                inner_delta_multiplier=inner_delta_multiplier,
+                randomising_step = False)
+            except ConvergenceException as e:
+                continue
             #print("trial {}, outer_difference {}".format(i,outer_difference))
             if outer_difference==0:
-                results[i].append(settings)
+                settings_dict['vector'] = dict(zip(labels,sim.v.transpose().tolist()[0]))
+                settings_dict['stability']=stability
+                results[i].append(settings_dict)
                 break
             else:
-                if outer_difference>max_outer_difference:
-                    max_outer_difference = outer_difference
-                    max_outer_difference_index = i
+                #if outer_difference<max_outer_difference: #TODO < or >?
+                #    max_outer_difference = outer_difference
+                #    max_outer_difference_index = i
                 continue
         else:
             if max_outer_difference_index == None:
                 sim.load_vg(None)
             else:
                 sim.load_vg(outcomes[max_outer_difference_index])
-            sim.debug_matrix("hello1.txt",labels)
-            
-            sim.run(max_inner_iterations=200,
-            max_outer_iterations=60000,
-            outer_incorporation_factor=0.3,
-            outer_iteration_target=0.0,
-            inner_iteration_target=1e-6)
 
-            sim.debug_matrix("hello2.txt",labels)
-            
+            try:
+                print(settings_dict)
+                converged,stability = sim.run(max_inner_iterations=max_inner_iterations,
+                max_outer_iterations=max_outer_iterations,
+                outer_incorporation_factor=outer_incorporation_factor,
+                outer_iteration_target=outer_iteration_target,
+                inner_iteration_target=inner_iteration_target,
+                max_delta_magnitude=max_delta_magnitude,
+                inner_delta_multiplier=inner_delta_multiplier
+                )
+            except ConvergenceException as e:
+                pass
+                #continue
+
             outcome = {sim.g[i]:v for i,v in enumerate(sim.vg.transpose().tolist()[0])}
             #print("dum dum dum: {}".format(outcome))
             if outcomes.count(outcome)==0:
@@ -307,7 +361,9 @@ try:
                 outcomes.append(outcome)
             else:
                 outcome_index = outcomes.index(outcome)
-            results[outcome_index].append(settings)
+            settings_dict['vector'] = dict(zip(labels,sim.v.transpose().tolist()[0]))
+            settings_dict['stability']=stability
+            results[outcome_index].append(settings_dict)
         #print(results)
         #print(outcomes)
 except KeyboardInterrupt as e:
