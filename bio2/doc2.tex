@@ -1,0 +1,38 @@
+\documentclass{article}
+\usepackage{amsmath}
+% \title{Perturbation solution}
+% \author{Mark Burgess}
+
+\newcommand{\rvline}{\hspace*{-\arraycolsep}\vline\hspace*{-\arraycolsep}}
+% https://tex.stackexchange.com/questions/323297/typing-block-matrices-with-zero-blocks-and-seperators
+
+\begin{document}
+% \maketitle
+
+We consider the change in the largest eigenvalue of a real (known) positive $n\times n$ matrix $A$ where the matrix itself is parameterised by its own largest (known) positive eigenvector $X$ with (known) eigenvalue $\lambda$, and we perturb $A$ by small $\epsilon$ to find a new (unknown) eigenvalue/vector $X+X'\epsilon$,$\lambda+\lambda'\epsilon$ to first order of $\epsilon$. (using Einstein summation notation):
+
+$$ \lambda(\epsilon)X_{i}(\epsilon) = A(\epsilon,X(\epsilon))_{i,m}X_{m}(\epsilon) $$
+deriving wrt $\epsilon$:
+$$ \frac{\lambda(\epsilon)}{\partial \epsilon}X_{i}(\epsilon) + \lambda(\epsilon)\frac{X_{i}(\epsilon)}{\partial \epsilon} = $$
+$$\frac{A(\epsilon,X(\epsilon))_{i,m}}{\partial \epsilon}X_{m}(\epsilon)
+ + \frac{A(\epsilon,X(\epsilon))_{i,m}}{\partial X_{k}}\frac{\partial X_{k}(\epsilon)}{\partial \epsilon}X_{m}(\epsilon)
+ + A(\epsilon,X(\epsilon))_{i,m}\frac{X_{m}(\epsilon)}{\partial \epsilon} $$
+
+We consider the equality evaluated at $\epsilon=0$, letting shorthand:
+$$X(\epsilon)_{i}=X_i, \frac{X_i(\epsilon)}{\partial \epsilon}=X'_i, \lambda(\epsilon)=\lambda, \frac{\lambda(\epsilon)}{\partial \epsilon}=\lambda'$$
+$$A(\epsilon,X(\epsilon))_{i,m} = A_{i,m}$$
+$$\frac{A(\epsilon,X(\epsilon))_{i,m}}{\partial X_{k}} = B_{i,m,k}$$
+$$\frac{A(\epsilon,X(\epsilon))_{i,m}}{\partial \epsilon} = C_{i,m}$$
+ thus:\\
+$$\lambda'X_i+\lambda X'_i = C_{i,m}X_m + B_{i,m,k}X'_kX_m +A_{i,m}X'_m $$
+
+$$\lambda'X_i+\lambda I_{i,m}X'_m - B_{i,k,m}X_kX'_m - A_{i,m}X'_m = C_{i,m}X_m $$
+where $I$ is identity matrix, thus:
+$$\lambda'X_i+\left(\lambda I_{i,m} - B_{i,k,m}X_k - A_{i,m}\right)X'_m = C_{i,m}X_m $$
+Letting $\bar{X} = \bigl[ \begin{smallmatrix}X' \\\hline \lambda' \end{smallmatrix}\bigr]$ then
+$$\left[\begin{smallmatrix}\lambda I_{i,m} - B_{i,k,m}X_k - A_{i,m} & \rvline & X_i \end{smallmatrix}\right]\bar{X}_m = C_{i,m}X_m $$
+Adding a normalising constraint that $\sum_i X'_{i}=0$ gives:
+$$\left[\begin{smallmatrix}\lambda I_{i,m} - B_{i,k,m}X_k - A_{i,m} & \rvline & X_i \\\hline 1 & \rvline & 0\end{smallmatrix}\right]\bar{X}_m = \left[\begin{smallmatrix} C_{i,m}X_m \\\hline 0\end{smallmatrix}\right] $$
+
+Which can be inverted (or pseudo-inverted) to find $\bar{X}$ yay
+\end{document}

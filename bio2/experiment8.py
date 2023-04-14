@@ -7,9 +7,6 @@ from random import shuffle
 logging.getLogger().setLevel(logging.WARNING)
 #logging.getLogger().setLevel(logging.INFO)
 
-#from sympy import symbols, Matrix
-#import json
-
 #https://stackoverflow.com/questions/2912231/is-there-a-clever-way-to-pass-the-key-to-defaultdicts-default-factory
 class keydefaultdict(defaultdict):
     def __missing__(self, key):
@@ -78,8 +75,6 @@ def punnet_square_likelihood(parent_A,parent_B,offspring):
                 return 0
             elif offspring == homozygous_negative:
                 return 0
-            else:
-                raise Exception("sos")
         elif parent_B == hetrozygous:
             if offspring == homozygous_positive:
                 return 0.5
@@ -87,8 +82,6 @@ def punnet_square_likelihood(parent_A,parent_B,offspring):
                 return 0.5
             elif offspring == homozygous_negative:
                 return 0
-            else:
-                raise Exception("sos")
         elif parent_B == homozygous_negative:
             if offspring == homozygous_positive:
                 return 0
@@ -96,10 +89,6 @@ def punnet_square_likelihood(parent_A,parent_B,offspring):
                 return 1
             elif offspring == homozygous_negative:
                 return 0
-            else:
-                raise Exception("sos")
-        else:
-            raise Exception("sos")
     elif parent_A == hetrozygous:
         if parent_B == hetrozygous:
             if offspring == homozygous_positive:
@@ -108,12 +97,7 @@ def punnet_square_likelihood(parent_A,parent_B,offspring):
                 return 0.5
             elif offspring == homozygous_negative:
                 return 0.25
-            else:
-                raise Exception("sos")
-        else:
-            raise Exception("sos")
-    else:
-        raise Exception("sos")
+    raise Exception("Punnet Square Senseless Exception")
     
 
 
