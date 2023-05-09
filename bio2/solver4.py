@@ -283,9 +283,6 @@ class Simulator(object):
         (outer_difference>outer_incorporation_factor*outer_iteration_target)):
             j += 1
             logging.info("beginning {} loop".format(j))
-            if j==12:
-                import pdb
-                pdb.set_trace()
             new_outer_difference,stability = self.outer_run(outer_incorporation_factor,**inner_arguments)
             differences[j % len(differences)] = new_outer_difference
             outer_difference = sum(differences) / len(differences)

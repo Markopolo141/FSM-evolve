@@ -1,4 +1,4 @@
-from solver3 import *
+from solver4 import *
 import numpy as np
 from collections import defaultdict
 from tqdm import tqdm
@@ -104,6 +104,15 @@ def punnet_square_likelihood(parent_A,parent_B,offspring):
 def get_symbol(combination):
     return symbols("x{}".format(index_combinations.index(combination)))
 
+def get_selection_symbol(from_t,other):
+    if from_t["age"]=="Y":
+        sym = "".join(from_dict(from_t))+"".join(other)
+        #print("consiering: {}".format(sym))
+        sel_fact = symbols(sym)
+    else:
+        sel_fact = 1
+    return sel_fact
+
 def sex_propagate(old,coords,from_t,to_t):
     #offspring must be young
     if to_t['age']!="S" or from_t['age']=='S':
@@ -118,12 +127,9 @@ def sex_propagate(old,coords,from_t,to_t):
         if other_d['sex']==from_t['sex']:
             continue
         # young have selection factors
-        if from_t["age"]=="Y":
-            sym = "".join(from_dict(from_t))+"".join(other)
-            #print("consiering: {}".format(sym))
-            sel_fact = symbols(sym)
-        else:
-            sel_fact = 1
+        sel_fact = get_selection_symbol(from_t,other)
+        #sel_fact *= get_selection_symbol(other_d,from_dict(from_t))
+        
         conjoined_state = list(from_t.values())+other
         if "P" in conjoined_state:
             if "O" in conjoined_state or "Y" in conjoined_state:
@@ -135,7 +141,7 @@ def sex_propagate(old,coords,from_t,to_t):
         s = get_symbol(other)
         weighting += s
         v += survival_factor*sel_fact*s*punnet_square_likelihood(from_t['genetics'],other_d['genetics'],to_t['genetics'])
-#    return v/weighting #TODO: undo this
+    #return v/weighting #TODO: undo this
     return v
 
 
@@ -251,6 +257,17 @@ settings_coords = {
 }
 
 
+
+settings_coords = {
+"PN":np.linspace(0.9,0.9,1),
+"NN":np.linspace(0.1,0.1,1),
+"advantage_hetero":np.linspace(0.10,1.10,11),
+"advantage_homo":np.linspace(0.01,0.01,1),
+"fertility_factor":np.linspace(0.9,0.9,1)
+}
+
+
+
 # test the hypothesis that more resource abundance will shift
 # emphasis to good genes.
 #
@@ -274,9 +291,9 @@ results = defaultdict(list)
 
 max_outer_iterations=2000
 outer_incorporation_factor=0.5
-outer_iteration_target= 1e-5 #0
+outer_iteration_target= 1e-8 #0
 max_inner_iterations=5000
-inner_iteration_target=1e-9
+inner_iteration_target=1e-12
 
 max_delta_magnitude= 1.0
 inner_delta_multiplier=float('inf')#10000.0
