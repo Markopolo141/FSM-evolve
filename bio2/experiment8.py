@@ -251,16 +251,15 @@ settings_coords = {
 settings_coords = {
 "PN":np.linspace(0.9,0.9,1),
 "NN":np.linspace(0.1,0.1,1),
-"advantage_hetero":np.linspace(0.10,0.10,1),
+"advantage_hetero":np.linspace(0.10,1.10,11),
 "advantage_homo":np.linspace(0.01,0.01,1),
 "fertility_factor":np.linspace(0.9,0.9,1)
 }
 
 
-
 settings_coords = {
 "PN":np.linspace(0.9,0.9,1),
-"NN":np.linspace(0.1,0.1,1),
+"NN":np.linspace(0.1,0.9,9),
 "advantage_hetero":np.linspace(0.10,1.10,11),
 "advantage_homo":np.linspace(0.01,0.01,1),
 "fertility_factor":np.linspace(0.9,0.9,1)
