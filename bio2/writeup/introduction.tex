@@ -1,20 +1,23 @@
 
 \section{Introduction}
 Biological species are well recognised as being engaged in an fight-for-survival and Evolutionary Game Theory has been used to analyse the strategies in such a fight.
-Evolutionary Game Theory encompasses games of different forms, but one of the most standard forms concerns the continuous growth/decay of organism types where the organism types are defined by the strategy they play as they are continuously randomly paired to participate in a simultaneous symmetric two-player game where the expected payoff determines the growth-rate of their strategy according to the most classic replicator dynamics.\cite{maynard,maynard2,weibull}
+Evolutionary Game Theory encompasses games of different forms, but one of the most canonical forms concerns the continuous growth/decay of organism types where the organism types are defined by the strategy they play as they are continuously randomly paired to participate in a simultaneous symmetric two-player game where the expected payoff determines the growth-rate of their strategy according to the most classic replicator dynamics.\cite{maynard,maynard2,weibull}
 
-Whereas the sets of actions that actual organisms employ can depend-apon and influence a range of other ecological factors including the lifecycles of organisms within an ecosystem, which in turn determines their growth-rate.
-These details, such as the stages of the lifecycles of organisms and the web of mutual influences between them, are seldom directly modelled in evolutionary game theory.
-Lifecycles are most directly described by matrix models of population dynamics, where the growth-rate of an organism type is naturally given by its population matrix, and where the influences between lifecycle stages are recognised as a potential source of non-linear dynamics and chaotic behaviour \cite{doi:10.1080/10236198.2019.1699916, DEVRIES2020108875, population1}.
+While this canonical representation can represent a range of evolutionary phenomina, the actions that actually evolving organisms employ are naturally more complex, and can depend-apon and influence a range of other ecological factors including the lifecycles of organisms within a wider ecosystem.
+These details, such as the stages of the lifecycles of organisms and the web of mutual influences between them, and the non-linear effects of such factors on fitness and evolutionary dynamics, are seldom directly modelled in evolutionary game theory.
+In this work, we focus particularly on Lifecycles. Lifecycles are most directly described by matrix models of population dynamics, where the growth-rate of an organism type is given by its population matrix, and where the influences between lifecycle stages are recognised as a potential source of non-linear dynamics and chaotic behaviour \cite{doi:10.1080/10236198.2019.1699916, DEVRIES2020108875, population1}.
 
 The mathematical analysis of the interaction between strategies and lifecycles has been disparaterly investigated by several different authors, as we show in section \ref{sec:-1}, and in this work we aim to outlay and justify a methodology to extend and simulate such expansive dynamics.
 
-The work sits at the intersection of several different fields of research, including population genetics, game theory, 
+Within this paper we consider game-theoretic strategies in the context of non-linear population matrix models, and make several contributions:
+\begin{enumerate}
+\item We describe such complicated evolutionary models and provide theorems establishing that all equilibria can be established by finite sets of pure strategies.
+\item We see these sets of pure strategies imply a population mixed-strategy, whos characteristics is subject to purterbation analysis
+\item We outline a algorithm for solving for such populaiton mixed-strategy equilibrium points, incorporating matrix purtperbation and power iterations
+\item We give a demonstration of our model and solver, with a complicated evolutionary model.
+\end{enumerate}
 
-Within this paper we consider game-theoretic strategies in the context of lifecycles, and make a contribution by providing a proof that in such games that any search for equilibrium points need only consider pure strategies, and can ignore stochastic combinations of actions - or 'mixed' strategies.
-In this way, dynamic points of interest in these complicated games can be discovered and characterised much more directly.
-
-
+The paper is composed of the following sections:
 
 \subsection{Structure}
 \begin{itemize}
@@ -46,9 +49,11 @@ The expected sum of payoffs determine the growth-rate of the presence of the str
 
 Our work contrasts against other games, primarily as we model the growth-rate of strategies not in relation to the expected summation of payoffs, but in relation to the equilibrium between states defined by vital rates. This attitude is also reflected in the works of J. M. Cushing \cite{doi:10.1080/10236198.2016.1177522, Cushing2017,doi:10.1080/17513758.2019.1574034} who analyses evolutionary dynamics in population matrix models particularly focusing on bifurcation.
 
+Most recently the analysis of strategy specifically in the context of coupled structured population models has come forward particularly about the work of Krzysztof Argasinski \cite{Argasinski_Broom_2021,Argasinski_Rudnicki_2021,john2022age} who outlay illustrative discussion and dynamics in the context of specific structured population models.
+Our work aims to extend their analysis to arbitrary structured population models.
+
 \section{Vital Rates and Population Matrix Models}\label{sec:2}
 
-%It is also worth noting that fitness is not a very simple concept\cite{sep-fitness}
 The demographic flow of individuals of a population between states of a lifecycle is sometimes described in ecological-studies by a matrix that is not necessarily Markov.
 The simplest example of such matrices are Leslie Matrices used for studying the structure of populations of individuals transitioning between evenly spaced age-states.
 Leslie Matrices are square, and they have form \cite{leslie}:

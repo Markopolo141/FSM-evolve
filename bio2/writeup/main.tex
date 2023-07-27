@@ -60,6 +60,9 @@
 %=================================================================
 % Add packages and commands here. The following packages are loaded in our class file: fontenc, inputenc, calc, indentfirst, fancyhdr, graphicx,epstopdf, lastpage, ifthen, lineno, float, amsmath, setspace, enumitem, mathpazo, booktabs, titlesec, etoolbox, tabto, xcolor, soul, multirow, microtype, tikz, totcount, amsthm, hyphenat, natbib, hyperref, footmisc, url, geometry, newfloat, caption
 
+\usepackage{pgfplots}
+\pgfplotsset{compat = newest}
+
 %=================================================================
 %% Please use the following mathematics environments: Theorem, Lemma, Corollary, Proposition, Characterization, Property, Problem, Example, ExamplesandDefinitions, Hypothesis, Remark, Definition, Notation, Assumption
 %% For proofs, please use the proof environment (the amsthm package is loaded by the MDPI class).
@@ -98,12 +101,12 @@
 
 % Abstract (Do not insert blank lines, i.e. \\) 
 \abstract{
-Real world evolutionary games have significant complexity that is seldom directly modeled.
-In endeavouring to model such complexity we consider organisms with state dependant strategic actions which affecting vital rates in the context of arbitrary non-linear population matrix models. We discuss the extreme complexity of such systems and the flexibility of phenomina which can be modeled using them.
-We treat such systems mathematically, demonstrating that any equilbrium between mixed strategies can be respresented as finite combination of pure strategies, which can then imply an effective population mixed strategy.
-This reduction allows us to consider the evolutionary dynamics of such a population mixed strategy, under replicator dynamics and towards evolutionary stability, where we outlay a software package implimenting a matrix perturbation method for simulating such dynamics.
-We demonstrate the complexity of these systems and the power of our modelling approach by presenting a model of the sexual selection of a deleterious mutation with heterozygous advantage, in the context of a variable sexual diamorphism and between resource states.
-This model of sexual selection encompases 24 states 54 stretegic dimensions yielding $ 2^{54} $ unique and pure strategies, and we use our software package to interogate the equilibrium and disequilibrium dynamics of such a game across a range of 5 different survival parameters.
+Evolutionary scenarios can have significant complexity that is not always amenable to simple mathematical modeling.
+To extend the complexity of what can be readily modelled mathematically, we consider the broad setting of organisms with state dependant strategic dynamics.
+Particularly, organisms with strategic actions affecting the vital rates between states in the context of arbitrary non-linear population matrix models. We outlay formalism, present theorems, and and give an algorithm to solve for population-mean mixed-strategy equilibria by an iterated matrix-purturbation and power-iteration method.
+We highlight the complexity and power of our modelling and solving software, by presenting and solving a model of the sexual selection of a deleterious mutation with heterozygous advantage, in the context of a variable sexual diamorphism, and between resource states.
+The model encompases 24 states with 54 stretegic dimensions yielding $ 2^{54} $ pure strategies with non-linear coupled fitness values.
+We apply our software algorithm to interogate the equilibrium and disequilibrium dynamics of such a game across a range of parameters.
 }
 
 % Keywords

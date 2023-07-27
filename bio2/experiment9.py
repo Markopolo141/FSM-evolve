@@ -147,7 +147,7 @@ def sex_propagate(old,coords,from_t,to_t):
             continue
         # young have selection factors
         sel_fact = get_selection_symbol(from_t,other)
-        #sel_fact *= get_selection_symbol(other_d,from_dict(from_t)) #optional mutuality of choice
+        sel_fact *= get_selection_symbol(other_d,from_dict(from_t)) #optional mutuality of choice
         
         conjoined_state = list(from_t.values())+other
         if "P" in conjoined_state:
@@ -156,12 +156,12 @@ def sex_propagate(old,coords,from_t,to_t):
             else:
                 survival_factor = 1.0
         else:
-            survival_factor = hypermodel_symbols['PN']**2 #hypermodel_symbols['NN']
+            survival_factor = 0.5*hypermodel_symbols['PN']**2 #hypermodel_symbols['NN']
         s = get_symbol(other)
         weighting += s
         v += survival_factor*sel_fact*s*punnet_square_likelihood(from_t['genetics'],other_d['genetics'],to_t['genetics'])
-    #return v/weighting #optional weighting factor
-    return v
+    return v/weighting #optional weighting factor
+    #return v
 
 
 
@@ -193,7 +193,7 @@ def age_propagate(old,coords,from_t,to_t):
             s = get_symbol(other)
             weighting += s
             v += sel_fact*s
-#        v = v/weighting #optional weighting factor
+        v = v/weighting #optional weighting factor
         if to_t['age']=="O":
             if from_t['sex']=="F":
                 return v * hypermodel_symbols['fertility_factor']
@@ -227,13 +227,14 @@ settings_coords = {
 }
 
 
-'''settings_coords = {
-"PN":np.linspace(0.04,1.0,25),
-"advantage_hetero":np.linspace(0.02,1.50,75),
-"advantage_homo":np.linspace(0.0,0.0,1),
-"fertility_factor":np.linspace(0.9,0.9,1),
-"mut":np.linspace(0.01,0.01,1)
-}'''
+
+#settings_coords = {
+#"PN":np.linspace(0.67,0.67,1),
+#"advantage_hetero":np.linspace(0.04,0.04,1),
+#"advantage_homo":np.linspace(0.0,0.0,1),
+#"fertility_factor":np.linspace(0.9,0.9,1),
+#"mut":np.linspace(0.01,0.01,1)
+#}
 
 
 
@@ -258,11 +259,13 @@ results = defaultdict(list)
 #tqdm = list
 
 
-max_outer_iterations=300
+max_outer_iterations=500
 outer_incorporation_factor=0.5
 outer_iteration_target= 1e-6 #0
 max_inner_iterations=2000
 inner_iteration_target=1e-8
+
+rehash_max_outer_iterations=10
 
 max_delta_magnitude= 1.0
 inner_delta_multiplier=float('inf')#10000.0
@@ -286,7 +289,7 @@ try:
                 outer_difference, stability = sim.outer_run(
                 outer_incorporation_factor=outer_incorporation_factor,
                 max_inner_iterations=max_inner_iterations,
-                max_outer_iterations=max_outer_iterations,
+                max_outer_iterations=rehash_max_outer_iterations,
                 inner_iteration_target=inner_iteration_target,
                 max_delta_magnitude=max_delta_magnitude,
                 inner_delta_multiplier=inner_delta_multiplier,
@@ -321,11 +324,18 @@ try:
                 inner_delta_multiplier=inner_delta_multiplier
                 )
             except ConvergenceException as e:
-                pass
-                #continue
+                # using the averaged vg and v as data
+                outcome = {sim.g[i]:v for i,v in enumerate(sim.vg_averaged.transpose().tolist()[0])}
+                outcome_index = len(outcomes)
+                outcomes.append(outcome)
+                settings_dict['vector'] = dict(zip(labels,sim.v_averaged.transpose().tolist()[0]))
+                settings_dict['stability']=999
+                results[outcome_index].append(settings_dict)
+                
+                #pass # formerly pass
+                continue
 
             outcome = {sim.g[i]:v for i,v in enumerate(sim.vg.transpose().tolist()[0])}
-            #print("dum dum dum: {}".format(outcome))
             if outcomes.count(outcome)==0:
                 outcome_index = len(outcomes)
                 outcomes.append(outcome)

@@ -10,6 +10,9 @@ import click
 import logging
 import time
 
+import cgitb
+cgitb.enable(format='text')
+
 logging.basicConfig()
 logging.getLogger().setLevel(logging.DEBUG)
 
@@ -30,6 +33,9 @@ def box_accent(v,dd,diff,c=None,dc=None):
         result = linprog(-diff,dc.transpose(),dot(c,dc),bounds=(0,1))
     if result.status==2: #infeasible - already hyperconstrained
         return v
+    if result.x is None:
+        import pdb
+        pdb.set_trace()
     x = matrix(result.x).transpose()-v
     if norm(x)>dd:
         x = dd*x/norm(x)
@@ -57,10 +63,12 @@ class Simulator(object):
 
     w = None
     v = None
+    v_averaged = None
     s = None
     s_symbols = None
 
     vg = None
+    vg_averaged = None
     g = None
     g_symbols = None
 
@@ -208,6 +216,10 @@ class Simulator(object):
         if i==max_inner_iterations:
             logging.warning("Reached max inner iterations")
             raise ConvergenceException("inner loop iteration limit reached")
+        if self.v_averaged is not None:
+            self.v_averaged = 0.98*self.v_averaged + 0.02*self.v
+        else:
+            self.v_averaged = self.v
         ret = [i,time.time()-inner_t, norm(self.v-old_old_v)]
         logging.info("inner took: {0} iters, {1:.4g}s, delta={2:.4g}".format(*ret))
         return ret
@@ -252,12 +264,16 @@ class Simulator(object):
         # make the step in the direction delta_gamma, respecting a non-decrease in direction delta_lambda
         old_vg = self.vg.copy()
         self.vg[:,:] = box_accent(self.vg,step_size,delta_gamma,self.vg,-delta_lambda)
+        if self.vg_averaged is not None:
+            self.vg_averaged = 0.98*self.vg + 0.02*self.vg_averaged
+        else:
+            self.vg_averaged = self.vg
         
-        with open("vector_debug.txt","a") as f:
-            ZZ = (self.vg-old_vg).transpose().tolist()[0]
-            ZZ = ["#" if z>0 else "." if z<0 else " " for z in ZZ]
-            f.write("".join(ZZ))
-            f.write(" {} {}\n".format(norm(self.vg-old_vg), dot(box_accent(old_vg,1.0,delta_lambda)-old_vg,delta_lambda) ))
+        #with open("vector_debug.txt","a") as f:
+        #    ZZ = (self.vg-old_vg).transpose().tolist()[0]
+        #    ZZ = ["#" if z>0 else "." if z<0 else " " for z in ZZ]
+        #    f.write("".join(ZZ))
+        #    f.write(" {} {}\n".format(norm(self.vg-old_vg), dot(box_accent(old_vg,1.0,delta_lambda)-old_vg,delta_lambda) ))
 
         return norm(self.vg-old_vg), dot(box_accent(self.vg,1.0,delta_lambda)-self.vg,delta_lambda)
          
@@ -279,14 +295,16 @@ class Simulator(object):
         j = 0
         outer_difference = float('inf')
         differences = [float('inf')]*5
-        while ((j<max_outer_iterations) and 
-        (outer_difference>outer_incorporation_factor*outer_iteration_target)):
+        over_iterations = 0
+        while ((j<max_outer_iterations) and (over_iterations < 20)):
             j += 1
             logging.info("beginning {} loop".format(j))
             new_outer_difference,stability = self.outer_run(outer_incorporation_factor,**inner_arguments)
             differences[j % len(differences)] = new_outer_difference
             outer_difference = sum(differences) / len(differences)
             logging.info("diff_Lambda = {}".format(outer_difference))
+            if (outer_difference<outer_incorporation_factor*outer_iteration_target):
+                over_iterations += 1
         if j==max_outer_iterations:
             logging.warning("Reached max outer iterations, simulation failed to converge")
             raise ConvergenceException("outer loop iteration limit reached")

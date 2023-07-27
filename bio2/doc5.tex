@@ -1,0 +1,42 @@
+\documentclass{article}
+\usepackage{amsmath}
+% \title{Perturbation solution}
+% \author{Mark Burgess}
+
+\newcommand{\rvline}{\hspace*{-\arraycolsep}\vline\hspace*{-\arraycolsep}}
+% https://tex.stackexchange.com/questions/323297/typing-block-matrices-with-zero-blocks-and-seperators
+
+\begin{document}
+% \maketitle
+
+We consider a species, with a population Matrix $A$, which is parameterised by genomic perturbation $\epsilon$, and a superpopulation vector $Y$. We consider the change in the largest eigenvector/value $X,\lambda$ as a function of $\epsilon$.
+$X+X'\epsilon$,$\lambda+\lambda'\epsilon$ to first order of $\epsilon$. (using Einstein summation notation):
+
+$$ \lambda(\epsilon)X_{i}^1(\epsilon) = A(\epsilon K^1,\sum_kX^k(\epsilon))_{i,m}X_{m}^1(\epsilon) $$
+$$ \lambda(\epsilon)X_{i}^2(\epsilon) = A(\epsilon K^2,\sum_kX^k(\epsilon))_{i,m}X_{m}^2(\epsilon) $$
+$$ \lambda(\epsilon)X_{i}^3(\epsilon) = A(\epsilon K^3,\sum_kX^k(\epsilon))_{i,m}X_{m}^3(\epsilon) $$
+$$ \lambda(\epsilon)X_{i}^4(\epsilon) = A(\epsilon K^4,\sum_kX^k(\epsilon))_{i,m}X_{m}^4(\epsilon) $$
+
+for arbitary $t$:
+
+$$ \lambda(\epsilon)X_{i}^t(\epsilon) = A(\epsilon K^t,\sum_kX^k(\epsilon))_{i,m}X_{m}^t(\epsilon) $$
+
+letting $y_i$ be the $i$th input of the first block to A and $z_i$ be the $i$th input of the second block to A, then differentiating wrt to $\epsilon$ gives: ($\lambda(\epsilon) = \lambda$, $\partial\lambda/\partial\epsilon = \lambda^\prime$, etc.)
+
+$$ \lambda X_i^{t\prime} + \lambda^\prime X_i^t $$
+$$ = \sum_{l,m} \frac{\partial A_{i,m}}{\partial y_l}K^t_lX_m^t + \sum_{l,m}\frac{\partial A_{i,m}}{\partial z_l} \sum_kX^{k\prime}_lX_m^t + \sum_mA_{i,m}X_m^{t\prime}$$
+
+Summing over $t$:
+$$ \lambda \sum_t X_i^{t\prime} + \lambda^\prime \sum_t X_i^t $$
+$$ = \sum_{l,m} \frac{\partial A_{i,m}}{\partial y_l}\sum_t K^t_lX_m^t + \sum_{l,m}\frac{\partial A_{i,m}}{\partial z_l} \sum_kX^{k\prime}_l\sum_t X_m^t + \sum_mA_{i,m}\sum_t X_m^{t\prime}$$
+
+rearranging:
+$$ \sum_l\Bigg(\lambda I_{i,l}\Bigg) \sum_t X_l^{t\prime} + \lambda^\prime \sum_t X_i^t$$
+$$ = \sum_{l,m} \frac{\partial A_{i,m}}{\partial y_l}\sum_t K^t_lX_m^t + \sum_l\left(\sum_{m}\frac{\partial A_{i,m}}{\partial z_l}\sum_k X_m^k\right) \sum_tX^{t\prime}_l + \sum_l\Bigg(A_{i,l}\Bigg)\sum_t X_l^{t\prime}$$
+
+thus:
+
+$$ \sum_l\Bigg(\lambda I_{i,l} - \sum_{m}\frac{\partial A_{i,m}}{\partial z_l}\sum_k X_m^k - A_{i,l} \Bigg) \sum_t X_l^{t\prime} + \lambda^\prime \sum_t X_i^t$$
+$$ = \sum_{l,m} \frac{\partial A_{i,m}}{\partial y_l}\sum_t K^t_lX_m^t \qquad\qquad\text{...ooooh}$$
+
+\end{document}
